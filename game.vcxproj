@@ -209,6 +209,44 @@
       <BaseAddress>0x20000000</BaseAddress>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
+    <PostBuildEvent>
+      <Command>:: 	Modified Batch Script
+::	Original Author: ALvin Bontuyan
+
+
+
+:: 	Replace curly brackets with your specific file path
+::
+::	Example:
+::	set unzip=C:/7z.exe
+::	set modTarget=C:/Quake 4/Mod/game000.pk4
+
+
+set unzip=C:/Program Files/7-Zip/7z.exe
+set modTarget=C:/GOG Games/Quake 4/IT266/game000.pk4
+
+set buildDir=../$(Platform)/$(Configuration)\Gamex86.dll
+
+
+::	Set 'quake' to the path of the folder where Quake4 is installed
+::	this is needed so Quake4 does not throw an error when running through command line
+::	Example:
+::	set quake=C:/Quake 4/
+
+
+set quake=C:/GOG Games/Quake 4/
+
+"%unzip%" d "%modTarget%" *.dll
+"%unzip%" a "%modTarget%" "%buildDir%"
+
+cd "%quake%"
+
+
+::	If for some reason you named your .exe something different, change this part
+
+
+"%quake%/Quake4.exe"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="game\Actor.cpp" />
