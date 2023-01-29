@@ -1446,7 +1446,7 @@ idPhysics_Player::MovePlayer
 ================
 */
 void idPhysics_Player::MovePlayer( int msec ) {
-
+	
 	// this counter lets us debug movement problems with a journal
 	// by setting a conditional breakpoint for the previous frame
 	c_pmove++;
@@ -1472,7 +1472,7 @@ void idPhysics_Player::MovePlayer( int msec ) {
 	}
 
 	// if no movement at all
-	if ( current.movementType == PM_FREEZE ) {
+	if ( current.movementType == PM_FREEZE || true) {
 		return;
 	}
 

@@ -193,6 +193,9 @@ const idVec4 marineHitscanTint( 0.69f, 1.0f, 0.4f, 1.0f );
 const idVec4 stroggHitscanTint( 1.0f, 0.5f, 0.0f, 1.0f );
 const idVec4 defaultHitscanTint( 0.4f, 1.0f, 0.4f, 1.0f );
 
+float cameraOriginX = 0;
+float cameraOriginY = 0;
+
 /*
 ==============
 idInventory::Clear
@@ -10901,6 +10904,18 @@ void idPlayer::GetViewPos( idVec3 &origin, idMat3 &axis ) const {
 		// adjust the origin based on the camera nodal distance (eye distance from neck)
 		origin += physicsObj.GetGravityNormal() * g_viewNodalZ.GetFloat();
 		origin += axis[0] * g_viewNodalX.GetFloat() + axis[2] * g_viewNodalZ.GetFloat();
+
+		if (gameLocal.usercmds->rightmove > 0)
+			cameraOriginY += 1;
+		else if (gameLocal.usercmds->rightmove < 0)
+			cameraOriginY -= 1;
+		if (gameLocal.usercmds->forwardmove > 0)
+			cameraOriginX += 1;
+		else if (gameLocal.usercmds->forwardmove < 0)
+			cameraOriginX -= 1;
+
+		origin.x += cameraOriginX;
+		origin.y += cameraOriginY;
 	}
 }
 
@@ -11065,12 +11080,16 @@ void idPlayer::CalculateRenderView( void ) {
 	 			OffsetThirdPersonView( 0.0f, 20.0f + range, 0.0f, false );
 				SmoothenRenderView( false );
 			} else {
+				/*
 				renderView->vieworg = firstPersonViewOrigin;
 				renderView->viewaxis = firstPersonViewAxis;
 				SmoothenRenderView( true );
 				// set the viewID to the clientNum + 1, so we can suppress the right player bodies and
 				// allow the right player view weapons
 				renderView->viewID = entityNumber + 1;
+				*/
+				OffsetThirdPersonView(pm_thirdPersonAngle.GetFloat(), pm_thirdPersonRange.GetFloat(), pm_thirdPersonHeight.GetFloat(), pm_thirdPersonClip.GetBool());
+				SmoothenRenderView(false);
 			}
 		}
 		
