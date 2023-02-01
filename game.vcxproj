@@ -223,6 +223,7 @@
 
 
 set unzip=C:/Program Files/7-Zip/7z.exe
+set mod=IT266
 set modTarget=C:/GOG Games/Quake 4/IT266/game000.pk4
 
 set buildDir=../$(Platform)/$(Configuration)\Gamex86.dll
@@ -245,7 +246,7 @@ cd "%quake%"
 ::	If for some reason you named your .exe something different, change this part
 
 
-"%quake%/Quake4.exe"</Command>
+"%quake%/Quake4.exe" +set fs_game %mod%</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
