@@ -193,9 +193,6 @@ const idVec4 marineHitscanTint( 0.69f, 1.0f, 0.4f, 1.0f );
 const idVec4 stroggHitscanTint( 1.0f, 0.5f, 0.0f, 1.0f );
 const idVec4 defaultHitscanTint( 0.4f, 1.0f, 0.4f, 1.0f );
 
-float cameraOriginX = 0;
-float cameraOriginY = 0;
-
 /*
 ==============
 idInventory::Clear
@@ -1850,6 +1847,7 @@ void idPlayer::Spawn( void ) {
 		objectiveSystem = NULL;
 
 		if ( spawnArgs.GetString( "hud", "", temp ) ) {
+			gameLocal.Printf("[%s]", temp.c_str());
 			hud = uiManager->FindGui( temp, true, false, true );
 		} else {
 			gameLocal.Warning( "idPlayer::Spawn() - No hud for player." );
@@ -1863,6 +1861,9 @@ void idPlayer::Spawn( void ) {
 			}
 		}
 
+		// IT 266
+		mapui = uiManager->FindGui("guis/mod_debug.gui", true, false, true);
+
 		if ( hud ) {
 			hud->Activate( true, gameLocal.time );
 		}
@@ -1871,6 +1872,11 @@ void idPlayer::Spawn( void ) {
 			mphud->Activate( true, gameLocal.time );
 		}
 
+		// IT 266
+		if (mapui)
+			mapui->Activate(true, gameLocal.time);
+		else
+			gameLocal.Warning("Mapui went wrong in Player.cpp");
 		// load cursor
 		GetCursorGUI();
 		if ( cursor ) {
@@ -3399,8 +3405,8 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	if ( temp != health ) {		
 		_hud->SetStateInt   ( "player_healthDelta", temp == -1 ? 0 : (temp - health) );
 		_hud->SetStateInt	( "player_health", health < -100 ? -100 : health );
+		_hud->SetStateInt("player_maxhealth", inventory.maxHealth);
 		_hud->SetStateFloat	( "player_healthpct", idMath::ClampFloat ( 0.0f, 1.0f, (float)health / (float)inventory.maxHealth ) );
-		_hud->SetStateInt	("player_maxhealth", inventory.maxHealth);
 		_hud->HandleNamedEvent ( "updateHealth" );
 	}
 		
@@ -6040,7 +6046,12 @@ idUserInterface *idPlayer::ActiveGui( void ) {
 		return 0;
 	}
 #endif
-	return focusUI;
+	//	IT 266
+	//	map ui is the only focusable uo
+	if (true)
+		return mapui;
+	if(false)
+		return focusUI;
 }
 
 /*
@@ -7788,12 +7799,19 @@ void idPlayer::UpdateViewAngles( void ) {
 //		gameLocal.Printf( "\tUSERCMD: <%d, %d, %d>\n", usercmd.angles[ 0 ], usercmd.angles[ 1 ], usercmd.angles[ 2 ] );
 //		gameLocal.Printf( "\tDELTAVIEW: %s\n", deltaViewAngles.ToString() );
 //	}
-	for ( i = 0; i < 3; i++ ) {
-		cmdAngles[i] = SHORT2ANGLE( usercmd.angles[i] );
-		if ( influenceActive == INFLUENCE_LEVEL3 ) {
-			viewAngles[i] += idMath::ClampFloat( -1.0f, 1.0f, idMath::AngleDelta( idMath::AngleNormalize180( SHORT2ANGLE( usercmd.angles[i]) + deltaViewAngles[i] ) , viewAngles[i] ) );
-		} else {
-			viewAngles[i] = idMath::AngleNormalize180( SHORT2ANGLE( usercmd.angles[i] ) + deltaViewAngles[i] );
+
+	//	IT 266
+	//	Force camera to never rotate
+	if (false)
+	{
+		for (i = 0; i < 3; i++) {
+			cmdAngles[i] = SHORT2ANGLE(usercmd.angles[i]);
+			if (influenceActive == INFLUENCE_LEVEL3) {
+				viewAngles[i] += idMath::ClampFloat(-1.0f, 1.0f, idMath::AngleDelta(idMath::AngleNormalize180(SHORT2ANGLE(usercmd.angles[i]) + deltaViewAngles[i]), viewAngles[i]));
+			}
+			else {
+				viewAngles[i] = idMath::AngleNormalize180(SHORT2ANGLE(usercmd.angles[i]) + deltaViewAngles[i]);
+			}
 		}
 	}
 	if ( !centerView.IsDone( gameLocal.time ) ) {
@@ -10905,18 +10923,6 @@ void idPlayer::GetViewPos( idVec3 &origin, idMat3 &axis ) const {
 		// adjust the origin based on the camera nodal distance (eye distance from neck)
 		origin += physicsObj.GetGravityNormal() * g_viewNodalZ.GetFloat();
 		origin += axis[0] * g_viewNodalX.GetFloat() + axis[2] * g_viewNodalZ.GetFloat();
-
-		if (gameLocal.usercmds->rightmove > 0)
-			cameraOriginY += 1;
-		else if (gameLocal.usercmds->rightmove < 0)
-			cameraOriginY -= 1;
-		if (gameLocal.usercmds->forwardmove > 0)
-			cameraOriginX += 1;
-		else if (gameLocal.usercmds->forwardmove < 0)
-			cameraOriginX -= 1;
-
-		origin.x += cameraOriginX;
-		origin.y += cameraOriginY;
 	}
 }
 
@@ -11081,16 +11087,12 @@ void idPlayer::CalculateRenderView( void ) {
 	 			OffsetThirdPersonView( 0.0f, 20.0f + range, 0.0f, false );
 				SmoothenRenderView( false );
 			} else {
-				/*
 				renderView->vieworg = firstPersonViewOrigin;
 				renderView->viewaxis = firstPersonViewAxis;
 				SmoothenRenderView( true );
 				// set the viewID to the clientNum + 1, so we can suppress the right player bodies and
 				// allow the right player view weapons
 				renderView->viewID = entityNumber + 1;
-				*/
-				OffsetThirdPersonView(pm_thirdPersonAngle.GetFloat(), pm_thirdPersonRange.GetFloat(), pm_thirdPersonHeight.GetFloat(), pm_thirdPersonClip.GetBool());
-				SmoothenRenderView(false);
 			}
 		}
 		

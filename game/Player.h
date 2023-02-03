@@ -337,7 +337,8 @@ public:
 	idEntityPtr<idAnimatedEntity>	weaponWorldModel;
 	const idDeclEntityDef*			weaponDef;
 
-
+	//	IT 266
+	idUserInterface *		mapui;
  	idUserInterface *		hud;				// Common hud
 	idUserInterface *		mphud;				// hud overlay containing MP elements
 	

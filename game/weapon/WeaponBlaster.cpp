@@ -432,9 +432,6 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 				PlayAnim( ANIMCHANNEL_ALL, "chargedfire", parms.blendFrames );
 			} else {
 				Attack ( false, 1, spread, 0, 1.0f );
-		/*		pm_thirdPerson.SetBool(!pm_thirdPerson.GetBool());
-				gameLocal.Printf("[%d]", gameLocal.usercmds->forwardmove); */
-
 				PlayEffect ( "fx_normalflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
 			}

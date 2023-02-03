@@ -498,7 +498,6 @@ void idPlayerView::SingleView( idUserInterface *hud, const renderView_t *view, i
 	if ( !view ) {
 		return;
 	}
-
 	if ( !( RF_GUI_ONLY & renderFlags ) ) {
 		// jscott: portal sky rendering with KRABS
 		idCamera *portalSky = gameLocal.GetPortalSky();
@@ -513,8 +512,8 @@ void idPlayerView::SingleView( idUserInterface *hud, const renderView_t *view, i
 	if ( RF_NO_GUI & renderFlags ) {
 		return;
 	}
-
 	// draw screen blobs
+	
 	if ( !pm_thirdPerson.GetBool() && !g_skipViewEffects.GetBool() ) {
 		for ( int i = 0 ; i < MAX_SCREEN_BLOBS ; i++ ) {
 			screenBlob_t	*blob = &screenBlobs[i];
@@ -532,16 +531,14 @@ void idPlayerView::SingleView( idUserInterface *hud, const renderView_t *view, i
 				renderSystem->SetColor4( 1,1,1,fade );
 				renderSystem->DrawStretchPic( blob->x, blob->y, blob->w, blob->h,blob->s1, blob->t1, blob->s2, blob->t2, blob->material );
 			}
-		}
 
+		}
 		// Render tunnel vision
 		if ( gameLocal.time < tvFinishTime ) {
 			renderSystem->SetColor4( 1.0f, 1.0f, 1.0f, tvScale * ((float)(tvFinishTime - gameLocal.time) / (float)(tvFinishTime - tvStartTime)) );
 			renderSystem->DrawStretchPic( 0.0f, 0.0f, 640.0f, 480.0f, 0.0f, 0.0f, 1.0f, 1.0f, tunnelMaterial );
 		}
-
-		player->DrawHUD( hud );
-
+		player->DrawHUD(hud);
 			
 /*
 		// tunnel vision
@@ -769,6 +766,7 @@ void idPlayerView::RenderPlayerView( idUserInterface *hud ) {
 		// Now draw GUI's.
 		if ( !guiRendered ) {
 			SingleView( hud, view, RF_GUI_ONLY );
+			player->mapui->Redraw(gameLocal.time);
 		}
 
 		ScreenFade();
