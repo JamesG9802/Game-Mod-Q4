@@ -1846,6 +1846,15 @@ void idPlayer::Spawn( void ) {
 		
 		objectiveSystem = NULL;
 
+		// IT 266
+		if (spawnArgs.GetString("it266_map", "", temp)) {
+			gameLocal.Printf("[%s]", temp.c_str());
+			mapui = uiManager->FindGui(temp, true, false, true);
+		}
+		else {
+			gameLocal.Warning("idPlayer::Spawn() - No map for player.");
+		}
+
 		if ( spawnArgs.GetString( "hud", "", temp ) ) {
 			gameLocal.Printf("[%s]", temp.c_str());
 			hud = uiManager->FindGui( temp, true, false, true );
@@ -1861,9 +1870,6 @@ void idPlayer::Spawn( void ) {
 			}
 		}
 
-		// IT 266
-		mapui = uiManager->FindGui("guis/mod_debug.gui", true, false, true);
-
 		if ( hud ) {
 			hud->Activate( true, gameLocal.time );
 		}
@@ -1873,10 +1879,10 @@ void idPlayer::Spawn( void ) {
 		}
 
 		// IT 266
-		if (mapui)
+		if (mapui) {
 			mapui->Activate(true, gameLocal.time);
-		else
-			gameLocal.Warning("Mapui went wrong in Player.cpp");
+		}
+		SetupMapUI(mapui);
 		// load cursor
 		GetCursorGUI();
 		if ( cursor ) {
@@ -9518,6 +9524,12 @@ void idPlayer::Think( void ) {
 
 	EvaluateControls();
 
+	//	IT 266
+	//	Back and forth movement pans the map ui
+	if(usercmd.forwardmove > 0)
+		mapui->SetStateFloat("verticalOffset", mapui->GetStateFloat("verticalOffset") + 5.0f);
+	else if(usercmd.forwardmove < 0)
+		mapui->SetStateFloat("verticalOffset", mapui->GetStateFloat("verticalOffset") - 5.0f);
 
 // RAVEN BEGIN
 // abahr
@@ -14098,5 +14110,43 @@ int idPlayer::CanSelectWeapon(const char* weaponName)
 
 	return weaponNum;
 }
+//	IT 266
 
+/// <summary>
+/// Sets up random position for map.
+/// Sets up random paths.
+/// </summary>
+void SetupMapUI(idUserInterface* mapui)
+{
+	for (int x = 0; x < 7; x++)
+	{
+		for (int y = 0; y < 15; y++)
+		{
+			float random = 16 * idMath::Fabs(gameLocal.random.CRandomFloat());
+			char varname[32];
+			char intBuffer[8];
+			strcpy(varname, "node_");
+			strcat(varname, itoa(x, intBuffer, 10));
+			strcat(varname, "_");
+			strcat(varname, itoa(y, intBuffer, 10));
+			strcat(varname, "");
+
+			char xVar[32];
+			strcpy(xVar, varname);
+			strcat(xVar, "_x");
+
+
+			mapui->SetStateFloat(xVar, random);
+			gameLocal.Printf("%s %.6f", xVar, random);
+			random = 32 * idMath::Fabs(gameLocal.random.CRandomFloat());
+			char yVar[32];
+			strcpy(yVar, varname);
+			strcat(yVar, "_y");
+
+			mapui->SetStateFloat(yVar, random);
+
+			gameLocal.Printf("%s %.6f", yVar, random);
+		}
+	}
+}
 // RITUAL END
