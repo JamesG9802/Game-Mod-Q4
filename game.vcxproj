@@ -334,6 +334,33 @@ cd "%quake%"
     <ClCompile Include="game\IconManager.cpp" />
     <ClCompile Include="game\IK.cpp" />
     <ClCompile Include="game\Instance.cpp" />
+    <ClCompile Include="game\it266_mod\Mod_Battle.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_BattleEntity.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_BattleNode.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_Card.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_Deck.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_Map.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_Node.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_RestNode.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_ShopNode.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="game\Item.cpp" />
     <ClCompile Include="game\Light.cpp" />
     <ClCompile Include="game\LipSync.cpp" />
@@ -459,6 +486,15 @@ cd "%quake%"
     <ClInclude Include="game\IconManager.h" />
     <ClInclude Include="game\IK.h" />
     <ClInclude Include="game\Instance.h" />
+    <ClInclude Include="game\it266_mod\Mod_Battle.h" />
+    <ClInclude Include="game\it266_mod\Mod_BattleEntity.h" />
+    <ClInclude Include="game\it266_mod\Mod_BattleNode.h" />
+    <ClInclude Include="game\it266_mod\Mod_Card.h" />
+    <ClInclude Include="game\it266_mod\Mod_Deck.h" />
+    <ClInclude Include="game\it266_mod\Mod_Map.h" />
+    <ClInclude Include="game\it266_mod\Mod_Node.h" />
+    <ClInclude Include="game\it266_mod\Mod_RestNode.h" />
+    <ClInclude Include="game\it266_mod\Mod_ShopNode.h" />
     <ClInclude Include="game\Item.h" />
     <ClInclude Include="game\Light.h" />
     <ClInclude Include="game\LipSync.h" />

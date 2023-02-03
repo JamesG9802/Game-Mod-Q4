@@ -37,6 +37,9 @@
     <Filter Include="Game\MP\Stats">
       <UniqueIdentifier>{24f1b4a4-242a-49b1-b384-42a9e710d875}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\IT266Mod">
+      <UniqueIdentifier>{0462c3f2-0c1f-45e8-adc9-88d51101cb97}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game\Actor.cpp">
@@ -516,6 +519,33 @@
     <ClCompile Include="game\mp\stats\StatWindow.cpp">
       <Filter>Game\MP\Stats</Filter>
     </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_Battle.cpp">
+      <Filter>Game\IT266Mod</Filter>
+    </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_BattleEntity.cpp">
+      <Filter>Game\IT266Mod</Filter>
+    </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_BattleNode.cpp">
+      <Filter>Game\IT266Mod</Filter>
+    </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_Card.cpp">
+      <Filter>Game\IT266Mod</Filter>
+    </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_Deck.cpp">
+      <Filter>Game\IT266Mod</Filter>
+    </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_Node.cpp">
+      <Filter>Game\IT266Mod</Filter>
+    </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_RestNode.cpp">
+      <Filter>Game\IT266Mod</Filter>
+    </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_ShopNode.cpp">
+      <Filter>Game\IT266Mod</Filter>
+    </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_Map.cpp">
+      <Filter>Game\IT266Mod</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game\Actor.h">
@@ -829,6 +859,33 @@
     </ClInclude>
     <ClInclude Include="game\mp\stats\StatWindow.h">
       <Filter>Game\MP\Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="game\it266_mod\Mod_Card.h">
+      <Filter>Game\IT266Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="game\it266_mod\Mod_Deck.h">
+      <Filter>Game\IT266Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="game\it266_mod\Mod_Battle.h">
+      <Filter>Game\IT266Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="game\it266_mod\Mod_BattleEntity.h">
+      <Filter>Game\IT266Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="game\it266_mod\Mod_BattleNode.h">
+      <Filter>Game\IT266Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="game\it266_mod\Mod_Node.h">
+      <Filter>Game\IT266Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="game\it266_mod\Mod_RestNode.h">
+      <Filter>Game\IT266Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="game\it266_mod\Mod_ShopNode.h">
+      <Filter>Game\IT266Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="game\it266_mod\Mod_Map.h">
+      <Filter>Game\IT266Mod</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
