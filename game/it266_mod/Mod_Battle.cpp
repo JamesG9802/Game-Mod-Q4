@@ -24,7 +24,3 @@
 	.	List<BattleEntity> enemyTeam
 
 */
-#include <stdint.h>
-int a() {
-	return -1;
-}

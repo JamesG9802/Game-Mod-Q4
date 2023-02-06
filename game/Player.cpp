@@ -28,6 +28,8 @@
 #endif
 // RAVEN END
 
+//	IT 266
+#include "it266_mod/Mod_Map.h"
 
 
 
@@ -14116,37 +14118,117 @@ int idPlayer::CanSelectWeapon(const char* weaponName)
 /// Sets up random position for map.
 /// Sets up random paths.
 /// </summary>
-void SetupMapUI(idUserInterface* mapui)
+void idPlayer::SetupMapUI(idUserInterface* mapui)
 {
+	idPlayer::mod_map.GenerateMap();
 	for (int x = 0; x < 7; x++)
 	{
 		for (int y = 0; y < 15; y++)
 		{
-			float random = 16 * idMath::Fabs(gameLocal.random.CRandomFloat());
-			char varname[32];
+			char varname[64];
 			char intBuffer[8];
 			strcpy(varname, "node_");
 			strcat(varname, itoa(x, intBuffer, 10));
 			strcat(varname, "_");
 			strcat(varname, itoa(y, intBuffer, 10));
-			strcat(varname, "");
 
-			char xVar[32];
+			gameLocal.Printf("%s ", varname);
+
+
+			char xVar[64];
 			strcpy(xVar, varname);
 			strcat(xVar, "_x");
-
-
-			mapui->SetStateFloat(xVar, random);
-			gameLocal.Printf("%s %.6f", xVar, random);
-			random = 32 * idMath::Fabs(gameLocal.random.CRandomFloat());
-			char yVar[32];
+	//		mapui->SetStateFloat(xVar, 32 * idMath::Fabs(gameLocal.random.CRandomFloat()));
+			char yVar[64];
 			strcpy(yVar, varname);
 			strcat(yVar, "_y");
-
-			mapui->SetStateFloat(yVar, random);
-
-			gameLocal.Printf("%s %.6f", yVar, random);
+	//		mapui->SetStateFloat(yVar, 32 * idMath::Fabs(gameLocal.random.CRandomFloat()));
+			char zVar[64];
+			strcpy(zVar, varname);
+			strcat(zVar, "_z");
+			mapui->SetStateFloat(zVar, idPlayer::mod_map.nodes[x][y].type == Mod_Node::NotNode ? 0 : 1);
+			char wVar[64];
+			strcpy(wVar, varname);
+			strcat(wVar, "_w");
+			mapui->SetStateFloat(wVar, (int)idPlayer::mod_map.nodes[x][y].type);
 		}
 	}
+	for (int i = 0; i < idPlayer::mod_map.connections.size();i++)
+	{
+		int fromx = idPlayer::mod_map.connections.get(i).fromx;
+		int fromy = idPlayer::mod_map.connections.get(i).fromy;
+		int tox = idPlayer::mod_map.connections.get(i).tox;
+		int toy = idPlayer::mod_map.connections.get(i).toy;
+		char varname[64];
+		char intBuffer[8];
+		strcpy(varname, "connection_");
+		strcat(varname, itoa(fromx, intBuffer, 10));
+		strcat(varname, "_");
+		strcat(varname, itoa(fromy, intBuffer, 10));
+		strcat(varname, "_");
+		strcat(varname, itoa(tox, intBuffer, 10));
+		strcat(varname, "_");
+		strcat(varname, itoa(toy, intBuffer, 10));
+		mapui->SetStateFloat(varname, 1);
+
+		/*
+			Rotation
+			Need x,y of from and x,y of to
+			Angle = -tan(x difference/y difference
+		
+			xdiff = 
+		*/
+		float xdiff = 0;
+		if (tox < fromx)
+			xdiff += 640 * .7f / 7.0f;
+		else if (tox > fromx)
+			xdiff -= 640 * .7f / 7.0f;
+
+
+		char fromNodeX[64];
+		strcpy(fromNodeX, "node_");
+		strcat(fromNodeX, itoa(fromx, intBuffer, 10));
+		strcat(fromNodeX, "_");
+		strcat(fromNodeX, itoa(fromy, intBuffer, 10));
+		strcat(fromNodeX, "_x");
+		xdiff += mapui->GetStateFloat(fromNodeX);
+		char toNodeX[64];
+		strcpy(toNodeX, "node_");
+		strcat(toNodeX, itoa(tox, intBuffer, 10));
+		strcat(toNodeX, "_");
+		strcat(toNodeX, itoa(toy, intBuffer, 10));
+		strcat(toNodeX, "_x");
+		xdiff -= mapui->GetStateFloat(toNodeX);
+
+		float ydiff = 96;
+		char fromNodeY[64];
+		strcpy(fromNodeY, "node_");
+		strcat(fromNodeY, itoa(fromx, intBuffer, 10));
+		strcat(fromNodeY, "_");
+		strcat(fromNodeY, itoa(fromy, intBuffer, 10));
+		strcat(fromNodeY, "_y");
+		ydiff += mapui->GetStateFloat(fromNodeY);
+		char toNodeY[64];
+		strcpy(toNodeY, "node_");
+		strcat(toNodeY, itoa(tox, intBuffer, 10));
+		strcat(toNodeY, "_");
+		strcat(toNodeY, itoa(toy, intBuffer, 10));
+		strcat(toNodeY, "_x");
+		ydiff -= mapui->GetStateFloat(toNodeY);
+
+		char rotate[64];
+		strcpy(rotate, "connection_");
+		strcat(rotate, itoa(fromx, intBuffer, 10));
+		strcat(rotate, "_");
+		strcat(rotate, itoa(fromy, intBuffer, 10));
+		strcat(rotate, "_");
+		strcat(rotate, itoa(tox, intBuffer, 10));
+		strcat(rotate, "_");
+		strcat(rotate, itoa(toy, intBuffer, 10));
+		strcat(rotate, "_rotate");
+		mapui->SetStateFloat(rotate, atanf(xdiff / ydiff) * 180.0f/ 3.1415f);
+		gameLocal.Printf("%0.6f", atanf(xdiff / ydiff) * 180.0f / 3.1415f);
+	}
+	mapui->HandleNamedEvent("UpdateAll");
 }
 // RITUAL END

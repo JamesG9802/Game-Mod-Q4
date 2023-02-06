@@ -6,6 +6,9 @@
 #ifndef __GAME_PLAYER_H__
 #define __GAME_PLAYER_H__
 
+//	IT 266
+
+#include "./it266_mod/Mod_Map.h"
 /*
 ===============================================================================
 
@@ -341,7 +344,9 @@ public:
 	idUserInterface *		mapui;
  	idUserInterface *		hud;				// Common hud
 	idUserInterface *		mphud;				// hud overlay containing MP elements
-	
+	Mod_Map					mod_map;
+
+
 	idUserInterface *		objectiveSystem;
 	idUserInterface *		cinematicHud;
 	bool					objectiveSystemOpen;
@@ -1005,6 +1010,10 @@ private:
 	int						oldInventoryWeapons;
 
 	const idDeclEntityDef*	itemCosts;
+
+
+	//	IT 266
+	void					SetupMapUI(idUserInterface* mapui);
 
 	bool					WantSmoothing( void ) const;
 	void					PredictionErrorDecay( void );
