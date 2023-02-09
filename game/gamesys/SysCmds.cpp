@@ -3038,6 +3038,14 @@ void Cmd_ClientOverflowReliable_f( const idCmdArgs& args ) {
 }
 #endif
 
+//	IT 266
+void Cmd_ToggleMap_f(const idCmdArgs& args) {
+	idPlayer *player = gameLocal.GetLocalPlayer();
+	if (player)
+	{
+		player->mapui->HandleNamedEvent("ToggleMap");
+	}
+}
 /*
 =================
 idGameLocal::InitConsoleCommands
@@ -3233,6 +3241,8 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand( "buy",					Cmd_BuyItem_f,				CMD_FL_GAME,				"Buy an item (if in a buy zone and the game type supports it)" );
 // RITUAL END
 
+	//	IT 266
+	cmdSystem->AddCommand("toggleMap", Cmd_ToggleMap_f, CMD_FL_GAME, "(IT 266) Toggle map ui");
 }
 
 /*

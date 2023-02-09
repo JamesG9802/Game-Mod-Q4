@@ -14121,6 +14121,8 @@ int idPlayer::CanSelectWeapon(const char* weaponName)
 void idPlayer::SetupMapUI(idUserInterface* mapui)
 {
 	idPlayer::mod_map.GenerateMap();
+
+	//	Init each node
 	for (int x = 0; x < 7; x++)
 	{
 		for (int y = 0; y < 15; y++)
@@ -14153,6 +14155,8 @@ void idPlayer::SetupMapUI(idUserInterface* mapui)
 			mapui->SetStateFloat(wVar, (int)idPlayer::mod_map.nodes[x][y].type);
 		}
 	}
+
+	//	Init connections
 	for (int i = 0; i < idPlayer::mod_map.connections.size();i++)
 	{
 		int fromx = idPlayer::mod_map.connections.get(i).fromx;
@@ -14229,6 +14233,27 @@ void idPlayer::SetupMapUI(idUserInterface* mapui)
 		mapui->SetStateFloat(rotate, atanf(xdiff / ydiff) * 180.0f/ 3.1415f);
 		gameLocal.Printf("%0.6f", atanf(xdiff / ydiff) * 180.0f / 3.1415f);
 	}
+	for (int i = 0; i < idPlayer::mod_map.connections.size(); i++)
+		gameLocal.Printf("%d %d %d %d\n", idPlayer::mod_map.connections.get(i).fromx, 
+			idPlayer::mod_map.connections.get(i).fromy,
+			idPlayer::mod_map.connections.get(i).tox,
+			idPlayer::mod_map.connections.get(i).toy);
+	//	Set Available Nodes
+	for (int i = 0; i < idPlayer::mod_map.connections.size(); i++)
+	{
+		char varname[64];
+		char intBuffer[8];
+
+		strcpy(varname, "node_");
+		strcat(varname, itoa(idPlayer::mod_map.connections.get(i).fromx, intBuffer, 10));
+		strcat(varname, "_");
+		strcat(varname, itoa(idPlayer::mod_map.connections.get(i).fromy, intBuffer, 10));
+		strcat(varname, "_available");
+		gameLocal.Printf("%s %d %d\n",varname, idPlayer::mod_map.connections.get(i).fromy, idPlayer::mod_map.connections.get(i).fromy == 0 ? 0 : 1);
+		mapui->SetStateFloat(varname, idPlayer::mod_map.connections.get(i).fromy == 0 ? 0 : 1);
+	}
+	mapui->HandleNamedEvent("SetAvailable");
 	mapui->HandleNamedEvent("UpdateAll");
+
 }
 // RITUAL END

@@ -340,13 +340,6 @@ public:
 	idEntityPtr<idAnimatedEntity>	weaponWorldModel;
 	const idDeclEntityDef*			weaponDef;
 
-	//	IT 266
-	idUserInterface *		mapui;
- 	idUserInterface *		hud;				// Common hud
-	idUserInterface *		mphud;				// hud overlay containing MP elements
-	Mod_Map					mod_map;
-
-
 	idUserInterface *		objectiveSystem;
 	idUserInterface *		cinematicHud;
 	bool					objectiveSystemOpen;
@@ -800,6 +793,12 @@ public:
 	void					ClampCash( float minCash, float maxCash );
 	void					SetCash( float newCashAmount );
 	void					ResetCash();
+
+	//	IT 266
+	idUserInterface* mapui;
+	idUserInterface* hud;				// Common hud
+	idUserInterface* mphud;				// hud overlay containing MP elements
+	Mod_Map	mod_map;
 // RITUAL END
 
 protected:
@@ -1163,7 +1162,7 @@ private:
 	stateResult_t			State_Legs_Fall					( const stateParms_t& parms );
 	stateResult_t			State_Legs_Land					( const stateParms_t& parms );
 	stateResult_t			State_Legs_Dead					( const stateParms_t& parms );
-	
+
  	CLASS_STATES_PROTOTYPE( idPlayer );
 };
 
