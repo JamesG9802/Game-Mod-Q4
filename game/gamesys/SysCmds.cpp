@@ -3046,6 +3046,92 @@ void Cmd_ToggleMap_f(const idCmdArgs& args) {
 		player->mapui->HandleNamedEvent("ToggleMap");
 	}
 }
+void Cmd_SetActiveNode_f(const idCmdArgs& args) {
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	if (!player)
+		return;
+	int x = atoi(args.Argv(1));
+	int y = atoi(args.Argv(2));
+
+	for (int i = 0; i < player->mod_map.connections.size(); i++)
+	{
+		int fromx = player->mod_map.connections.get(i).fromx;
+		int fromy = player->mod_map.connections.get(i).fromy;
+		int tox = player->mod_map.connections.get(i).tox;
+		int toy = player->mod_map.connections.get(i).toy;
+		{
+			char varname[64];
+			char intBuffer[8];
+
+			strcpy(varname, "node_");
+			strcat(varname, itoa(tox, intBuffer, 10));
+			strcat(varname, "_");
+			strcat(varname, itoa(toy, intBuffer, 10));
+			strcat(varname, "_available");
+
+			//	 if from x == x from y == y
+			player->mapui->SetStateFloat(varname, 1);
+		}
+		{
+			char varname[64];
+			char intBuffer[8];
+
+			strcpy(varname, "node_");
+			strcat(varname, itoa(fromx, intBuffer, 10));
+			strcat(varname, "_");
+			strcat(varname, itoa(fromy, intBuffer, 10));
+			strcat(varname, "_available");
+
+			//	 if from x == x from y == y
+			player->mapui->SetStateFloat(varname, 1);
+		}
+	}
+	for (int i = 0; i < player->mod_map.connections.size(); i++)
+	{
+		int fromx = player->mod_map.connections.get(i).fromx;
+		int fromy = player->mod_map.connections.get(i).fromy;
+		int tox = player->mod_map.connections.get(i).tox;
+		int toy = player->mod_map.connections.get(i).toy;
+
+		if (fromx != x || fromy != y)
+			continue;
+		char varname[64];
+		char intBuffer[8];
+
+		strcpy(varname, "node_");
+		strcat(varname, itoa(tox, intBuffer, 10));
+		strcat(varname, "_");
+		strcat(varname, itoa(toy, intBuffer, 10));
+		strcat(varname, "_available");
+
+		//	 if from x == x from y == y
+		player->mapui->SetStateFloat(varname, 0);
+	}
+	player->mapui->HandleNamedEvent("SetAvailable");
+}
+void Cmd_ActivateNode_f(const idCmdArgs& args) {
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	if (!player)
+		return;
+	int x = atoi(args.Argv(1));
+	int y = atoi(args.Argv(2));
+	gameLocal.Printf("%d %d\n", x, y);
+}
+void Cmd_OpenDeck_f(const idCmdArgs& args)
+{
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	if (!player)
+		return;
+	player->deckui->SetStateFloat("isvisible", 1);
+	gameLocal.Printf("working\n");
+}
+void Cmd_CloseDeck_f(const idCmdArgs& args)
+{
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	if (!player)
+		return;
+	player->deckui->SetStateFloat("isvisible", 0);
+}
 /*
 =================
 idGameLocal::InitConsoleCommands
@@ -3243,6 +3329,10 @@ void idGameLocal::InitConsoleCommands( void ) {
 
 	//	IT 266
 	cmdSystem->AddCommand("toggleMap", Cmd_ToggleMap_f, CMD_FL_GAME, "(IT 266) Toggle map ui");
+	cmdSystem->AddCommand("setActiveNode", Cmd_SetActiveNode_f, CMD_FL_GAME, "(IT 266) Set Active Nodes");
+	cmdSystem->AddCommand("activateNode", Cmd_ActivateNode_f, CMD_FL_GAME, "(IT 266) Activate Node");
+	cmdSystem->AddCommand("openDeck", Cmd_OpenDeck_f, CMD_FL_GAME, "(IT 266) Open Deck GUI");
+	cmdSystem->AddCommand("closeDeck", Cmd_CloseDeck_f, CMD_FL_GAME, "(IT 266) Close Deck GUI");
 }
 
 /*

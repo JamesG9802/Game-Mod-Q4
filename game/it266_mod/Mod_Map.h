@@ -99,6 +99,7 @@ public:
     // function to get capacity of the vector
     int getcapacity() { return capacity; }
 };
+
 struct ConnectionPair {
 	int fromx, fromy, tox, toy;
 };

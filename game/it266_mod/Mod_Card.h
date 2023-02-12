@@ -1,6 +1,11 @@
-#ifndef Mod_Card_h
-#define Mod_Card_h
-#endif
-class Mod_Card {
+#ifndef Mod_Map_h
+#define Mod_Map_h
 
+class Mod_Card {
+public:
+	char* name;
+	char* cardArt;
+
+	virtual void Execute();
 };
+#endif

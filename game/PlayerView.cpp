@@ -766,7 +766,10 @@ void idPlayerView::RenderPlayerView( idUserInterface *hud ) {
 		// Now draw GUI's.
 		if ( !guiRendered ) {
 			SingleView( hud, view, RF_GUI_ONLY );
+			//	IT 266
 			player->mapui->Redraw(gameLocal.time);
+		//	player->hud->Redraw(gameLocal.time);
+			player->deckui->Redraw(gameLocal.time);
 		}
 
 		ScreenFade();

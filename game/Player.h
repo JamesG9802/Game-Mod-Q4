@@ -268,6 +268,9 @@ public:
 //	idList<rvDatabaseEntry>	database;
 	
 	int						secretAreasDiscovered;
+
+	//	IT 266
+	int						playerGoldAmt = 0;
 };
 
 class idPlayer : public idActor {
@@ -796,6 +799,7 @@ public:
 
 	//	IT 266
 	idUserInterface* mapui;
+	idUserInterface* deckui;
 	idUserInterface* hud;				// Common hud
 	idUserInterface* mphud;				// hud overlay containing MP elements
 	Mod_Map	mod_map;

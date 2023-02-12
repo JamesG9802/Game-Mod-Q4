@@ -208,7 +208,8 @@ void idInventory::Clear( void ) {
 	armor				= 0;
 	maxarmor			= 0;
 	secretAreasDiscovered = 0;
-
+	//	IT 266
+	playerGoldAmt		= 0;
 	memset( ammo, 0, sizeof( ammo ) );
 
 	ClearPowerUps();
@@ -341,6 +342,9 @@ void idInventory::RestoreInventory( idPlayer *owner, const idDict &dict ) {
 	maxHealth		= dict.GetInt( "maxhealth", "100" );
 	armor			= dict.GetInt( "armor", "50" );
 	maxarmor		= dict.GetInt( "maxarmor", "100" );
+
+	//	IT 266
+	playerGoldAmt = dict.GetInt("goldAmt", "0");
 
 	// ammo
 	for( i = 0; i < MAX_AMMOTYPES; i++ ) {
@@ -1856,6 +1860,13 @@ void idPlayer::Spawn( void ) {
 		else {
 			gameLocal.Warning("idPlayer::Spawn() - No map for player.");
 		}
+		if (spawnArgs.GetString("it266_deck", "", temp)) {
+			gameLocal.Printf("[%s]", temp.c_str());
+			deckui = uiManager->FindGui(temp, true, false, true);
+		}
+		else {
+			gameLocal.Warning("idPlayer::Spawn() - No deck for player.");
+		}
 
 		if ( spawnArgs.GetString( "hud", "", temp ) ) {
 			gameLocal.Printf("[%s]", temp.c_str());
@@ -1883,6 +1894,9 @@ void idPlayer::Spawn( void ) {
 		// IT 266
 		if (mapui) {
 			mapui->Activate(true, gameLocal.time);
+		}
+		if (deckui) {
+			deckui->Activate(true, gameLocal.time);
 		}
 		SetupMapUI(mapui);
 		// load cursor
@@ -3416,6 +3430,13 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 		_hud->SetStateInt("player_maxhealth", inventory.maxHealth);
 		_hud->SetStateFloat	( "player_healthpct", idMath::ClampFloat ( 0.0f, 1.0f, (float)health / (float)inventory.maxHealth ) );
 		_hud->HandleNamedEvent ( "updateHealth" );
+
+		//	IT 266
+		idUserInterface* map = gameLocal.GetLocalPlayer()->mapui;
+		map->SetStateInt("player_health", health < -100 ? -100 : health);
+		map->SetStateInt("player_maxhealth", inventory.maxHealth);
+		map->SetStateFloat("player_healthpct", idMath::ClampFloat(0.0f, 1.0f, (float)health / (float)inventory.maxHealth));
+
 	}
 		
 	temp = _hud->State().GetInt ( "player_armor", "-1" );
@@ -6055,7 +6076,7 @@ idUserInterface *idPlayer::ActiveGui( void ) {
 	}
 #endif
 	//	IT 266
-	//	map ui is the only focusable uo
+	//	map ui is the only focusable ui
 	if (true)
 		return mapui;
 	if(false)
