@@ -1,11 +1,20 @@
-#ifndef Mod_Map_h
-#define Mod_Map_h
+#ifndef Mod_Card_h
+#define Mod_Card_h
+#include "vectorClass.h"
+#include "keyvalueClass.h"
 
 class Mod_Card {
 public:
+	int cost; 
 	char* name;
 	char* cardArt;
 
-	virtual void Execute();
+	Mod_Card(int cost, char* name, char* cardArt)
+	{
+		this->cost = cost;
+		this->name = name;
+		this->cardArt = cardArt;
+	}
+	virtual void Execute() = 0;
 };
 #endif

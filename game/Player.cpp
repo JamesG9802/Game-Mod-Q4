@@ -30,8 +30,9 @@
 
 //	IT 266
 #include "it266_mod/Mod_Map.h"
+#include "it266_mod/Mod_Card.h"
 
-
+class Mod_Card;
 
 idCVar net_predictionErrorDecay( "net_predictionErrorDecay", "112", CVAR_FLOAT | CVAR_GAME | CVAR_NOCHEAT, "time in milliseconds it takes to fade away prediction errors", 0.0f, 200.0f );
 idCVar net_showPredictionError( "net_showPredictionError", "-1", CVAR_INTEGER | CVAR_GAME | CVAR_NOCHEAT, "show prediction errors for the given client", -1, MAX_CLIENTS );
@@ -209,7 +210,8 @@ void idInventory::Clear( void ) {
 	maxarmor			= 0;
 	secretAreasDiscovered = 0;
 	//	IT 266
-	playerGoldAmt		= 0;
+	if(gameLocal.GetLocalPlayer())
+		gameLocal.GetLocalPlayer()->playerGoldAmt		= 0;
 	memset( ammo, 0, sizeof( ammo ) );
 
 	ClearPowerUps();
@@ -344,7 +346,8 @@ void idInventory::RestoreInventory( idPlayer *owner, const idDict &dict ) {
 	maxarmor		= dict.GetInt( "maxarmor", "100" );
 
 	//	IT 266
-	playerGoldAmt = dict.GetInt("goldAmt", "0");
+	if(gameLocal.GetLocalPlayer())
+		gameLocal.GetLocalPlayer()->playerGoldAmt = dict.GetInt("goldAmt", "0");
 
 	// ammo
 	for( i = 0; i < MAX_AMMOTYPES; i++ ) {
@@ -1894,11 +1897,22 @@ void idPlayer::Spawn( void ) {
 		// IT 266
 		if (mapui) {
 			mapui->Activate(true, gameLocal.time);
+			mapui->SetStateInt("isvisible", 1);
 		}
 		if (deckui) {
 			deckui->Activate(true, gameLocal.time);
 		}
 		SetupMapUI(mapui);
+
+		//	Needs to add ui to their respective list
+		uiList.push(keyvalueClass<int, idUserInterface*>(0, mapui));
+		uiList.push(keyvalueClass<int, idUserInterface*>(1, deckui));
+		uiList.sort();
+
+		//	IT 266
+		//	Set up deck
+	//	Mod_Card card = (1, "it266_card_strike_name", "it266_card_strike_art");
+
 		// load cursor
 		GetCursorGUI();
 		if ( cursor ) {
@@ -2151,6 +2165,12 @@ void idPlayer::Save( idSaveGame *savefile ) const {
 
  	savefile->WriteUserInterface( hud, false );
 //	savefile->WriteUserInterface( mphud, false );			// Don't save MP stuff
+	//	IT 266
+	//	Saving our own gui information
+	savefile->WriteUserInterface(mapui, false);
+	savefile->WriteUserInterface(deckui, false);
+
+
  	savefile->WriteUserInterface( objectiveSystem, false );
 	savefile->WriteUserInterface( cinematicHud, false );
 	savefile->WriteBool( objectiveSystemOpen );
@@ -2284,7 +2304,9 @@ void idPlayer::Save( idSaveGame *savefile ) const {
 	}
 	savefile->WriteInt( currentLoggedAccel );
 
-	savefile->WriteUserInterface( focusUI, false );
+	//	IT 266 Important: Due to how UI is handled, focusUI related stuff is overriden
+	//	This is commented out to prevent an error when loading & saving
+	//	savefile->WriteUserInterface( focusUI, false );
 	savefile->WriteInt( focusTime );
 	savefile->WriteInt ( focusType );
 	focusEnt.Save ( savefile );
@@ -2418,6 +2440,11 @@ void idPlayer::Restore( idRestoreGame *savefile ) {
 
  	savefile->ReadUserInterface( hud, &spawnArgs );	
 	assert( !mphud );									// Don't save MP stuff
+	//	IT 266
+	//	Loading our own ui
+	savefile->ReadUserInterface(mapui, &spawnArgs);
+	savefile->ReadUserInterface(deckui, &spawnArgs);
+
 	savefile->ReadUserInterface( objectiveSystem, &spawnArgs );
 	savefile->ReadUserInterface( cinematicHud, &spawnArgs );
 	savefile->ReadBool( objectiveSystemOpen );
@@ -2559,8 +2586,9 @@ void idPlayer::Restore( idRestoreGame *savefile ) {
 		savefile->ReadVec3( loggedAccel[ i ].dir );
 	}
 	savefile->ReadInt( currentLoggedAccel );
-
-	savefile->ReadUserInterface( focusUI, &spawnArgs ),
+	//	IT 266
+	//	Must be commented out
+	//	savefile->ReadUserInterface( focusUI, &spawnArgs ),
 	savefile->ReadInt( focusTime );
 	savefile->ReadInt( (int&)focusType );
 	focusEnt.Restore ( savefile );
@@ -3436,7 +3464,7 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 		map->SetStateInt("player_health", health < -100 ? -100 : health);
 		map->SetStateInt("player_maxhealth", inventory.maxHealth);
 		map->SetStateFloat("player_healthpct", idMath::ClampFloat(0.0f, 1.0f, (float)health / (float)inventory.maxHealth));
-
+		map->SetStateInt("player_gold", playerGoldAmt);
 	}
 		
 	temp = _hud->State().GetInt ( "player_armor", "-1" );
@@ -6311,23 +6339,52 @@ void idPlayer::Weapon_GUI( void ) {
  		const char *command = NULL;
 		bool updateVisuals = false;
 
+		//	IT 266
+		//	Instead of only handling event for one focusUI, we want to activate for all relevant UI.
 		idUserInterface *ui = ActiveGui();
-		if ( ui ) {
+		if ( ui ) {	//	This check is not really necessary
  			ev = sys->GenerateMouseButtonEvent( 1, ( usercmd.buttons & BUTTON_ATTACK ) != 0 );
+			gameLocal.Printf("\n");
+			for (int i = uiList.size() - 1; i >= 0; i--)
+			{
+				if (uiList.get(i).value)
+				{
+					gameLocal.Printf("For %d: %d\n", uiList.get(i).key, uiList.get(i).value->GetStateInt("isvisible"));
+				}
+				if (uiList.get(i).value && uiList.get(i).value->GetStateInt("isvisible") == 1)
+				{
+					command = uiList.get(i).value->HandleEvent(&ev, gameLocal.time, &updateVisuals);
+					if (uiList.get(i).value->GetStateInt("responded") == 1)
+					{
+						//	IT 266
+						//	Player is always the GUI focus entity
+						HandleGuiCommands(this, command);
+						uiList.get(i).value->SetStateInt("responded", 0);
+						return;
+					}
+				}
+			}
+			/*
 			command = ui->HandleEvent( &ev, gameLocal.time, &updateVisuals );
 			if ( updateVisuals && focusEnt && ui == focusUI ) {
 				focusEnt->UpdateVisuals();
 			}
+			ui->SetStateInt("responded", 0);
+			*/
 		}
+		/*
 		if ( gameLocal.isClient ) {
 			// we predict enough, but don't want to execute commands
 			return;
 		}
 		if ( focusEnt ) {
-			HandleGuiCommands( focusEnt, command );
+			HandleGuiCommands( focusEnt, command );	
 		} else {
+			//	IT 266
+			//	Player is always the GUI focus entity
 			HandleGuiCommands( this, command );
 		}
+		*/
 	}
 }
 
@@ -9535,10 +9592,27 @@ void idPlayer::Think( void ) {
 
 	// if we have an active gui, we will unrotate the view angles as
 	// we turn the mouse movements into gui events
+
+	//	IT 266
+	//	We need to move the mouse of all GUIS
+
+	/*
 	idUserInterface *gui = ActiveGui();
 	if ( gui && gui != focusUI ) {
 		RouteGuiMouse( gui );
 	}
+	*/
+	for (int i = 0; i < uiList.size(); i++)
+	{
+		if (uiList.get(i).value)
+			RouteGuiMouse(uiList.get(i).value);
+	}
+
+	//	Due to RouteGUIMouse normally resetting mouse positional variables
+	//	after execution, we need to stop that so we can move the mouse individually
+	//	for each gui and only do that after all are finished
+	oldMouseX = usercmd.mx;
+	oldMouseY = usercmd.my;
 
 	// set the push velocity on the weapon before running the physics
 	if ( weapon ) {
@@ -9714,8 +9788,16 @@ void idPlayer::RouteGuiMouse( idUserInterface *gui ) {
 	if ( usercmd.mx != oldMouseX || usercmd.my != oldMouseY ) {
  		ev = sys->GenerateMouseMoveEvent( usercmd.mx - oldMouseX, usercmd.my - oldMouseY );
  		command = gui->HandleEvent( &ev, gameLocal.time );
+		
+		//	IT 266
+		//	Because we are routing multiple GUIS at the same time
+		//	we cannot reset the mouse positional variables yet
+		//	We will handle this after all of them are processed
+
+		/*
 		oldMouseX = usercmd.mx;
 		oldMouseY = usercmd.my;
+		*/
 	}
 }
 
@@ -14277,4 +14359,5 @@ void idPlayer::SetupMapUI(idUserInterface* mapui)
 	mapui->HandleNamedEvent("UpdateAll");
 
 }
+
 // RITUAL END

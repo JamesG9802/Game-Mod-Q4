@@ -440,6 +440,7 @@ cd "%quake%"
     <ClCompile Include="game\weapon\WeaponRocketLauncher.cpp" />
     <ClCompile Include="game\weapon\WeaponShotgun.cpp" />
     <ClCompile Include="game\WorldSpawn.cpp" />
+    <ClCompile Include="game\it266_mod\Mod_Cards.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game\Actor.h" />
@@ -486,6 +487,7 @@ cd "%quake%"
     <ClInclude Include="game\IconManager.h" />
     <ClInclude Include="game\IK.h" />
     <ClInclude Include="game\Instance.h" />
+    <ClInclude Include="game\it266_mod\keyvalueClass.h" />
     <ClInclude Include="game\it266_mod\Mod_Battle.h" />
     <ClInclude Include="game\it266_mod\Mod_BattleEntity.h" />
     <ClInclude Include="game\it266_mod\Mod_BattleNode.h" />
@@ -495,6 +497,8 @@ cd "%quake%"
     <ClInclude Include="game\it266_mod\Mod_Node.h" />
     <ClInclude Include="game\it266_mod\Mod_RestNode.h" />
     <ClInclude Include="game\it266_mod\Mod_ShopNode.h" />
+    <ClInclude Include="game\it266_mod\SmartPointer.h" />
+    <ClInclude Include="game\it266_mod\vectorClass.h" />
     <ClInclude Include="game\Item.h" />
     <ClInclude Include="game\Light.h" />
     <ClInclude Include="game\LipSync.h" />

@@ -767,9 +767,14 @@ void idPlayerView::RenderPlayerView( idUserInterface *hud ) {
 		if ( !guiRendered ) {
 			SingleView( hud, view, RF_GUI_ONLY );
 			//	IT 266
-			player->mapui->Redraw(gameLocal.time);
+		//	player->mapui->Redraw(gameLocal.time);
 		//	player->hud->Redraw(gameLocal.time);
-			player->deckui->Redraw(gameLocal.time);
+		//	player->deckui->Redraw(gameLocal.time);
+			for (int i = 0; i < player->uiList.size(); i++)
+			{
+				if (player->uiList.get(i).value && player->uiList.get(i).value->GetStateInt("isvisible") == 1)
+					player->uiList.get(i).value->Redraw(gameLocal.time);
+			}
 		}
 
 		ScreenFade();

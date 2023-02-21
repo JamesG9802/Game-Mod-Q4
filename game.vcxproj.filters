@@ -546,6 +546,9 @@
     <ClCompile Include="game\it266_mod\Mod_Map.cpp">
       <Filter>Game\IT266Mod</Filter>
     </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_Cards.cpp">
+      <Filter>Game\IT266Mod</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game\Actor.h">
@@ -885,6 +888,15 @@
       <Filter>Game\IT266Mod</Filter>
     </ClInclude>
     <ClInclude Include="game\it266_mod\Mod_Map.h">
+      <Filter>Game\IT266Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="game\it266_mod\vectorClass.h">
+      <Filter>Game\IT266Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="game\it266_mod\keyvalueClass.h">
+      <Filter>Game\IT266Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="game\it266_mod\SmartPointer.h">
       <Filter>Game\IT266Mod</Filter>
     </ClInclude>
   </ItemGroup>

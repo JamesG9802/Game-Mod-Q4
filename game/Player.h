@@ -9,6 +9,11 @@
 //	IT 266
 
 #include "./it266_mod/Mod_Map.h"
+#include "./it266_mod/Mod_Card.h"
+#include "./it266_mod/Mod_Deck.h"
+#include "./it266_mod/vectorClass.h"
+#include "./it266_mod/keyvalueClass.h"
+#include "./it266_mod/SmartPointer.h"
 /*
 ===============================================================================
 
@@ -269,8 +274,6 @@ public:
 	
 	int						secretAreasDiscovered;
 
-	//	IT 266
-	int						playerGoldAmt = 0;
 };
 
 class idPlayer : public idActor {
@@ -803,6 +806,13 @@ public:
 	idUserInterface* hud;				// Common hud
 	idUserInterface* mphud;				// hud overlay containing MP elements
 	Mod_Map	mod_map;
+	Mod_Deck mod_deck;
+
+	//	IT 266
+	//	replacing individual mod uis with an list that will store every UI up with their Z-index
+	vectorClass<keyvalueClass<int, idUserInterface*>> uiList;
+	//	IT 266
+	int						playerGoldAmt = 0;
 // RITUAL END
 
 protected:

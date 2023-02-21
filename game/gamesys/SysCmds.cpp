@@ -3115,14 +3115,14 @@ void Cmd_ActivateNode_f(const idCmdArgs& args) {
 		return;
 	int x = atoi(args.Argv(1));
 	int y = atoi(args.Argv(2));
-	gameLocal.Printf("%d %d\n", x, y);
+	gameLocal.Printf("Activating Node (%d %d)\n", x, y);
 }
 void Cmd_OpenDeck_f(const idCmdArgs& args)
 {
 	idPlayer* player = gameLocal.GetLocalPlayer();
 	if (!player)
 		return;
-	player->deckui->SetStateFloat("isvisible", 1);
+	player->deckui->SetStateInt("isvisible", 1);
 	gameLocal.Printf("working\n");
 }
 void Cmd_CloseDeck_f(const idCmdArgs& args)
@@ -3130,7 +3130,27 @@ void Cmd_CloseDeck_f(const idCmdArgs& args)
 	idPlayer* player = gameLocal.GetLocalPlayer();
 	if (!player)
 		return;
-	player->deckui->SetStateFloat("isvisible", 0);
+	player->deckui->SetStateInt("isvisible", 0);
+}
+//	IT 266
+void CreateCard()
+{
+
+}
+void Cmd_CreateCard_f(const idCmdArgs& args)
+{
+	idStr		temp;
+	if (gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_card", "", temp)) {
+		idUserInterface* card = uiManager->FindGui(temp, true, false, false);
+		card->Activate(true, gameLocal.time);
+		card->SetStateFloat("cardx", 100);
+		card->SetStateFloat("cardy", 50);
+		card->SetStateString("cardart", "gfx/guis/cards/card");
+		card->SetStateInt("isvisible", 1);
+		gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
+			(2, card));
+		gameLocal.GetLocalPlayer()->uiList.sort();
+	}
 }
 /*
 =================
@@ -3333,6 +3353,7 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand("activateNode", Cmd_ActivateNode_f, CMD_FL_GAME, "(IT 266) Activate Node");
 	cmdSystem->AddCommand("openDeck", Cmd_OpenDeck_f, CMD_FL_GAME, "(IT 266) Open Deck GUI");
 	cmdSystem->AddCommand("closeDeck", Cmd_CloseDeck_f, CMD_FL_GAME, "(IT 266) Close Deck GUI");
+	cmdSystem->AddCommand("addCard", Cmd_CreateCard_f, CMD_FL_GAME, "(IT 266) Close Deck GUI");
 }
 
 /*
