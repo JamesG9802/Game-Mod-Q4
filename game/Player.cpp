@@ -31,7 +31,7 @@
 //	IT 266
 #include "it266_mod/Mod_Map.h"
 #include "it266_mod/Mod_Card.h"
-
+#include "it266_mod/Mod_Cards.h"
 class Mod_Card;
 
 idCVar net_predictionErrorDecay( "net_predictionErrorDecay", "112", CVAR_FLOAT | CVAR_GAME | CVAR_NOCHEAT, "time in milliseconds it takes to fade away prediction errors", 0.0f, 200.0f );
@@ -1903,7 +1903,7 @@ void idPlayer::Spawn( void ) {
 			deckui->Activate(true, gameLocal.time);
 		}
 		SetupMapUI(mapui);
-
+		SetupDeck();
 		//	Needs to add ui to their respective list
 		uiList.push(keyvalueClass<int, idUserInterface*>(0, mapui));
 		uiList.push(keyvalueClass<int, idUserInterface*>(1, deckui));
@@ -14360,4 +14360,16 @@ void idPlayer::SetupMapUI(idUserInterface* mapui)
 
 }
 
+/// <summary>
+/// Initializes the player deck.
+/// </summary>
+void idPlayer::SetupDeck()
+{
+	for (int i = 0; i < 5; i++)
+	{
+		Mod_Card* card = new Mod_Card_Strike();
+		mod_deck.push(card);
+	}
+		
+}
 // RITUAL END

@@ -79,6 +79,7 @@ public:
     // function to delete last element
     void pop() { current--; }
 
+    // function to remove element at index
     void removeAt(int index)
     {
         for (int i = index; i < size() - 1; i++)
@@ -87,7 +88,16 @@ public:
         }
         current--;
     }
-
+    int indexOf(T item)
+    {
+        for (int i = 0; i < size(); i++)
+        {
+            if (arr[i] == item)
+                return i;
+        }
+        return -1;
+    }
+    //  Insertion Sort
     void sort()
     {
         for (int i = 0; i < size() - 1; i++)

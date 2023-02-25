@@ -3152,6 +3152,55 @@ void Cmd_CreateCard_f(const idCmdArgs& args)
 		gameLocal.GetLocalPlayer()->uiList.sort();
 	}
 }
+void Cmd_PlayerDebug_f(const idCmdArgs& args)
+{
+
+	if (gameLocal.GetLocalPlayer())
+	{
+		float x = 0;
+		float y = 0;
+		if (args.Argv(1) != "")
+		{
+			x = atof(args.Argv(1));
+		}
+		if (args.Argv(2) != "")
+		{
+			y = atof(args.Argv(2));
+		}
+		gameLocal.Printf("\nTrying %.2f %.2f\n", x, y);
+		/*
+		idPlayer* player = gameLocal.GetLocalPlayer();
+		gameLocal.Printf("Number of cards in deck: %d\n", player->mod_deck.size());
+		gameLocal.Printf("Cards:\n");
+		for (int i = 0; i < player->mod_deck.size();i++)
+		{
+			gameLocal.Printf("\t%s\n", player->mod_deck.get(i)->name);
+			player->mod_deck.get(i)->AddCard(50*i, 50 *i);
+		}
+		*/
+		idStr temp;
+		gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_card", "", temp);
+		idUserInterface* ui = uiManager->FindGui(temp, true, true, false);
+
+		ui->Activate(true, gameLocal.time);
+		ui->SetStateFloat("cardx", x);
+		ui->SetStateFloat("cardy", y);
+
+		gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_card_strike_art", "", temp);
+		ui->SetStateString("cardart", temp);
+
+		gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_card_strike_name", "", temp);
+		ui->SetStateString("cardname", temp);
+
+		ui->SetStateInt("isvisible", 1);
+
+		gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
+			(2, ui));
+		gameLocal.GetLocalPlayer()->uiList.sort();
+	//	gameLocal.Printf("");
+	//	gameLocal.Printf("");
+	}
+}
 /*
 =================
 idGameLocal::InitConsoleCommands
@@ -3353,7 +3402,8 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand("activateNode", Cmd_ActivateNode_f, CMD_FL_GAME, "(IT 266) Activate Node");
 	cmdSystem->AddCommand("openDeck", Cmd_OpenDeck_f, CMD_FL_GAME, "(IT 266) Open Deck GUI");
 	cmdSystem->AddCommand("closeDeck", Cmd_CloseDeck_f, CMD_FL_GAME, "(IT 266) Close Deck GUI");
-	cmdSystem->AddCommand("addCard", Cmd_CreateCard_f, CMD_FL_GAME, "(IT 266) Close Deck GUI");
+	cmdSystem->AddCommand("addCard", Cmd_CreateCard_f, CMD_FL_GAME, "(IT 266) Add Card GUI");
+	cmdSystem->AddCommand("debugPlayer", Cmd_PlayerDebug_f, CMD_FL_GAME, "(IT 266) Debug player info");
 }
 
 /*

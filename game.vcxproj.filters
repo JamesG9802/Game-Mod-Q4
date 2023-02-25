@@ -546,7 +546,7 @@
     <ClCompile Include="game\it266_mod\Mod_Map.cpp">
       <Filter>Game\IT266Mod</Filter>
     </ClCompile>
-    <ClCompile Include="game\it266_mod\Mod_Cards.cpp">
+    <ClCompile Include="game\it266_mod\Mod_Cards.h">
       <Filter>Game\IT266Mod</Filter>
     </ClCompile>
   </ItemGroup>

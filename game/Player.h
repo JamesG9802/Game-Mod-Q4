@@ -7,13 +7,15 @@
 #define __GAME_PLAYER_H__
 
 //	IT 266
-
 #include "./it266_mod/Mod_Map.h"
 #include "./it266_mod/Mod_Card.h"
 #include "./it266_mod/Mod_Deck.h"
 #include "./it266_mod/vectorClass.h"
 #include "./it266_mod/keyvalueClass.h"
 #include "./it266_mod/SmartPointer.h"
+
+
+class Mod_Card;
 /*
 ===============================================================================
 
@@ -806,7 +808,7 @@ public:
 	idUserInterface* hud;				// Common hud
 	idUserInterface* mphud;				// hud overlay containing MP elements
 	Mod_Map	mod_map;
-	Mod_Deck mod_deck;
+	vectorClass<Mod_Card*> mod_deck;
 
 	//	IT 266
 	//	replacing individual mod uis with an list that will store every UI up with their Z-index
@@ -1027,7 +1029,7 @@ private:
 
 	//	IT 266
 	void					SetupMapUI(idUserInterface* mapui);
-
+	void					SetupDeck();
 	bool					WantSmoothing( void ) const;
 	void					PredictionErrorDecay( void );
 
