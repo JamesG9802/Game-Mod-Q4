@@ -1,36 +1,61 @@
+#include "../../idlib/precompiled.h"
 #include "Mod_Card.h"
 #include "keyvalueClass.h"
-
 #pragma hdrstop
-void Mod_Card::AddCard(float x, float y)
+idUserInterface* Mod_Card::AddCard(float x, float y)
 {
-	idStr temp;
-	HideCard();
-	gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_card", "", temp);
-	ui = uiManager->FindGui(temp, true, false, false);
+	if (gameLocal.GetLocalPlayer())
+	{
+		if(ui)
+			HideCard();
+		idStr temp;
+		gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_card", "", temp);
+		ui = uiManager->FindGui(temp, true, true, false);
+		ui->Activate(true, gameLocal.time);
+		ui->SetStateFloat("cardx", x);
+		ui->SetStateFloat("cardy", y);
 
-	ui->Activate(true, gameLocal.time);
-	ui->SetStateFloat("cardx", x);
-	ui->SetStateFloat("cardy", y);
+		gameLocal.GetLocalPlayer()->spawnArgs.GetString(cardArt, "", temp);
+		ui->SetStateString("cardart", temp);
 
-	gameLocal.GetLocalPlayer()->spawnArgs.GetString(cardArt, "", temp);
-	ui->SetStateString("cardart", temp);
+		gameLocal.GetLocalPlayer()->spawnArgs.GetString(name, "", temp);
+		ui->SetStateString("cardname", temp);
 
-	gameLocal.GetLocalPlayer()->spawnArgs.GetString(name, "", temp);
-	ui->SetStateString("cardname", "gfx/guis/cards/card");
+		ui->SetStateInt("isvisible", 1);
 
-	ui->SetStateInt("isvisible", 1);
+		/*
+		const char* command;
+		sysEvent_t	ev;
+		ev = sys->GenerateMouseMoveEvent(-2000, -2000);
+		command = ui->HandleEvent(&ev, gameLocal.time);
+		gameLocal.GetLocalPlayer()->HandleGuiCommands(gameLocal.GetLocalPlayer(), command);
 
-	gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
-		(2, ui));
-	gameLocal.GetLocalPlayer()->uiList.sort();
+		// move to an absolute position
+		ev = sys->GenerateMouseMoveEvent(gameLocal.GetLocalPlayer()->GetMouseX(), gameLocal.GetLocalPlayer()->GetMouseY());
+		command = ui->HandleEvent(&ev, gameLocal.time);
+		gameLocal.GetLocalPlayer()->HandleGuiCommands(gameLocal.GetLocalPlayer(), command);
+		*/
+		gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
+			(guiZ, ui));
+		gameLocal.GetLocalPlayer()->uiList.sort();
+		return ui;
+	}
+	return NULL;
 }
 void Mod_Card::HideCard()
 {
 	if (ui)
 	{
-		int index = gameLocal.GetLocalPlayer()->uiList.indexOf(keyvalueClass <int, idUserInterface*>(2, ui));
-		if(index != -1)
+		ui->SetStateInt("isvisible", 0);
+	}
+}
+void Mod_Card::DeleteUI()
+{
+	if (ui)
+	{
+		keyvalueClass <int, idUserInterface*> kvpair(guiZ, ui);
+		int index = gameLocal.GetLocalPlayer()->uiList.indexOf(kvpair);
+		if (index != -1)
 			gameLocal.GetLocalPlayer()->uiList.removeAt(index);
 		delete ui;
 	}

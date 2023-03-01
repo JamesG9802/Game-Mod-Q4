@@ -1,26 +1,20 @@
 #include "../../idlib/precompiled.h"
+#include "./Mod_Battle.h"
 #pragma hdrstop
-/*
-	Map
-	.	List<Node>
-	Node
-	.	List<Node> NextNodes
-	>	BattleNode
-	>	RestNode
-	>	ShopNode
-	BattleEntity
-	.	Health
-	.	List<BattleEntity> ExecuteAction()
-	>	Player
-	>	Pokemon
-	>	Enemy
-	Deck
-	.	List<Card>
-	.	DrawCard
-	.	Reshuffle
-	Battle
-	.	List<Card> graveyard
-	.	List<BattleEntity> playerTeam
-	.	List<BattleEntity> enemyTeam
 
-*/
+void Mod_Battle::StartBattle()
+{
+	this->battleStarted = true;
+}
+void Mod_Battle::EndBattle()
+{
+	this->battleStarted = false;
+}
+void Mod_Battle::Think()
+{
+
+}
+void Mod_Battle::PlayerRoundStart()
+{
+
+}

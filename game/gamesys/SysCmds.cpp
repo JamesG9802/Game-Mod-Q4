@@ -2,6 +2,9 @@
 #include "../../idlib/precompiled.h"
 #pragma hdrstop
 
+//	IT 266
+#include "../it266_mod/Mod_Node.h"
+
 #include "../Game_local.h"
 // RAVEN BEGIN
 #include "../ai/AI.h"
@@ -3046,13 +3049,58 @@ void Cmd_ToggleMap_f(const idCmdArgs& args) {
 		player->mapui->HandleNamedEvent("ToggleMap");
 	}
 }
+
+void Cmd_DeleteNodeUI_f(const idCmdArgs& args)
+{
+	if (gameLocal.GetLocalPlayer() && gameLocal.GetLocalPlayer()->nodeui)
+	{
+		keyvalueClass <int, idUserInterface*> kvpair(2, gameLocal.GetLocalPlayer()->nodeui);
+		int index = gameLocal.GetLocalPlayer()->uiList.indexOf(kvpair);
+		if (index != -1)
+			gameLocal.GetLocalPlayer()->uiList.removeAt(index);
+		delete gameLocal.GetLocalPlayer()->nodeui;
+	}
+}
+void Cmd_LoadRestNode()
+{
+	idStr		temp;
+	if (gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_restui", "", temp)) {
+		idUserInterface* ui = uiManager->FindGui(temp, true, true, false);
+		gameLocal.GetLocalPlayer()->nodeui = ui;
+		ui->Activate(true, gameLocal.time);
+		ui->SetStateInt("isvisible", 1);
+		gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
+			(2, ui));
+		gameLocal.GetLocalPlayer()->uiList.sort();
+	}
+}
+
+//	Given a node, hides all relevant gui and loads the correct gui
+void Cmd_LoadNode(const idCmdArgs &args,Mod_Node node)
+{
+	switch (node.type)
+	{
+
+	case node.MonsterNode:
+	case node.EliteNode:
+	case node.RestNode:
+	{
+		gameLocal.Printf("Loading RestNode Ui");
+		Cmd_LoadRestNode();
+	}
+	case node.ShopNode:
+	case node.NotNode:
+	default:
+		break;
+	}
+}
 void Cmd_SetActiveNode_f(const idCmdArgs& args) {
 	idPlayer* player = gameLocal.GetLocalPlayer();
 	if (!player)
 		return;
 	int x = atoi(args.Argv(1));
 	int y = atoi(args.Argv(2));
-
+	gameLocal.Printf("Activating Node (%d %d)\n", x, y);
 	for (int i = 0; i < player->mod_map.connections.size(); i++)
 	{
 		int fromx = player->mod_map.connections.get(i).fromx;
@@ -3108,7 +3156,9 @@ void Cmd_SetActiveNode_f(const idCmdArgs& args) {
 		player->mapui->SetStateFloat(varname, 0);
 	}
 	player->mapui->HandleNamedEvent("SetAvailable");
+	Cmd_LoadNode(args, player->mod_map.nodes[x][y]);
 }
+/*
 void Cmd_ActivateNode_f(const idCmdArgs& args) {
 	idPlayer* player = gameLocal.GetLocalPlayer();
 	if (!player)
@@ -3117,13 +3167,21 @@ void Cmd_ActivateNode_f(const idCmdArgs& args) {
 	int y = atoi(args.Argv(2));
 	gameLocal.Printf("Activating Node (%d %d)\n", x, y);
 }
+*/
 void Cmd_OpenDeck_f(const idCmdArgs& args)
 {
 	idPlayer* player = gameLocal.GetLocalPlayer();
 	if (!player)
 		return;
 	player->deckui->SetStateInt("isvisible", 1);
-	gameLocal.Printf("working\n");
+	player->deckui->SetStateFloat("verticalOffset", 0);
+	for (int i = 0; i < player->mod_deck.size(); i++)
+	{
+		int x = i % 4;
+		int y = i / 4;
+		idUserInterface* ui = player->mod_deck.get(i)->AddCard(20 + 154 * x, y * 188);
+		gameLocal.Printf("%d\n", ui->GetStateInt("isvisible"));
+	}
 }
 void Cmd_CloseDeck_f(const idCmdArgs& args)
 {
@@ -3131,75 +3189,93 @@ void Cmd_CloseDeck_f(const idCmdArgs& args)
 	if (!player)
 		return;
 	player->deckui->SetStateInt("isvisible", 0);
+	for (int i = 0; i < player->mod_deck.size(); i++)
+		player->mod_deck.get(i)->HideCard();
 }
-//	IT 266
-void CreateCard()
+void Cmd_ToggleDeck_f(const idCmdArgs& args)
 {
-
-}
-void Cmd_CreateCard_f(const idCmdArgs& args)
-{
-	idStr		temp;
-	if (gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_card", "", temp)) {
-		idUserInterface* card = uiManager->FindGui(temp, true, false, false);
-		card->Activate(true, gameLocal.time);
-		card->SetStateFloat("cardx", 100);
-		card->SetStateFloat("cardy", 50);
-		card->SetStateString("cardart", "gfx/guis/cards/card");
-		card->SetStateInt("isvisible", 1);
-		gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
-			(2, card));
-		gameLocal.GetLocalPlayer()->uiList.sort();
-	}
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	if (!player)
+		return;
+	if (player->deckui->GetStateInt("isvisible") == 0)
+		Cmd_OpenDeck_f(args);
+	else
+		Cmd_CloseDeck_f(args);
 }
 void Cmd_PlayerDebug_f(const idCmdArgs& args)
 {
-
 	if (gameLocal.GetLocalPlayer())
 	{
-		float x = 0;
-		float y = 0;
-		if (args.Argv(1) != "")
-		{
-			x = atof(args.Argv(1));
-		}
-		if (args.Argv(2) != "")
-		{
-			y = atof(args.Argv(2));
-		}
-		gameLocal.Printf("\nTrying %.2f %.2f\n", x, y);
-		/*
 		idPlayer* player = gameLocal.GetLocalPlayer();
 		gameLocal.Printf("Number of cards in deck: %d\n", player->mod_deck.size());
 		gameLocal.Printf("Cards:\n");
+		/*
 		for (int i = 0; i < player->mod_deck.size();i++)
 		{
 			gameLocal.Printf("\t%s\n", player->mod_deck.get(i)->name);
 			player->mod_deck.get(i)->AddCard(50*i, 50 *i);
 		}
 		*/
-		idStr temp;
-		gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_card", "", temp);
-		idUserInterface* ui = uiManager->FindGui(temp, true, true, false);
-
-		ui->Activate(true, gameLocal.time);
-		ui->SetStateFloat("cardx", x);
-		ui->SetStateFloat("cardy", y);
-
-		gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_card_strike_art", "", temp);
-		ui->SetStateString("cardart", temp);
-
-		gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_card_strike_name", "", temp);
-		ui->SetStateString("cardname", temp);
-
-		ui->SetStateInt("isvisible", 1);
-
-		gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
-			(2, ui));
-		gameLocal.GetLocalPlayer()->uiList.sort();
+		player->mod_deck.get(0)->AddCard(50, 50);
+		player->mod_deck.get(0)->HideCard();
 	//	gameLocal.Printf("");
 	//	gameLocal.Printf("");
 	}
+}
+void Cmd_StartBattle(const idCmdArgs& args)
+{
+	if (gameLocal.GetLocalPlayer())
+	{
+		idStr		temp;
+		idPlayer* player = gameLocal.GetLocalPlayer();
+
+		if (player->mod_battle.battleStarted)
+			return;
+		player->mod_battle.StartBattle();
+		if (gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_battle", "", temp)) {
+			idUserInterface* battlegui = uiManager->FindGui(temp, true, false, false);
+			player->nodeui = battlegui;
+			player->uiList.push(keyvalueClass<int, idUserInterface*>(2, battlegui));
+		}
+	}
+}
+void Cmd_Sleep_f(const idCmdArgs& args)
+{
+	if (gameLocal.GetLocalPlayer())
+	{
+		idPlayer* player = gameLocal.GetLocalPlayer();
+		int maxHealth = player->inventory.maxHealth;
+		player->health = player->health + (int)(.30 * maxHealth) > maxHealth ? 
+			maxHealth : player->health + (int)(.30 * maxHealth);	
+	}
+}
+void Cmd_ShowUpgradeMenu_f(const idCmdArgs& args)
+{
+	if (gameLocal.GetLocalPlayer())
+	{
+		idPlayer* player = gameLocal.GetLocalPlayer();
+		if (!player)
+			return;
+		player->deckui->SetStateInt("isvisible", 1);
+		player->deckui->SetStateFloat("verticalOffset", 0);
+		for (int i = 0; i < player->mod_deck.size(); i++)
+		{
+			if (!(player->mod_deck.get(i)->isUpgradeable))
+				continue;
+			int x = i % 4;
+			int y = i / 4;
+			idUserInterface* ui;
+			ui = player->mod_deck.get(i)->AddCard(20 + 154 * x, y * 188);
+			ui->SetStateInt("isUpgradeable", 1);
+			ui->SetStateInt("cardIndex", i);
+			gameLocal.Printf("%d ", i);
+		}
+	}
+}
+void Cmd_ShowUpgradeCard(const idCmdArgs& args)
+{
+	int x = atoi(args.Argv(1));
+	gameLocal.Printf("%d", x);
 }
 /*
 =================
@@ -3399,11 +3475,16 @@ void idGameLocal::InitConsoleCommands( void ) {
 	//	IT 266
 	cmdSystem->AddCommand("toggleMap", Cmd_ToggleMap_f, CMD_FL_GAME, "(IT 266) Toggle map ui");
 	cmdSystem->AddCommand("setActiveNode", Cmd_SetActiveNode_f, CMD_FL_GAME, "(IT 266) Set Active Nodes");
-	cmdSystem->AddCommand("activateNode", Cmd_ActivateNode_f, CMD_FL_GAME, "(IT 266) Activate Node");
+//	cmdSystem->AddCommand("activateNode", Cmd_ActivateNode_f, CMD_FL_GAME, "(IT 266) Activate Node");
 	cmdSystem->AddCommand("openDeck", Cmd_OpenDeck_f, CMD_FL_GAME, "(IT 266) Open Deck GUI");
 	cmdSystem->AddCommand("closeDeck", Cmd_CloseDeck_f, CMD_FL_GAME, "(IT 266) Close Deck GUI");
-	cmdSystem->AddCommand("addCard", Cmd_CreateCard_f, CMD_FL_GAME, "(IT 266) Add Card GUI");
+	cmdSystem->AddCommand("toggleDeck", Cmd_ToggleDeck_f, CMD_FL_GAME, "(IT 266) Toggle Deck GUI");
+//	cmdSystem->AddCommand("addCard", Cmd_CreateCard_f, CMD_FL_GAME, "(IT 266) Add Card GUI");
 	cmdSystem->AddCommand("debugPlayer", Cmd_PlayerDebug_f, CMD_FL_GAME, "(IT 266) Debug player info");
+	cmdSystem->AddCommand("sleep", Cmd_Sleep_f, CMD_FL_GAME, "(IT 266) Player sleep");
+	cmdSystem->AddCommand("deleteNodeUI", Cmd_DeleteNodeUI_f, CMD_FL_GAME, "(IT 266) Deletes Node UI");
+	cmdSystem->AddCommand("showUpgradeMenu", Cmd_ShowUpgradeMenu_f, CMD_FL_GAME, "(IT 266) Show Upgrade Menu");
+	cmdSystem->AddCommand("showUpgradeCard", Cmd_ShowUpgradeCard, CMD_FL_GAME, "(IT 266) Show Card Upgrade");
 }
 
 /*

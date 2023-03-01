@@ -343,6 +343,7 @@ cd "%quake%"
     <ClCompile Include="game\it266_mod\Mod_BattleNode.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_Battler.cpp" />
     <ClCompile Include="game\it266_mod\Mod_Card.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -491,6 +492,7 @@ cd "%quake%"
     <ClInclude Include="game\it266_mod\Mod_Battle.h" />
     <ClInclude Include="game\it266_mod\Mod_BattleEntity.h" />
     <ClInclude Include="game\it266_mod\Mod_BattleNode.h" />
+    <ClInclude Include="game\it266_mod\Mod_Battler.h" />
     <ClInclude Include="game\it266_mod\Mod_Card.h" />
     <ClInclude Include="game\it266_mod\Mod_Deck.h" />
     <ClInclude Include="game\it266_mod\Mod_Map.h" />

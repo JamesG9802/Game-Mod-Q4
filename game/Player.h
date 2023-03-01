@@ -8,6 +8,7 @@
 
 //	IT 266
 #include "./it266_mod/Mod_Map.h"
+#include "./it266_mod/Mod_Battle.h"
 #include "./it266_mod/Mod_Card.h"
 #include "./it266_mod/Mod_Deck.h"
 #include "./it266_mod/vectorClass.h"
@@ -438,6 +439,11 @@ public:
 							idPlayer();
 	virtual					~idPlayer();
 
+	//	IT 266
+
+	int						GetMouseX();
+	int						GetMouseY();
+
 	void					Spawn( void );
 	void					Think( void );
 
@@ -805,12 +811,18 @@ public:
 	//	IT 266
 	idUserInterface* mapui;
 	idUserInterface* deckui;
+	idUserInterface* nodeui;
+
 	idUserInterface* hud;				// Common hud
 	idUserInterface* mphud;				// hud overlay containing MP elements
+	
+	
+	
+	//	IT 266
 	Mod_Map	mod_map;
+	Mod_Battle mod_battle;
 	vectorClass<Mod_Card*> mod_deck;
 
-	//	IT 266
 	//	replacing individual mod uis with an list that will store every UI up with their Z-index
 	vectorClass<keyvalueClass<int, idUserInterface*>> uiList;
 	//	IT 266

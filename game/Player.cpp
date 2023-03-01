@@ -1903,15 +1903,14 @@ void idPlayer::Spawn( void ) {
 			deckui->Activate(true, gameLocal.time);
 		}
 		SetupMapUI(mapui);
+		
+		//	IT 266
+		//	Set up deck
 		SetupDeck();
 		//	Needs to add ui to their respective list
 		uiList.push(keyvalueClass<int, idUserInterface*>(0, mapui));
 		uiList.push(keyvalueClass<int, idUserInterface*>(1, deckui));
 		uiList.sort();
-
-		//	IT 266
-		//	Set up deck
-	//	Mod_Card card = (1, "it266_card_strike_name", "it266_card_strike_art");
 
 		// load cursor
 		GetCursorGUI();
@@ -2100,6 +2099,9 @@ void idPlayer::Spawn( void ) {
 //RITUAL END
 
 	itemCosts = static_cast< const idDeclEntityDef * >( declManager->FindType( DECL_ENTITYDEF, "ItemCostConstants", false ) );
+
+
+	this->health = 30;
 }
 
 /*
@@ -9623,10 +9625,27 @@ void idPlayer::Think( void ) {
 
 	//	IT 266
 	//	Back and forth movement pans the map ui
-	if(usercmd.forwardmove > 0)
-		mapui->SetStateFloat("verticalOffset", mapui->GetStateFloat("verticalOffset") + 5.0f);
-	else if(usercmd.forwardmove < 0)
-		mapui->SetStateFloat("verticalOffset", mapui->GetStateFloat("verticalOffset") - 5.0f);
+	if (usercmd.forwardmove > 0)
+	{
+		if(!deckui->GetStateInt("isvisible"))
+			mapui->SetStateFloat("verticalOffset", mapui->GetStateFloat("verticalOffset") + 5.0f);
+		else
+			for (int i = 0; i < mod_deck.size(); i++)
+				if (mod_deck.get(i)->ui)
+					mod_deck.get(i)->ui->SetStateFloat("verticalOffset", 
+						mod_deck.get(i)->ui->GetStateFloat("verticalOffset") + 5.0f);
+	}
+	else if (usercmd.forwardmove < 0)
+	{
+		if (!deckui->GetStateInt("isvisible"))
+			mapui->SetStateFloat("verticalOffset", mapui->GetStateFloat("verticalOffset") - 5.0f);
+		else
+			for (int i = 0; i < mod_deck.size(); i++)
+				if (mod_deck.get(i)->ui)
+					mod_deck.get(i)->ui->SetStateFloat("verticalOffset", 
+						mod_deck.get(i)->ui->GetStateFloat("verticalOffset") - 5.0f);
+	}
+	mod_battle.Think();
 
 // RAVEN BEGIN
 // abahr
@@ -14371,5 +14390,13 @@ void idPlayer::SetupDeck()
 		mod_deck.push(card);
 	}
 		
+}
+int idPlayer::GetMouseX()
+{
+	return oldMouseX;
+}
+int idPlayer::GetMouseY()
+{
+	return oldMouseY;
 }
 // RITUAL END
