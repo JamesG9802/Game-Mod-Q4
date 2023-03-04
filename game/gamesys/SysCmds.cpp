@@ -4,6 +4,7 @@
 
 //	IT 266
 #include "../it266_mod/Mod_Node.h"
+#include "../it266_mod/Mod_Constants.h"
 
 #include "../Game_local.h"
 // RAVEN BEGIN
@@ -3042,6 +3043,12 @@ void Cmd_ClientOverflowReliable_f( const idCmdArgs& args ) {
 #endif
 
 //	IT 266
+
+void Cmd_UpgradeCard(Mod_Card * card)
+{
+	card->isUpgraded = true;
+}
+
 void Cmd_ToggleMap_f(const idCmdArgs& args) {
 	idPlayer *player = gameLocal.GetLocalPlayer();
 	if (player)
@@ -3254,13 +3261,10 @@ void Cmd_ShowUpgradeMenu_f(const idCmdArgs& args)
 	if (gameLocal.GetLocalPlayer())
 	{
 		idPlayer* player = gameLocal.GetLocalPlayer();
-		if (!player)
-			return;
 		player->deckui->SetStateInt("isvisible", 1);
-		player->deckui->SetStateFloat("verticalOffset", 0);
 		for (int i = 0; i < player->mod_deck.size(); i++)
 		{
-			if (!(player->mod_deck.get(i)->isUpgradeable))
+			if (player->mod_deck.get(i)->isUpgraded)
 				continue;
 			int x = i % 4;
 			int y = i / 4;
@@ -3268,14 +3272,79 @@ void Cmd_ShowUpgradeMenu_f(const idCmdArgs& args)
 			ui = player->mod_deck.get(i)->AddCard(20 + 154 * x, y * 188);
 			ui->SetStateInt("isUpgradeable", 1);
 			ui->SetStateInt("cardIndex", i);
-			gameLocal.Printf("%d ", i);
+		}
+	}
+}
+void Cmd_HideUpgradeMenu_f()
+{
+	if (gameLocal.GetLocalPlayer())
+	{
+		idPlayer* player = gameLocal.GetLocalPlayer();
+		player->deckui->SetStateInt("isvisible", 0);
+		for (int i = 0; i < player->mod_deck.size(); i++)
+		{
+			player->mod_deck.get(i)->HideCard();
+			player->mod_deck.get(i)->ui->SetStateInt("isUpgradeable", 0);
 		}
 	}
 }
 void Cmd_ShowUpgradeCard(const idCmdArgs& args)
 {
-	int x = atoi(args.Argv(1));
-	gameLocal.Printf("%d", x);
+	if (gameLocal.GetLocalPlayer())
+	{
+		idPlayer* player = gameLocal.GetLocalPlayer();
+
+		idStr temp;
+		gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_confirmui", "", temp);
+		player->confirmui = uiManager->FindGui(temp, true, true, false);
+		player->confirmui->Activate(true, gameLocal.time);
+		player->confirmui->SetStateInt("isvisible", 1);
+
+		keyvalueClass<int, idUserInterface*> kvpair(MOD_DeckUiZ, player->confirmui);
+		player->uiList.push(kvpair);
+		player->uiList.sort();
+
+		int cardIndex = atoi(args.Argv(1));
+		Cmd_HideUpgradeMenu_f();
+		player->deckui->SetStateInt("isvisible", 1);
+		player->mod_deck.get(cardIndex)->AddCard(201, 32);
+		player->cardTarget = player->mod_deck.get(cardIndex);
+		
+	}
+}
+
+void Cmd_UpgradeBack_f(const idCmdArgs& args)
+{
+	if (gameLocal.GetLocalPlayer())
+	{
+		idPlayer* player = gameLocal.GetLocalPlayer();
+		if (player->confirmui)
+		{
+			keyvalueClass <int, idUserInterface*> kvpair(MOD_DeckUiZ, player->confirmui);
+			int index = gameLocal.GetLocalPlayer()->uiList.indexOf(kvpair);
+			if (index != -1)
+				gameLocal.GetLocalPlayer()->uiList.removeAt(index);
+			delete player->confirmui;
+			Cmd_ShowUpgradeMenu_f(args);
+		}
+	}
+}
+void Cmd_UpgradeConfirm_f(const idCmdArgs& args)
+{
+	if (gameLocal.GetLocalPlayer())
+	{
+		idPlayer* player = gameLocal.GetLocalPlayer();
+		if (player->confirmui)
+		{
+			keyvalueClass <int, idUserInterface*> kvpair(MOD_DeckUiZ, player->confirmui);
+			int index = gameLocal.GetLocalPlayer()->uiList.indexOf(kvpair);
+			if (index != -1)
+				gameLocal.GetLocalPlayer()->uiList.removeAt(index);
+			delete player->confirmui;
+			Cmd_UpgradeCard(player->cardTarget);
+			Cmd_HideUpgradeMenu_f();
+		}
+	}
 }
 /*
 =================
@@ -3485,6 +3554,8 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand("deleteNodeUI", Cmd_DeleteNodeUI_f, CMD_FL_GAME, "(IT 266) Deletes Node UI");
 	cmdSystem->AddCommand("showUpgradeMenu", Cmd_ShowUpgradeMenu_f, CMD_FL_GAME, "(IT 266) Show Upgrade Menu");
 	cmdSystem->AddCommand("showUpgradeCard", Cmd_ShowUpgradeCard, CMD_FL_GAME, "(IT 266) Show Card Upgrade");
+	cmdSystem->AddCommand("upgradeBack", Cmd_UpgradeBack_f, CMD_FL_GAME, "(IT 266) Go Back from upgrade");
+	cmdSystem->AddCommand("upgradeConfirm", Cmd_UpgradeConfirm_f, CMD_FL_GAME, "(IT 266) Upgrade card");
 }
 
 /*

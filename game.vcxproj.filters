@@ -905,6 +905,9 @@
     <ClInclude Include="game\it266_mod\Mod_Battler.h">
       <Filter>Game\IT266Mod</Filter>
     </ClInclude>
+    <ClInclude Include="game\it266_mod\Mod_Constants.h">
+      <Filter>Game\IT266Mod</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="game\Game.def" />

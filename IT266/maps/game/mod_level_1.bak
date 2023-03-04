@@ -1,0 +1,69 @@
+Version 3
+// entity 0
+{
+"classname" "worldspawn"
+// primitive 0
+{
+ brushDef3
+ {
+  ( 0 0 -1 -88 ) ( ( 0.0078125 0 -0.9140625 ) ( 0 0.0078125 -0.0468749702 ) ) "textures/common_floors/c_floor_1"
+  ( 0 0 1 80 ) ( ( 0.0078125 0 -0.9140625 ) ( 0 0.0078125 0.0468750298 ) ) "textures/common_floors/c_floor_1"
+  ( 0 -1 0 45 ) ( ( 0.0078125 0 0.046875 ) ( 0 0.0078125 -0.6875 ) ) "textures/common_floors/c_floor_1"
+  ( 1 0 0 -130 ) ( ( 0.0078125 0 -0.9140625 ) ( 0 0.0078125 -0.6875 ) ) "textures/common_floors/c_floor_1"
+  ( 0 1 0 -189 ) ( ( 0.0078125 0 -0.046875 ) ( 0 0.0078125 -0.6875 ) ) "textures/common_floors/c_floor_1"
+  ( -1 0 0 -62 ) ( ( 0.0078125 0 0.9140625 ) ( 0 0.0078125 -0.6875 ) ) "textures/common_floors/c_floor_1"
+ }
+}
+}
+// entity 1
+{
+"classname" "func_static"
+"name" "func_static_2"
+"model" "func_static_2"
+"origin" "164 120 -28"
+"gui" "guis/mod_debug.gui"
+// primitive 0
+{
+ brushDef3
+ {
+  ( -1 0 0 -20 ) ( ( 0.015625 0 0 ) ( 0 0.015625 0 ) ) "textures/common/entitygui"
+  ( 0 1 0 -96 ) ( ( 0.015625 0 0 ) ( 0 0.015625 0 ) ) "textures/common/entitygui"
+  ( 1 0 0 -20 ) ( ( 0.015625 0 0 ) ( 0 0.015625 0 ) ) "textures/common/entitygui"
+  ( 0 -1 0 -96 ) ( ( 0.015625 0 0 ) ( 0 0.015625 0 ) ) "textures/common/entitygui"
+  ( 0 0 1 -60 ) ( ( 0.015625 0 0 ) ( 0 0.015625 0 ) ) "textures/common/entitygui"
+  ( 0 0 -1 -60 ) ( ( 0.015625 0 0 ) ( 0 0.015625 0 ) ) "textures/common/entitygui"
+ }
+}
+}
+// entity 2
+{
+"classname" "func_static"
+"name" "func_static_1"
+"model" "func_static_1"
+"origin" "84 112 -38"
+"gui" "guis/mod_debug.gui"
+// primitive 0
+{
+ brushDef3
+ {
+  ( -1 0 0 -2 ) ( ( 0.015625 0 0 ) ( 0 0.015625 0 ) ) "textures/common/entitygui"
+  ( 0 1 0 -36 ) ( ( 0.015625 0 0 ) ( 0 0.015625 0 ) ) "textures/common/entitygui"
+  ( 1 0 0 -2 ) ( ( 0.015625 0 0 ) ( 0 0.015625 0 ) ) "textures/common/entitygui"
+  ( 0 -1 0 -36 ) ( ( 0.015625 0 0 ) ( 0 0.015625 0 ) ) "textures/common/entitygui"
+  ( 0 0 1 -34 ) ( ( 0.015625 0 0 ) ( 0 0.015625 0 ) ) "textures/common/entitygui"
+  ( 0 0 -1 -34 ) ( ( 0.015625 0 0 ) ( 0 0.015625 0 ) ) "textures/common/entitygui"
+ }
+}
+}
+// entity 3
+{
+"classname" "light"
+"name" "light_1"
+"origin" "64 112 0"
+}
+// entity 4
+{
+"classname" "info_player_start"
+"name" "info_player_start_1"
+"origin" "8 112 -40"
+}

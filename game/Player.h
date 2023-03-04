@@ -809,9 +809,15 @@ public:
 	void					ResetCash();
 
 	//	IT 266
+	idUserInterface* cursorui;
+
 	idUserInterface* mapui;
 	idUserInterface* deckui;
 	idUserInterface* nodeui;
+	idUserInterface* confirmui;
+	idUserInterface* temp;
+
+	Mod_Card* cardTarget;
 
 	idUserInterface* hud;				// Common hud
 	idUserInterface* mphud;				// hud overlay containing MP elements

@@ -6,12 +6,14 @@ idUserInterface* Mod_Card::AddCard(float x, float y)
 {
 	if (gameLocal.GetLocalPlayer())
 	{
-		if(ui)
-			HideCard();
+
 		idStr temp;
-		gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_card", "", temp);
-		ui = uiManager->FindGui(temp, true, true, false);
-		ui->Activate(true, gameLocal.time);
+		if (!ui)
+		{
+			gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_card", "", temp);
+			ui = uiManager->FindGui(temp, true, true, false);
+			ui->Activate(true, gameLocal.time);
+		}
 		ui->SetStateFloat("cardx", x);
 		ui->SetStateFloat("cardy", y);
 
@@ -19,7 +21,21 @@ idUserInterface* Mod_Card::AddCard(float x, float y)
 		ui->SetStateString("cardart", temp);
 
 		gameLocal.GetLocalPlayer()->spawnArgs.GetString(name, "", temp);
+		if (isUpgraded)
+			temp += "+";
 		ui->SetStateString("cardname", temp);
+
+		temp = cardText;
+		if (isUpgraded)
+			temp += "+";
+		gameLocal.GetLocalPlayer()->spawnArgs.GetString(temp, "", temp);
+		
+		ui->SetStateString("cardtext", temp);
+		
+		temp = "";
+		temp += currentCost;
+		
+		ui->SetStateString("cardcost", temp);
 
 		ui->SetStateInt("isvisible", 1);
 

@@ -1,0 +1,78 @@
+CM "3"
+
+2153971715
+
+collisionModel "worldMap" 1 {
+	vertices { /* numVertices = */ 8
+	/* 0 */ ( 130 45 -88 )
+	/* 1 */ ( -62 45 -88 )
+	/* 2 */ ( -62 189 -88 )
+	/* 3 */ ( 130 189 -88 )
+	/* 4 */ ( -62 45 -80 )
+	/* 5 */ ( 130 45 -80 )
+	/* 6 */ ( 130 189 -80 )
+	/* 7 */ ( -62 189 -80 )
+	}
+	edges { /* numEdges = */ 13
+	/* 0 */ ( 0 0 ) 0 0
+	/* 1 */ ( 0 1 ) 0 2
+	/* 2 */ ( 1 2 ) 0 2
+	/* 3 */ ( 2 3 ) 0 2
+	/* 4 */ ( 3 0 ) 0 2
+	/* 5 */ ( 4 5 ) 0 2
+	/* 6 */ ( 5 6 ) 0 2
+	/* 7 */ ( 6 7 ) 0 2
+	/* 8 */ ( 7 4 ) 0 2
+	/* 9 */ ( 0 5 ) 0 2
+	/* 10 */ ( 4 1 ) 0 2
+	/* 11 */ ( 3 6 ) 0 2
+	/* 12 */ ( 2 7 ) 0 2
+	}
+	nodes {
+	( -1 0 )
+	}
+	polygons /* numPolygons = */ 6 /* numPolygonEdges = */ 24 {
+	4 ( -2 -10 -8 -12 ) ( -1 0 0 ) 62 ( -62 45 -88 ) ( -62 189 -80 ) "textures/common_floors/c_floor_1" ( 0.5625 0 ) ( -0.5625 -0.0625 ) ( -0.5625 0 ) 0
+	4 ( -3 12 -7 -11 ) ( 0 1 0 ) 189 ( -62 189 -88 ) ( 130 189 -80 ) "textures/common_floors/c_floor_1" ( 0.4375 0 ) ( -1.0625 -0.0625 ) ( -1.0625 0 ) 0
+	4 ( -4 11 -6 -9 ) ( 1 0 0 ) 130 ( 130 45 -88 ) ( 130 189 -80 ) "textures/common_floors/c_floor_1" ( -0.5625 0 ) ( 0.5625 -0.0625 ) ( 0.5625 0 ) 0
+	4 ( -1 9 -5 10 ) ( 0 -1 0 ) -45 ( -62 45 -88 ) ( 130 45 -80 ) "textures/common_floors/c_floor_1" ( -0.4375 0 ) ( 1.0625 -0.0625 ) ( 1.0625 0 ) 0
+	4 ( 5 6 7 8 ) ( 0 0 1 ) -80 ( -62 45 -80 ) ( 130 189 -80 ) "textures/common_floors/c_floor_1" ( -0.5625 -0.4374999702 ) ( 0.5625 1.0625 ) ( -0.5625 1.0625 ) 0
+	4 ( 1 2 3 4 ) ( 0 0 -1 ) 88 ( -62 45 -88 ) ( 130 189 -88 ) "textures/common_floors/c_floor_1" ( -0.5625 0.4375000298 ) ( 0.5625 -1.0625 ) ( -0.5625 -1.0625 ) 0
+	}
+	brushes /* numBrushes = */ 1 /* numBrushPlanes = */ 6 {
+	6 {
+		( 0 0 -1 ) 88
+		( 0 0 1 ) -80
+		( 0 -1 0 ) -45
+		( 1 0 0 ) 130
+		( 0 1 0 ) 189
+		( -1 0 0 ) 62
+	} ( -62 45 -88 ) ( 130 189 -80 ) "solid,opaque" 0
+	}
+}
+collisionModel "func_static_2" 1 {
+	vertices { /* numVertices = */ 0
+	}
+	edges { /* numEdges = */ 0
+	}
+	nodes {
+	( -1 0 )
+	}
+	polygons /* numPolygons = */ 0 /* numPolygonEdges = */ 0 {
+	}
+	brushes /* numBrushes = */ 0 /* numBrushPlanes = */ 0 {
+	}
+}
+collisionModel "func_static_1" 1 {
+	vertices { /* numVertices = */ 0
+	}
+	edges { /* numEdges = */ 0
+	}
+	nodes {
+	( -1 0 )
+	}
+	polygons /* numPolygons = */ 0 /* numPolygonEdges = */ 0 {
+	}
+	brushes /* numBrushes = */ 0 /* numBrushPlanes = */ 0 {
+	}
+}

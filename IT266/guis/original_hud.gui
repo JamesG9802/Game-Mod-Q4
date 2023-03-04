@@ -1,0 +1,518 @@
+windowDef Desktop
+{
+	rect	0,0,640,480
+	visible	1
+	nocursor	1
+	menugui	0
+	)	)
+	/	2
+	definevec4	"ws_on"	1,0.5,0,1
+	definevec4	"ws_off"	0.658,0.639,0.376,0.6
+	definevec4	"ws_glowon"	0.7,0.8,0.5,1
+	definevec4	"ws_glowoff"	0.7,0.8,0.5,0
+	definevec4	"ws_grey"	0.190,0.284,0.168,0.6
+	definevec4	"typecolor"	0.866,0.921,0.764,1
+	definevec4	"typecolor_strogg"	0.988,1,0.784,1
+	definevec4	"healthicon"	0.658,0.639,0.376,0.6
+	definevec4	"armoricon"	0.658,0.639,0.376,0.6
+	definevec4	"healthicon_mp"	0.980,0.168,0.0196,0.8
+	definevec4	"armoricon_mp"	0.968,0.752,0.0156,0.8
+	definevec4	"white"	1,1,1,1
+	float	"objdone"	0
+	float	"weapswitch"	0
+	float	"teamstrogg"	0
+	float	"hidden"	0
+	float	"deathCount"	0
+	definefloat	"showGunInfo"	1
+	definefloat	"switchLeft"	(640-((gui::weaponcount*30)-2
+
+	onInit {
+		namedEvent "updateHealth";
+		namedEvent "updateArmor";
+		namedEvent "updateAmmo";		
+		namedEvent "clipCheck";
+		namedEvent "updatePowerups";
+		namedEvent "hideBrackets";
+		namedEvent "weaponChange";
+		namedEvent "radioChatterDown";
+	}
+
+	onNamedEvent hideHud {
+		set "desktop::hidden" "1" ;
+		set "p_ammo::visible" "0" ;
+		set "p_armor::visible" "0" ;
+		set "p_health::visible" "0" ;
+		set "p_weapswitch::visible" "0" ;
+		set "powerups::visible" "0" ;		
+	}
+
+	onNamedEvent showHud {
+		set "desktop::hidden" "0" ;
+		set "p_ammo::visible" "1" ;
+		set "p_armor::visible" "1" ;
+		set "p_health::visible" "1" ;
+		set "p_weapswitch::visible" "1" ;
+		set "powerups::visible" "1" ;	
+	}
+
+	onNamedEvent removeDeathLine {
+		if ( "gui::gametype" != 2 ) {
+			set "deathhistory1::text" "$deathhistory2::text";
+			set "deathhistory1_fade::text" "$deathhistory2::text";
+			set "deathhistory2::text" "$deathhistory3::text";
+			set "deathhistory3::text" "$deathhistory4::text";
+			if ( "desktop::deathCount" >= 4 ) {
+				set "desktop::deathCount" "3";
+				set "deathhistory4::visible" "0";
+				resetTime "deathanim_remove" "0";
+			} else if ( "desktop::deathCount" == 3 ) {
+				set "desktop::deathCount" "2";
+				set "deathhistory3::visible" "0";
+				resetTime "deathanim_remove" "0";
+			} else if ( "desktop::deathCount" == 2 ) {
+				set "desktop::deathCount" "1";
+				set "deathhistory2::visible" "0";
+				resetTime "deathanim_remove" "0";
+			} else if ( "desktop::deathCount" <= 1 ) {
+				set "desktop::deathCount" "0";
+				set "deathhistory1::visible" "0";
+			}
+		} else {
+			set "deathhistory1_tourney::text" "$deathhistory2_tourney::text";
+			set "deathhistory1_fade_tourney::text" "$deathhistory2_tourney::text";
+			
+			if ( "desktop::deathCount" == 2 ) {
+				set "desktop::deathCount" "1";
+				set "deathhistory2_tourney::visible" "0";
+				resetTime "deathanim_remove" "0";
+			} else if ( "desktop::deathCount" <= 1 ) {
+				set "desktop::deathCount" "0";
+				set "deathhistory1_tourney::visible" "0";
+			}
+		}		
+	}
+
+	onNamedEvent addDeathLine {
+		if ( "gui::gametype" != 2 ) {
+			if ( "desktop::deathCount" >= 4 ) {
+				namedEvent "desktop::removedeathline";
+			}
+			
+			if ( "desktop::deathCount" == 3 ) {
+				set "deathhistory4::text" "$gui::deathinfo";
+				set "deathhistory4::visible" "1";
+				set "desktop::deathCount" "4";
+			} else if ( "desktop::deathCount" == 2 ) { 		
+				set "deathhistory3::text" "$gui::deathinfo";
+				set "deathhistory3::visible" "1";
+				set "desktop::deathCount" "3";
+			} else if ( "desktop::deathCount" == 1 ) { 		
+				set "deathhistory2::text" "$gui::deathinfo";
+				set "deathhistory2::visible" "1";
+				set "desktop::deathCount" "2";
+			} else {
+				set "deathhistory1::text" "$gui::deathinfo";
+				set "deathhistory1_fade::text" "$gui::deathinfo";
+				set "deathhistory1::visible" "1";
+				set "desktop::deathCount" "1";
+				resetTime "deathanim_remove" "0";
+			}
+		} else {
+			if ( "desktop::deathCount" >= 2 ) {
+				namedEvent "desktop::removedeathline";
+			}
+			
+			if ( "desktop::deathCount" == 1 ) { 		
+				set "deathhistory2_tourney::text" "$gui::deathinfo";
+				set "deathhistory2_tourney::visible" "1";
+				set "desktop::deathCount" "2";
+			} else {
+				set "deathhistory1_tourney::text" "$gui::deathinfo";
+				set "deathhistory1_fade_tourney::text" "$gui::deathinfo";
+				set "deathhistory1_tourney::visible" "1";
+				set "desktop::deathCount" "1";
+				resetTime "deathanim_remove" "0";
+			}
+		}		
+	}
+
+	onNamedEvent updateHealth {
+		if ( "gui::mp" == 0 )
+		{
+			if ( "gui::player_healthpct" < 0.26 )
+			{
+				set "health_valbar::matcolor" "1,0.3,0,0.35" ;
+				set "health_val::matcolor" "1,0.3,0,0.5" ;
+				set "health_ekg::matcolor" "0.3,0.05,0,1" ;
+				set "health_backbar_add::visible" "1" ;
+			} else	{
+				set "health_valbar::matcolor" "0.698,0.811,0.427,0.2" ;
+				set "health_val::matcolor" "0.698,0.811,0.427,0.35" ;
+				set "health_ekg::matcolor" "0.0862,0.105,0.0549,1" ;
+				set "health_backbar_add::visible" "0" ;
+			}	
+		} else {
+			if ( "gui::player_healthpct" < 0.26 )
+			{
+				set "health_backbar_add_mp::visible" "1" ;
+			} else	{
+				set "health_backbar_add_mp::visible" "0" ;
+			}	
+		}
+		
+		if ( "gui::player_healthdelta" < 0 )
+		{
+			resettime "health_amount" "0" ;
+		}
+	}
+
+	onNamedEvent updateArmor {
+		if ( "gui::player_armordelta" < 0 )
+		{
+			resettime "armor_amount" "0" ;
+		}
+	}
+
+	onNamedEvent weaponChange {
+		namedEvent "clipCheck";
+		
+		//-----------------------
+		// per weapon ammo bar colors for mp		
+		//-----------------------
+		if ( "gui::mp" == 1 ) {
+			if ( "gui::player_weapon" == 0 ) {
+				set "ammo_valbar_mp::matcolor" "0,0.85,1,0.2" ;
+				set "ammo_val_mp::matcolor" "0,0.85,1,0.5" ;
+			} else if ( "gui::player_weapon" == 1 ) {
+				set "ammo_valbar_mp::matcolor" "1,1,0,0.2" ;
+				set "ammo_val_mp::matcolor" "1,1,0,0.5" ;
+			} else if ( "gui::player_weapon" == 2 ) {
+				set "ammo_valbar_mp::matcolor" "1,0.55,0,0.2" ;
+				set "ammo_val_mp::matcolor" "1,0.55,0,0.5" ;
+			} else if ( "gui::player_weapon" == 3 ) {
+				set "ammo_valbar_mp::matcolor" "0,0.45,1,0.2" ;
+				set "ammo_val_mp::matcolor" "0,0.45,1,0.5" ;
+			} else if ( "gui::player_weapon" == 4 ) {
+				set "ammo_valbar_mp::matcolor" "0.2,0.56,0.07,0.2" ;
+				set "ammo_val_mp::matcolor" "0.2,0.56,0.07,0.5" ;
+			} else if ( "gui::player_weapon" == 5 ) {
+				set "ammo_valbar_mp::matcolor" "0.6,0.8,0.8,0.2" ;
+				set "ammo_val_mp::matcolor" "0.6,0.8,0.8,0.5" ;
+			} else if ( "gui::player_weapon" == 6 ) {
+				set "ammo_valbar_mp::matcolor" "1,0.25,0,0.2" ;
+				set "ammo_val_mp::matcolor" "1,0.25,0,0.5" ;
+			} else if ( "gui::player_weapon" == 7 ) {
+				set "ammo_valbar_mp::matcolor" "0,1,0,0.2" ;
+				set "ammo_val_mp::matcolor" "0,1,0,0.5" ;
+			} else if ( "gui::player_weapon" == 8 ) {
+				set "ammo_valbar_mp::matcolor" "1,1,0.6,0.2" ;
+				set "ammo_val_mp::matcolor" "1,1,0.6,0.5" ;
+			} else if ( "gui::player_weapon" == 9 ) {
+				set "ammo_valbar_mp::matcolor" "0.77,0.2,1,0.2" ;
+				set "ammo_val_mp::matcolor" "0.77,0.2,1,0.5" ;
+			} else if ( "gui::player_weapon" == 10 ) {
+				set "ammo_valbar_mp::matcolor" "1,0.75,0.25,0.2" ;
+				set "ammo_val_mp::matcolor" "1,0.75,0.25,0.5" ;
+			}
+		}
+		
+		//-----------------------		
+		// If we had a valid weapon as out last weapon then show the weapon 
+		// switch icons.  This check prevents the indicators from coming up
+		// when you first start the game.
+		//-----------------------	
+		
+		set "p_weapswitch::visible" "0";
+		if ( "gui::player_lastweapon" >= 0 && "desktop::hidden" == 0)
+		{
+			namedEvent "p_weapswitch::UpdateWeapons";
+			set "p_weapswitch::visible" "1";
+			set "desktop::weapswitch" "1";
+			resettime "p_weapswitch" "0";
+		}					
+	}
+
+	onNamedEvent weaponFire {
+		set "p_weapswitch::visible" "0";
+	}
+
+	onNamedEvent clipCheck {
+		if ( "gui::player_totalammo" == -1 ) {
+			set "ammo_amount::visible" "0";	
+			set "ammo_amount_mp::visible" "0";
+			set "total_ammo::visible" "0";		
+			set "ammo_amount_nc::visible" "0";
+		} else if ( "gui::player_ammo" == -1 || "gui::player_clip_size" < 2 ) {
+			set "ammo_amount::visible" "0";	
+			set "ammo_amount_mp::visible" "1";
+			set "total_ammo::visible" "0";	
+			set "ammo_amount_nc::visible" "1";
+		} else {
+			set "ammo_amount_mp::visible" "1";
+			set "ammo_amount::visible" "1";	
+			set "total_ammo::visible" "1";	
+			set "ammo_amount_nc::visible" "0";
+		}
+	}
+
+	onNamedEvent itemPickup {
+		set "p_itempickup::visible" "1" ;
+		resettime "p_itempickup" "0" ;
+	}
+
+	onNamedEvent radioChatterUp {
+		set "p_radio::visible" "1" ;
+		
+		transition "rhino::rect" "$rhino::rect" "$d_rhino::rect" "500" ;
+		transition "rhino_backbar::rect" "$rhino_backbar::rect" "$d_rhino_backbar::rect" "500" ;
+	}
+
+	onNamedEvent radioChatterDown {
+		set "p_radio::visible" "0" ;
+	}
+
+	onNamedEvent showBrackets {
+		set "brackets::alpha" "1";
+		set "brackets::visible" "1";
+		stopTransitions "brackets";
+		resetTime "brackets" "0";
+		set "brackets::notime" "1";
+	}
+
+	onNamedEvent fadeBrackets {
+		resetTime "brackets" "0";
+	}
+
+	onNamedEvent hideBrackets {
+		stopTransitions "brackets";
+		resetTime "brackets" "0";
+		set "brackets::notime" "1";
+		set "brackets::visible" "0";
+	}
+
+	onNamedEvent playerHit {
+		resetTime "hit_indicator" "0";	
+	}
+
+	onNamedEvent clearPowerups {
+		set "gui::powerup0_visible" "0";
+		set "gui::powerup1_visible" "0";
+		set "gui::powerup2_visible" "0";
+		set "gui::powerup3_visible" "0";
+		set "gui::powerup4_visible" "0";
+		set "gui::powerup_flag_visible" "0";
+	}
+
+	onNamedEvent fadeout {
+		resettime "anim_fade" "0" ;
+	}
+
+	onNamedEvent resetfade {
+		set "fade::backcolor" "0,0,0,0" ;
+		set "failedtext::forecolor" "0,0,0,0" ;
+	}
+
+	onNamedEvent showBossBar {
+		set "BossBar::visible" "1";
+	}
+
+	onNamedEvent hideBossBar {
+		set "BossBar::visible" "0";
+	}
+
+	onNamedEvent showBossShieldBar {
+		set "p_boss_shield_bar_left::visible" "1";
+		set "p_boss_shield_bar_right::visible" "1";
+	}
+
+	onNamedEvent hideBossShieldBar {
+		set "p_boss_shield_bar_left::visible" "0";
+		set "p_boss_shield_bar_right::visible" "0";
+	}
+
+	onNamedEvent showBossShieldWarn {
+		set "p_boss_shield_bar_leftwarn::visible" "1";
+		set "p_boss_shield_bar_rightwarn::visible" "1";
+		set "p_boss_shield_bar_left::visible" "0";
+		set "p_boss_shield_bar_right::visible" "0";
+	}
+
+	onNamedEvent hideBossShieldWarn {
+		set "p_boss_shield_bar_leftwarn::visible" "0";
+		set "p_boss_shield_bar_rightwarn::visible" "0";
+		set "p_boss_shield_bar_left::visible" "1";
+		set "p_boss_shield_bar_right::visible" "1";
+	}
+
+	onNamedEvent showExit {
+		set "p_exit_level::visible" "1";
+		resettime "anim_levelExitAlert" "0";
+	}
+
+	onNamedEvent hideExit {
+		set "p_exit_level::visible" "0";
+	}
+
+	onNamedEvent setTeam_marine {	
+		set "health_valbar_mp::matcolor" "0.698,0.811,0.427,0.2" ;
+		set "health_val_mp::matcolor" "0.698,0.811,0.427,0.5" ;
+		
+		set "armor_valbar_mp::matcolor" "0.698,0.811,0.427,0.2" ;
+		set "armor_val_mp::matcolor" "0.698,0.811,0.427,0.5" ;
+		
+		set "powerup_flag_icon::matcolor" "1,0.482,0.0156,0.8";
+		
+		set "desktop::teamstrogg" "0" ;
+	}
+
+	onNamedEvent setTeam_strogg {	
+		set "health_valbar_mp::matcolor" "1,0.5,0,0.2" ;
+		set "health_val_mp::matcolor" "1,0.5,0,0.5" ;
+		
+		set "armor_valbar_mp::matcolor" "1,0.5,0,0.2" ;
+		set "armor_val_mp::matcolor" "1,0.5,0,0.5" ;
+		
+		set "powerup_flag_icon::matcolor" "0.415,0.643,0.168,0.8";
+		
+		set "desktop::teamstrogg" "1" ;
+	}
+
+	onNamedEvent enterFlatbed {
+		set "p_flatbed::visible" "1";
+		set "p_ammo::visible" "0";
+		set "p_health::visible" "0";
+		set "p_armor::visible" "0";
+	}
+
+	onNamedEvent leaveFlatbed {
+		set "p_flatbed::visible" "0";
+		set "p_ammo::visible" "1";
+		set "p_health::visible" "1";
+		set "p_armor::visible" "1";
+	}
+
+	onNamedEvent saveMessage {
+		set "quicksave_msg::forecolor_w" "1" ;
+		set "quicksave_msg::visible" "1" ;
+		resettime "quicksave_msg" "0" ;
+	}
+
+	onNamedEvent missileThreatUp {
+		set "missile_indicator::visible" "1";
+		resetTime "missile_indicator" "0";	
+		
+		set "missile_text::visible" "1";
+		resetTime "missile_text" "0";	
+	}
+
+	onNamedEvent missileThreatDown {
+		set "missile_indicator::visible" "0";
+		stoptransitions "missile_indicator";	
+		set "missile_indicator::matcolor" "1,.1,.1,.7" ;
+		
+		set "missile_text::visible" "0";
+		stoptransitions "missile_text";	
+		set "missile_text::forecolor" "1,.1,.1,.7" ;
+	}
+
+	onNamedEvent showSpeed {
+		set	"speed::visible" "1" ;
+	}
+
+	onNamedEvent hideSpeed {
+		set "speed::visible" "0" ;
+	}
+
+	onNamedEvent showViewComments {
+		set "ViewComments::visible" "1";
+	}
+
+	onNamedEvent hideViewComments {
+		set "ViewComments::visible" "0";
+	}
+
+	windowDef p_health
+	{
+		rect	0,0,640,480
+		visible	("gui::mp" == 0 )
+		windowDef health_backbar
+		{
+			rect	190,420,125,59
+			visible	1
+			background	"gfx/guis/hud/backbar"
+			matcolor	0,0,0,0.5
+			shear	0,-.22
+		}
+		windowDef health_valbar
+		{
+			rect	190,420,125,59
+			visible	1
+			background	"gfx/guis/hud/valbar"
+			matcolor	0.701,0.815,0.431,0.2
+			shear	0,-.22
+		}
+		windowDef health_ekg
+		{
+			rect	190,420,125,59
+			visible	1
+			background	"gfx/guis/hud/ekg"
+			matcolor	0.0862,0.105,0.0549,1
+			shear	0,-.22
+		}
+		windowDef p_health_val
+		{
+			rect	310 - ( "gui::player_healthpct" * 115 ),420,115,59
+			visible	1
+			shear	0,-.22
+			windowDef health_val
+			{
+				rect	-120 + ( "gui::player_healthpct" * 115 ),0,125,59
+				visible	1
+				background	"gfx/guis/hud/valbar"
+				matcolor	0.701,0.815,0.431,0.35
+				shear	0,-.22
+			}
+		}
+		windowDef d_health_amount
+		{
+			rect	254,427,58,31
+			visible	0
+		}
+		windowDef health_amount
+		{
+			rect	256,429,52,26
+			visible	1
+			forecolor	0.866,0.921,0.764,1
+			text	"gui::player_health"
+			textscale	0.5
+			font	"fonts/chain"
+			shear	0,-.22
+			textalign	2
+			notime	1
+
+			onTime 0 {
+				transition "forecolor" "$desktop::white" "$desktop::typecolor" "250" ;
+				transition "rect" "$d_health_amount::rect" "$health_amount::rect" "250" ;
+				transition "textscale" "0.6" "0.5" "250" ;
+				
+				transition "icon_health::matcolor" "$desktop::white" "$desktop::healthicon" "250" ;
+			}
+
+		}
+		windowDef icon_health
+		{
+			rect	288,458,16,16
+			visible	1
+			background	"gfx/guis/hud/icons/item_health"
+			matcolor	0.658,0.639,0.376,0.6
+		}
+		windowDef health_backbar_add
+		{
+			rect	190,420,125,59
+			visible	0
+			background	"gfx/guis/hud/backbar_add"
+			matcolor	1*guitable_10_5[time*0.002],0,0,1
+			shear	0,-.22
+		}
+	}
+}

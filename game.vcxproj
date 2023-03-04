@@ -494,6 +494,7 @@ cd "%quake%"
     <ClInclude Include="game\it266_mod\Mod_BattleNode.h" />
     <ClInclude Include="game\it266_mod\Mod_Battler.h" />
     <ClInclude Include="game\it266_mod\Mod_Card.h" />
+    <ClInclude Include="game\it266_mod\Mod_Constants.h" />
     <ClInclude Include="game\it266_mod\Mod_Deck.h" />
     <ClInclude Include="game\it266_mod\Mod_Map.h" />
     <ClInclude Include="game\it266_mod\Mod_Node.h" />

@@ -29,6 +29,7 @@
 // RAVEN END
 
 //	IT 266
+#include "it266_mod//Mod_Constants.h"
 #include "it266_mod/Mod_Map.h"
 #include "it266_mod/Mod_Card.h"
 #include "it266_mod/Mod_Cards.h"
@@ -1870,7 +1871,13 @@ void idPlayer::Spawn( void ) {
 		else {
 			gameLocal.Warning("idPlayer::Spawn() - No deck for player.");
 		}
-
+		if (spawnArgs.GetString("it266_cursor", "", temp)) {
+			gameLocal.Printf("[%s]", temp.c_str());
+			cursorui = uiManager->FindGui(temp, true, false, true);
+		}
+		else {
+			gameLocal.Warning("idPlayer::Spawn() - No cursor somehow for player.");
+		}
 		if ( spawnArgs.GetString( "hud", "", temp ) ) {
 			gameLocal.Printf("[%s]", temp.c_str());
 			hud = uiManager->FindGui( temp, true, false, true );
@@ -1893,7 +1900,6 @@ void idPlayer::Spawn( void ) {
 		if ( mphud ) {
 			mphud->Activate( true, gameLocal.time );
 		}
-
 		// IT 266
 		if (mapui) {
 			mapui->Activate(true, gameLocal.time);
@@ -1902,14 +1908,22 @@ void idPlayer::Spawn( void ) {
 		if (deckui) {
 			deckui->Activate(true, gameLocal.time);
 		}
+		if (cursorui)
+		{
+			cursorui->Activate(true, gameLocal.time);
+			cursorui->SetStateInt("isvisible", 1);
+		}
 		SetupMapUI(mapui);
 		
+
+
 		//	IT 266
 		//	Set up deck
 		SetupDeck();
 		//	Needs to add ui to their respective list
 		uiList.push(keyvalueClass<int, idUserInterface*>(0, mapui));
-		uiList.push(keyvalueClass<int, idUserInterface*>(1, deckui));
+		uiList.push(keyvalueClass<int, idUserInterface*>(3, deckui));
+		uiList.push(keyvalueClass<int, idUserInterface*>(MOD_CursorUiZ, cursorui));
 		uiList.sort();
 
 		// load cursor
@@ -6346,6 +6360,9 @@ void idPlayer::Weapon_GUI( void ) {
 		idUserInterface *ui = ActiveGui();
 		if ( ui ) {	//	This check is not really necessary
  			ev = sys->GenerateMouseButtonEvent( 1, ( usercmd.buttons & BUTTON_ATTACK ) != 0 );
+			
+			//	Due to weird mouse shenanigans we will do some shenanigans of our own
+
 			gameLocal.Printf("\n");
 			for (int i = uiList.size() - 1; i >= 0; i--)
 			{
@@ -9604,6 +9621,7 @@ void idPlayer::Think( void ) {
 		RouteGuiMouse( gui );
 	}
 	*/
+
 	for (int i = 0; i < uiList.size(); i++)
 	{
 		if (uiList.get(i).value)
@@ -9805,9 +9823,17 @@ void idPlayer::RouteGuiMouse( idUserInterface *gui ) {
  	const char *command;
 
 	if ( usercmd.mx != oldMouseX || usercmd.my != oldMouseY ) {
- 		ev = sys->GenerateMouseMoveEvent( usercmd.mx - oldMouseX, usercmd.my - oldMouseY );
- 		command = gui->HandleEvent( &ev, gameLocal.time );
-		
+		if (gui == cursorui)
+		{
+			ev = sys->GenerateMouseMoveEvent(usercmd.mx - oldMouseX, usercmd.my - oldMouseY);
+			command = gui->HandleEvent(&ev, gameLocal.time);
+		}
+		else
+		{
+			ev = sys->GenerateMouseMoveEvent((int)(cursorui->CursorX() - gui->CursorX()),
+				(int)(cursorui->CursorY() - gui->CursorY()));
+			command = gui->HandleEvent(&ev, gameLocal.time);
+		}
 		//	IT 266
 		//	Because we are routing multiple GUIS at the same time
 		//	we cannot reset the mouse positional variables yet

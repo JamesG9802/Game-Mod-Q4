@@ -1,0 +1,35 @@
+windowDef Desktop
+{
+	rect	0,0,640,480
+	visible "gui::isvisible"
+	menugui	1
+	nocursor	1
+	windowDef Back
+	{
+		rect	100,270,128,56
+		visible	1
+		forecolor	1,1,1,1
+		text	"Back"
+		textscale	1
+		font	"fonts/chain"
+		textalign	1
+		onAction	{
+			consoleCMD "upgradeBack" ;
+			set "gui::responded "1" ;
+		}
+	}
+	windowDef Confirm
+	{
+		rect	346,270,194,56
+		visible	1
+		forecolor	1,1,1,1
+		text	"Confirm"
+		textscale	1
+		font	"fonts/chain"
+		textalign	1
+		onAction	{
+			consoleCMD "upgradeConfirm" ;
+			set "gui::responded "1" ;
+		}
+	}
+}

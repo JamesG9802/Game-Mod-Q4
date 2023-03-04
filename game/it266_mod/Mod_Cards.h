@@ -5,7 +5,8 @@
 class Mod_Card_Attack : public Mod_Card {
 public:
 	int damage;
-	Mod_Card_Attack(int cost, char* name, char* cardArt, int damage) : Mod_Card(cost, name, cardArt)
+	Mod_Card_Attack(int cost, char* name, char* cardArt, char* cardText, int damage) 
+		: Mod_Card(cost, name, cardArt, cardText)
 	{
 		this->damage = damage;
 	}
@@ -16,7 +17,7 @@ public:
 };
 class Mod_Card_Strike : public Mod_Card_Attack {
 public:
-	Mod_Card_Strike() : Mod_Card_Attack(1, "it266_card_strike_name", "it266_card_strike_art", 6)
+	Mod_Card_Strike() : Mod_Card_Attack(1, "it266_card_strike_name", "it266_card_strike_art", "it266_card_strike_text", 6)
 	{
 
 	}

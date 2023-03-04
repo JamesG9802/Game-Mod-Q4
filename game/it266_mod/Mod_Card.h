@@ -11,25 +11,24 @@ protected:
 public:
 	idUserInterface* ui = NULL;
 	
+	int currentCost;
+
 	int cost; 
 	char* name;
 	char* cardArt;
-	const char* cardArtUpgrade;
+	char* cardText; 
 
-	bool isUpgradeable;
-	Mod_Card(int cost, char* name, char* cardArt, bool isUpgradeable = true)
+	bool isUpgraded;
+	Mod_Card(int cost, char* name, char* cardArt, char* cardText, bool isUpgraded = false)
 	{
-		idStr str;
-
 		this->cost = cost;
 		this->name = name;
 		this->cardArt = cardArt;
-		
-		str = cardArt;
-		str += "_upgrade";
-		cardArtUpgrade = str.c_str();
-		this->isUpgradeable = isUpgradeable;
+		this->cardText = cardText;
 
+		this->isUpgraded = isUpgraded;
+
+		currentCost = cost;
 	}
 	~Mod_Card()
 	{

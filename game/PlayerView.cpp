@@ -775,6 +775,7 @@ void idPlayerView::RenderPlayerView( idUserInterface *hud ) {
 				if (player->uiList.get(i).value && player->uiList.get(i).value->GetStateInt("isvisible") == 1)
 					player->uiList.get(i).value->Redraw(gameLocal.time);
 			}
+			player->cursorui->Redraw(gameLocal.time);
 		}
 
 		ScreenFade();
