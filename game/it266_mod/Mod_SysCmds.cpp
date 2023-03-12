@@ -237,7 +237,6 @@ void Cmd_ShowUpgradeMenu_f(const idCmdArgs& args)
 			idUserInterface* ui;
 			ui = player->mod_deck.get(i)->AddCard(20 + 154 * x, y * 188);
 			ui->SetStateInt("isUpgradeable", 1);
-			ui->SetStateInt("cardIndex", i);
 		}
 	}
 }
@@ -270,7 +269,16 @@ void Cmd_ShowUpgradeCard_f(const idCmdArgs& args)
 		player->uiList.push(kvpair);
 		player->uiList.sort();
 
-		int cardIndex = atoi(args.Argv(1));
+		int cardIndex = -1;
+		for (int i = 0; i < player->mod_deck.size(); i++)
+		{
+			if (player->mod_deck.get(i)->ui->GetStateInt("thisCard") == 1)
+			{
+				cardIndex = i;
+				player->mod_deck.get(i)->ui->SetStateInt("thisCard", 0);
+				break;
+			}
+		}
 		Cmd_HideUpgradeMenu_f();
 		player->deckui->SetStateInt("isvisible", 1);
 		player->mod_deck.get(cardIndex)->AddCard(201, 32);

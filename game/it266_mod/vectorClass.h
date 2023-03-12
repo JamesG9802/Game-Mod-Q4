@@ -77,7 +77,11 @@ public:
     }
 
     // function to delete last element
-    void pop() { current--; }
+    T pop() 
+    {
+        current--; 
+        return arr[current];
+    }
 
     // function to remove element at index
     void removeAt(int index)

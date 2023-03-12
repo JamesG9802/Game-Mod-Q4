@@ -480,12 +480,15 @@ cd "%quake%"
     <ClInclude Include="game\IK.h" />
     <ClInclude Include="game\Instance.h" />
     <ClInclude Include="game\it266_mod\keyvalueClass.h" />
+    <ClInclude Include="game\it266_mod\Mod_Battle.h" />
+    <ClInclude Include="game\it266_mod\Mod_BattleEntity.h" />
     <ClInclude Include="game\it266_mod\Mod_BattleNode.h" />
     <ClInclude Include="game\it266_mod\Mod_Card.h" />
     <ClInclude Include="game\it266_mod\Mod_Constants.h" />
     <ClInclude Include="game\it266_mod\Mod_Deck.h" />
     <ClInclude Include="game\it266_mod\Mod_Map.h" />
     <ClInclude Include="game\it266_mod\Mod_Node.h" />
+    <ClInclude Include="game\it266_mod\Mod_Pool.h" />
     <ClInclude Include="game\it266_mod\Mod_RestNode.h" />
     <ClInclude Include="game\it266_mod\Mod_ShopNode.h" />
     <ClInclude Include="game\it266_mod\Mod_SysCmds.h" />

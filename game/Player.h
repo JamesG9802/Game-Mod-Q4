@@ -7,6 +7,7 @@
 #define __GAME_PLAYER_H__
 
 //	IT 266
+#include "./it266_mod/Mod_Pool.h"
 #include "./it266_mod/Mod_Map.h"
 #include "./it266_mod/Mod_Card.h"
 #include "./it266_mod/Mod_Deck.h"
@@ -829,6 +830,7 @@ public:
 
 	//	replacing individual mod uis with an list that will store every UI up with their Z-index
 	vectorClass<keyvalueClass<int, idUserInterface*>> uiList;
+	Mod_Pool<idUserInterface*> interfaces;
 	//	IT 266
 	int						playerGoldAmt = 0;
 // RITUAL END

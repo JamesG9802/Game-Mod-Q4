@@ -893,6 +893,9 @@
     <ClInclude Include="game\it266_mod\Mod_SysCmds.h">
       <Filter>Game\IT266Mod</Filter>
     </ClInclude>
+    <ClInclude Include="game\it266_mod\Mod_Pool.h" />
+    <ClInclude Include="game\it266_mod\Mod_BattleEntity.h" />
+    <ClInclude Include="game\it266_mod\Mod_Battle.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="game\Game.def" />
