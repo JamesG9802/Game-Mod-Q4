@@ -8,7 +8,6 @@
 
 //	IT 266
 #include "./it266_mod/Mod_Map.h"
-#include "./it266_mod/Mod_Battle.h"
 #include "./it266_mod/Mod_Card.h"
 #include "./it266_mod/Mod_Deck.h"
 #include "./it266_mod/vectorClass.h"
@@ -826,7 +825,6 @@ public:
 	
 	//	IT 266
 	Mod_Map	mod_map;
-	Mod_Battle mod_battle;
 	vectorClass<Mod_Card*> mod_deck;
 
 	//	replacing individual mod uis with an list that will store every UI up with their Z-index

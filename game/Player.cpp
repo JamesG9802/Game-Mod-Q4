@@ -9663,7 +9663,6 @@ void idPlayer::Think( void ) {
 					mod_deck.get(i)->ui->SetStateFloat("verticalOffset", 
 						mod_deck.get(i)->ui->GetStateFloat("verticalOffset") - 5.0f);
 	}
-	mod_battle.Think();
 
 // RAVEN BEGIN
 // abahr

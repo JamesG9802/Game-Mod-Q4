@@ -5,14 +5,15 @@
 
 class Mod_Card;
 class Mod_Deck {
-	vectorClass<Mod_Card> deck;
-
+	vectorClass<Mod_Card*> deck;
+	vectorClass<Mod_Card*> hand;
 	/// <summary>
 	/// Draw num cards from the deck. 
 	/// If the deck is empty while drawing, 
 	///		reshuffle the deck.
 	/// </summary>
 	virtual void DrawCard(int num = 1);
+	virtual void DiscardCard(Mod_Card* card);
 	virtual void Rehuffle();
 	virtual void Shuffle();
 

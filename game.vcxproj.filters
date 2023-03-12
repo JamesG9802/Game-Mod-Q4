@@ -519,15 +519,6 @@
     <ClCompile Include="game\mp\stats\StatWindow.cpp">
       <Filter>Game\MP\Stats</Filter>
     </ClCompile>
-    <ClCompile Include="game\it266_mod\Mod_Battle.cpp">
-      <Filter>Game\IT266Mod</Filter>
-    </ClCompile>
-    <ClCompile Include="game\it266_mod\Mod_BattleEntity.cpp">
-      <Filter>Game\IT266Mod</Filter>
-    </ClCompile>
-    <ClCompile Include="game\it266_mod\Mod_BattleNode.cpp">
-      <Filter>Game\IT266Mod</Filter>
-    </ClCompile>
     <ClCompile Include="game\it266_mod\Mod_Card.cpp">
       <Filter>Game\IT266Mod</Filter>
     </ClCompile>
@@ -549,7 +540,7 @@
     <ClCompile Include="game\it266_mod\Mod_Cards.h">
       <Filter>Game\IT266Mod</Filter>
     </ClCompile>
-    <ClCompile Include="game\it266_mod\Mod_Battler.cpp">
+    <ClCompile Include="game\it266_mod\Mod_SysCmds.cpp">
       <Filter>Game\IT266Mod</Filter>
     </ClCompile>
   </ItemGroup>
@@ -872,12 +863,6 @@
     <ClInclude Include="game\it266_mod\Mod_Deck.h">
       <Filter>Game\IT266Mod</Filter>
     </ClInclude>
-    <ClInclude Include="game\it266_mod\Mod_Battle.h">
-      <Filter>Game\IT266Mod</Filter>
-    </ClInclude>
-    <ClInclude Include="game\it266_mod\Mod_BattleEntity.h">
-      <Filter>Game\IT266Mod</Filter>
-    </ClInclude>
     <ClInclude Include="game\it266_mod\Mod_BattleNode.h">
       <Filter>Game\IT266Mod</Filter>
     </ClInclude>
@@ -902,10 +887,10 @@
     <ClInclude Include="game\it266_mod\SmartPointer.h">
       <Filter>Game\IT266Mod</Filter>
     </ClInclude>
-    <ClInclude Include="game\it266_mod\Mod_Battler.h">
+    <ClInclude Include="game\it266_mod\Mod_Constants.h">
       <Filter>Game\IT266Mod</Filter>
     </ClInclude>
-    <ClInclude Include="game\it266_mod\Mod_Constants.h">
+    <ClInclude Include="game\it266_mod\Mod_SysCmds.h">
       <Filter>Game\IT266Mod</Filter>
     </ClInclude>
   </ItemGroup>
