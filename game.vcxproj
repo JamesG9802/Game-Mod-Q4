@@ -334,6 +334,9 @@ cd "%quake%"
     <ClCompile Include="game\IconManager.cpp" />
     <ClCompile Include="game\IK.cpp" />
     <ClCompile Include="game\Instance.cpp" />
+    <ClCompile Include="game\it266_mod\Mod_BattleSystem.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="game\it266_mod\Mod_Card.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -480,9 +483,10 @@ cd "%quake%"
     <ClInclude Include="game\IK.h" />
     <ClInclude Include="game\Instance.h" />
     <ClInclude Include="game\it266_mod\keyvalueClass.h" />
-    <ClInclude Include="game\it266_mod\Mod_Battle.h" />
+    <ClInclude Include="game\it266_mod\Mod_BattleCreature.h" />
     <ClInclude Include="game\it266_mod\Mod_BattleEntity.h" />
     <ClInclude Include="game\it266_mod\Mod_BattleNode.h" />
+    <ClInclude Include="game\it266_mod\Mod_BattleSystem.h" />
     <ClInclude Include="game\it266_mod\Mod_Card.h" />
     <ClInclude Include="game\it266_mod\Mod_Constants.h" />
     <ClInclude Include="game\it266_mod\Mod_Deck.h" />

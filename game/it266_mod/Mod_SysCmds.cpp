@@ -6,6 +6,7 @@
 #include "../it266_mod/Mod_Node.h"
 #include "../it266_mod/Mod_Constants.h"
 #include "../it266_mod/Mod_SysCmds.h"
+#include "../it266_mod/Mod_BattleSystem.h"
 #include "../Game_local.h"
 //	IT 266
 void Cmd_UpgradeCard(Mod_Card* card)
@@ -58,6 +59,8 @@ void Cmd_StartBattle(const idCmdArgs& args)
 			battlegui->SetStateInt("isvisible", 1);
 			player->nodeui = battlegui;
 			player->uiList.push(keyvalueClass<int, idUserInterface*>(2, battlegui));
+
+			player->battleSystem.Mod_StartBattle();
 		}
 	}
 }

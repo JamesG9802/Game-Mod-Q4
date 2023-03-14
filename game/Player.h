@@ -7,6 +7,7 @@
 #define __GAME_PLAYER_H__
 
 //	IT 266
+#include "./it266_mod/Mod_BattleSystem.h"
 #include "./it266_mod/Mod_Pool.h"
 #include "./it266_mod/Mod_Map.h"
 #include "./it266_mod/Mod_Card.h"
@@ -825,6 +826,7 @@ public:
 	
 	
 	//	IT 266
+	Mod_BattleSystem battleSystem;
 	Mod_Map	mod_map;
 	vectorClass<Mod_Card*> mod_deck;
 

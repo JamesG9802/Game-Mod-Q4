@@ -543,6 +543,9 @@
     <ClCompile Include="game\it266_mod\Mod_SysCmds.cpp">
       <Filter>Game\IT266Mod</Filter>
     </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_BattleSystem.cpp">
+      <Filter>Game\IT266Mod</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game\Actor.h">
@@ -893,9 +896,18 @@
     <ClInclude Include="game\it266_mod\Mod_SysCmds.h">
       <Filter>Game\IT266Mod</Filter>
     </ClInclude>
-    <ClInclude Include="game\it266_mod\Mod_Pool.h" />
-    <ClInclude Include="game\it266_mod\Mod_BattleEntity.h" />
-    <ClInclude Include="game\it266_mod\Mod_Battle.h" />
+    <ClInclude Include="game\it266_mod\Mod_BattleEntity.h">
+      <Filter>Game\IT266Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="game\it266_mod\Mod_Pool.h">
+      <Filter>Game\IT266Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="game\it266_mod\Mod_BattleCreature.h">
+      <Filter>Game\IT266Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="game\it266_mod\Mod_BattleSystem.h">
+      <Filter>Game\IT266Mod</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="game\Game.def" />
