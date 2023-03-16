@@ -10,6 +10,9 @@ protected:
 	int guiZ = 5;
 public:
 	idUserInterface* ui = NULL;
+	int currentZ = 0;
+
+
 	int currentCost;
 
 	int cost; 
@@ -18,6 +21,7 @@ public:
 	char* cardText; 
 
 	bool isUpgraded;
+
 	Mod_Card(int cost, char* name, char* cardArt, char* cardText, bool isUpgraded = false)
 	{
 		this->cost = cost;
@@ -44,8 +48,9 @@ public:
 	/// <param name="uiList"></param>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
-	virtual idUserInterface* AddCard(float x, float y);
-	virtual idUserInterface* AddBattleCard(float x, float y);
+	virtual idUserInterface* AddCard(float x, float y, const char* cardgui = "it266_card", int zMod = 0);
+	virtual idUserInterface* AddBattleCard(float x, float y, int zMod = 0);
+	virtual void ChangeZ(int newZ);
 	virtual void HideCard();
 	virtual void DeleteUI();
 	virtual Mod_Card* Copy();

@@ -4,7 +4,6 @@
 Mod_Map::Mod_Map() {
 }
 Mod_Map::~Mod_Map() {
-    delete nodes;
 }
 
 void Mod_Map::GenerateMap()

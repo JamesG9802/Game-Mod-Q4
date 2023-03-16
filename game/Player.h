@@ -832,7 +832,9 @@ public:
 
 	//	replacing individual mod uis with an list that will store every UI up with their Z-index
 	vectorClass<keyvalueClass<int, idUserInterface*>> uiList;
-	Mod_Pool<idUserInterface*> interfaces;
+	Mod_Pool<idUserInterface*> interfaces;	//	idk if we need this
+
+
 	//	IT 266
 	int						playerGoldAmt = 0;
 // RITUAL END

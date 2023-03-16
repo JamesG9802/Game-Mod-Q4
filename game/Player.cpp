@@ -6368,7 +6368,10 @@ void idPlayer::Weapon_GUI( void ) {
 			{
 				if (uiList.get(i).value)
 				{
-					gameLocal.Printf("For %d: %d\n", uiList.get(i).key, uiList.get(i).value->GetStateInt("isvisible"));
+					gameLocal.Printf("For %d:\tvisible:%d\tresponded:%d\n", 
+						uiList.get(i).key, 
+						uiList.get(i).value->GetStateInt("isvisible"),
+						uiList.get(i).value->GetStateInt("responded"));
 				}
 				if (uiList.get(i).value && uiList.get(i).value->GetStateInt("isvisible") == 1)
 				{

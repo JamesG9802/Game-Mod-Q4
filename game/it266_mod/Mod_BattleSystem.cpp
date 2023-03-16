@@ -13,9 +13,11 @@ Mod_BattleSystem::~Mod_BattleSystem()
 }
 void Mod_BattleSystem::Mod_StartBattle()
 {
+	battleStarted = true;
+
 	idPlayer* player = gameLocal.GetLocalPlayer();
 	this->mod_battleplayer = new Mod_PlayerBattleCreature(player->health, player->inventory.maxHealth, &player->mod_deck);
-
+	this->mod_battleplayer->mod_deck->Shuffle();
 	SendRoundEvent("PlayerRoundStart");
 }
 void Mod_BattleSystem::SendRoundEvent(idStr str)

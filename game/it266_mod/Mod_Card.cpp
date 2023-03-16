@@ -2,16 +2,17 @@
 #include "Mod_Card.h"
 #include "keyvalueClass.h"
 #pragma hdrstop
-idUserInterface* Mod_Card::AddCard(float x, float y)
+idUserInterface* Mod_Card::AddCard(float x, float y, const char* cardgui, int zMod)
 {
 	if (gameLocal.GetLocalPlayer())
 	{
 		idStr temp;
 		if (!ui)
 		{
-			gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_card", "", temp);
+			gameLocal.GetLocalPlayer()->spawnArgs.GetString(cardgui, "", temp);
 			ui = uiManager->FindGui(temp, true, true, false);
 			ui->Activate(true, gameLocal.time);
+			currentZ = guiZ + zMod;
 		}
 		ui->SetStateFloat("cardx", x);
 		ui->SetStateFloat("cardy", y);
@@ -41,21 +42,36 @@ idUserInterface* Mod_Card::AddCard(float x, float y)
 		ui->SetStateInt("isvisible", 1);
 		
 		if (gameLocal.GetLocalPlayer()->uiList.indexOf(keyvalueClass<int, idUserInterface*>
-			(guiZ, ui)) == -1)
+			(currentZ , ui)) == -1)
 		{
 			gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
-				(guiZ, ui));
+				(currentZ, ui));
 			gameLocal.GetLocalPlayer()->uiList.sort();
 		}
 		return ui;
 	}
 	return NULL;
 }
-idUserInterface* Mod_Card::AddBattleCard(float x, float y)
+idUserInterface* Mod_Card::AddBattleCard(float x, float y, int zMod)
 {
-	AddCard(x, y);
+	AddCard(x, y, "it266_battlecard", zMod);
 	ui->SetStateInt("inBattle", 1);
+	gameLocal.GetLocalPlayer()->uiList.sort();
 	return ui;
+}
+void Mod_Card::ChangeZ(int newZmod)
+{
+	if (gameLocal.GetLocalPlayer()->uiList.indexOf(keyvalueClass<int, idUserInterface*>
+		(currentZ, ui)) != -1)
+	{
+		gameLocal.GetLocalPlayer()->uiList.removeAt(
+			gameLocal.GetLocalPlayer()->uiList.indexOf(keyvalueClass<int, idUserInterface*>
+				(currentZ, ui)));
+	}
+	currentZ = guiZ + newZmod;
+	gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
+		(currentZ, ui));
+	gameLocal.GetLocalPlayer()->uiList.sort();
 }
 void Mod_Card::HideCard()
 {

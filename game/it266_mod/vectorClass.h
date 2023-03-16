@@ -84,13 +84,15 @@ public:
     }
 
     // function to remove element at index
-    void removeAt(int index)
+    T removeAt(int index)
     {
+        T item = arr[index];
         for (int i = index; i < size() - 1; i++)
         {
             arr[i] = arr[i + 1];
         }
         current--;
+        return item;
     }
     int indexOf(T item)
     {
@@ -104,7 +106,7 @@ public:
     //  Insertion Sort
     void sort()
     {
-        for (int i = 0; i < size() - 1; i++)
+        for (int i = 1; i < size(); i++)
         {
             T item = arr[i];
             int j = i - 1;

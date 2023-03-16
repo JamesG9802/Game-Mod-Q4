@@ -7,6 +7,7 @@
 #include "../it266_mod/Mod_Constants.h"
 #include "../it266_mod/Mod_SysCmds.h"
 #include "../it266_mod/Mod_BattleSystem.h"
+#include "../it266_mod/Mod_BattleCreature.h"
 #include "../Game_local.h"
 //	IT 266
 void Cmd_UpgradeCard(Mod_Card* card)
@@ -329,4 +330,29 @@ void Cmd_UpgradeConfirm_f(const idCmdArgs& args)
 void Cmd_EndTurn_f(const idCmdArgs& args)
 {
 	gameLocal.Printf("Ending turn\n");
+}
+void Cmd_SelectBattleCard_f(const idCmdArgs& args)
+{
+	int j = 0;
+	int z = 1;
+	gameLocal.Printf("%d", z/j);
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	if (player && player->battleSystem.battleStarted)
+	{
+		Mod_PlayerBattleCreature* playerCreature = player->battleSystem.mod_battleplayer;
+		int cardIndex = -1;
+		for (int i = 0; i < playerCreature->mod_deck->hand.size(); i++)
+		{
+			if (playerCreature->mod_deck->hand.get(i)->ui->GetStateInt("thisCard") == 1)
+			{
+				cardIndex = i;
+				playerCreature->mod_deck->hand.get(i)->ui->SetStateInt("thisCard", 0);
+				break;
+			}
+		}
+		gameLocal.Printf("POTATOOOOOOO%d\n", cardIndex);
+		if (cardIndex == -1)
+			return;
+		player->cardTarget = playerCreature->mod_deck->hand.get(cardIndex);
+	}
 }
