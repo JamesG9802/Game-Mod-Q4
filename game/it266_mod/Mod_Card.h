@@ -10,7 +10,6 @@ protected:
 	int guiZ = 5;
 public:
 	idUserInterface* ui = NULL;
-	
 	int currentCost;
 
 	int cost; 
@@ -46,7 +45,9 @@ public:
 	/// <param name="x"></param>
 	/// <param name="y"></param>
 	virtual idUserInterface* AddCard(float x, float y);
+	virtual idUserInterface* AddBattleCard(float x, float y);
 	virtual void HideCard();
 	virtual void DeleteUI();
+	virtual Mod_Card* Copy();
 };
 #endif

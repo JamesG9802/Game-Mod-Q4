@@ -172,8 +172,10 @@ void Cmd_OpenDeck_f(const idCmdArgs& args)
 	{
 		int x = i % 4;
 		int y = i / 4;
-		idUserInterface* ui = player->mod_deck.get(i)->AddCard(20 + 154 * x, y * 188);
-		gameLocal.Printf("%d\n", ui->GetStateInt("isvisible"));
+		Mod_Card* card = player->mod_deck.get(i);
+		if (card == NULL)
+			continue;
+		card->AddCard(20 + 154 * x, y * 188);
 	}
 }
 void Cmd_CloseDeck_f(const idCmdArgs& args)
@@ -322,4 +324,9 @@ void Cmd_UpgradeConfirm_f(const idCmdArgs& args)
 			Cmd_HideUpgradeMenu_f();
 		}
 	}
+}
+
+void Cmd_EndTurn_f(const idCmdArgs& args)
+{
+	gameLocal.Printf("Ending turn\n");
 }

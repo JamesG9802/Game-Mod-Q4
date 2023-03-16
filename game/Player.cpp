@@ -14414,7 +14414,11 @@ void idPlayer::SetupDeck()
 		Mod_Card* card = new Mod_Card_Strike();
 		mod_deck.push(card);
 	}
-		
+	for (int i = 0; i < 5; i++)
+	{
+		Mod_Card* card = new Mod_Card_Defend();
+		mod_deck.push(card);
+	}
 }
 int idPlayer::GetMouseX()
 {

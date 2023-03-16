@@ -21,6 +21,38 @@ public:
 	{
 
 	}
+	Mod_Card* Copy()
+	{
+		return new Mod_Card_Strike();
+	}
+};
+class Mod_Card_Block : public Mod_Card {
+public:
+	int block;
+	Mod_Card_Block(int cost, char* name, char* cardArt, char* cardText, int block)
+		: Mod_Card(cost, name, cardArt, cardText)
+	{
+		this->block = block;
+	}
+	void Execute()
+	{
+
+	}
+};
+class Mod_Card_Defend : public Mod_Card_Block {
+public:
+	Mod_Card_Defend() : Mod_Card_Block(1, "it266_card_defend_name", "it266_card_defend_art", "it266_card_defend_text", 6)
+	{
+
+	}
+	void Execute()
+	{
+
+	}
+	Mod_Card* Copy()
+	{
+		return new Mod_Card_Defend();
+	}
 };
 /*
 void AddCard(vectorClass<keyvalueClass<int, idUserInterface*>> uiList, float x, float y)

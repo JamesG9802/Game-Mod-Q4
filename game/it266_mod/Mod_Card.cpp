@@ -6,7 +6,6 @@ idUserInterface* Mod_Card::AddCard(float x, float y)
 {
 	if (gameLocal.GetLocalPlayer())
 	{
-
 		idStr temp;
 		if (!ui)
 		{
@@ -17,46 +16,46 @@ idUserInterface* Mod_Card::AddCard(float x, float y)
 		ui->SetStateFloat("cardx", x);
 		ui->SetStateFloat("cardy", y);
 
+		/*	If only it was this simple; for some reason having a variable image draws it over
+		*	every other gui element
+		*	Options:	
+				- Create a card gui for every single possible card art
+		*		- Create a windowDef inside a card gui with every single possible card art
 		gameLocal.GetLocalPlayer()->spawnArgs.GetString(cardArt, "", temp);
 		ui->SetStateString("cardart", temp);
-
+		*/
 		gameLocal.GetLocalPlayer()->spawnArgs.GetString(name, "", temp);
 		if (isUpgraded)
 			temp += "+";
 		ui->SetStateString("cardname", temp);
-
 		temp = cardText;
 		if (isUpgraded)
 			temp += "+";
 		gameLocal.GetLocalPlayer()->spawnArgs.GetString(temp, "", temp);
 		
 		ui->SetStateString("cardtext", temp);
-		
 		temp = "";
 		temp += currentCost;
 		
 		ui->SetStateString("cardcost", temp);
-
 		ui->SetStateInt("isvisible", 1);
-
-		/*
-		const char* command;
-		sysEvent_t	ev;
-		ev = sys->GenerateMouseMoveEvent(-2000, -2000);
-		command = ui->HandleEvent(&ev, gameLocal.time);
-		gameLocal.GetLocalPlayer()->HandleGuiCommands(gameLocal.GetLocalPlayer(), command);
-
-		// move to an absolute position
-		ev = sys->GenerateMouseMoveEvent(gameLocal.GetLocalPlayer()->GetMouseX(), gameLocal.GetLocalPlayer()->GetMouseY());
-		command = ui->HandleEvent(&ev, gameLocal.time);
-		gameLocal.GetLocalPlayer()->HandleGuiCommands(gameLocal.GetLocalPlayer(), command);
-		*/
-		gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
-			(guiZ, ui));
-		gameLocal.GetLocalPlayer()->uiList.sort();
+		
+		if (gameLocal.GetLocalPlayer()->uiList.indexOf(keyvalueClass<int, idUserInterface*>
+			(guiZ, ui)) == -1)
+		{
+			gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
+				(guiZ, ui));
+			gameLocal.GetLocalPlayer()->uiList.sort();
+		}
 		return ui;
 	}
 	return NULL;
+}
+idUserInterface* Mod_Card::AddBattleCard(float x, float y)
+{
+	AddCard(x, y);
+	ui->SetStateInt("inBattle", 1);
+	return ui;
 }
 void Mod_Card::HideCard()
 {
@@ -79,4 +78,8 @@ void Mod_Card::DeleteUI()
 void Mod_Card::Execute()
 {
 
+}
+Mod_Card* Mod_Card::Copy()
+{
+	return NULL;
 }

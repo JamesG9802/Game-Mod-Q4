@@ -30,4 +30,6 @@ void Cmd_UpgradeBack_f(const idCmdArgs& args);
 void Cmd_UpgradeConfirm_f(const idCmdArgs& args);
 
 void Cmd_StartBattle(const idCmdArgs& args);
+
+void Cmd_EndTurn_f(const idCmdArgs& args);
 #endif // !Mod_SysCmds_h

@@ -3252,6 +3252,7 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand("showUpgradeCard",		Cmd_ShowUpgradeCard_f, CMD_FL_GAME, "(IT 266) Show Card Upgrade");
 	cmdSystem->AddCommand("upgradeBack",			Cmd_UpgradeBack_f, CMD_FL_GAME, "(IT 266) Go Back from upgrade");
 	cmdSystem->AddCommand("upgradeConfirm",			Cmd_UpgradeConfirm_f, CMD_FL_GAME, "(IT 266) Upgrade card");
+	cmdSystem->AddCommand("endTurn",				Cmd_EndTurn_f, CMD_FL_GAME, "(IT 266) End turn in battle");
 }
 
 /*
