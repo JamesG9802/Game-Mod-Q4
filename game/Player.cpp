@@ -33,6 +33,7 @@
 #include "it266_mod/Mod_Map.h"
 #include "it266_mod/Mod_Card.h"
 #include "it266_mod/Mod_Cards.h"
+#include "it266_mod/Mod_BattleCreature.h"
 class Mod_Card;
 
 idCVar net_predictionErrorDecay( "net_predictionErrorDecay", "112", CVAR_FLOAT | CVAR_GAME | CVAR_NOCHEAT, "time in milliseconds it takes to fade away prediction errors", 0.0f, 200.0f );
@@ -6375,10 +6376,6 @@ void idPlayer::Weapon_GUI( void ) {
 				if (uiList.get(i).value && uiList.get(i).value->GetStateInt("isvisible") == 1)
 				{
 					command = uiList.get(i).value->HandleEvent(&ev, gameLocal.time, &updateVisuals);
-					gameLocal.Printf("For %d:\tvisible:%d\tresponded:%d\n",
-						uiList.get(i).key,
-						uiList.get(i).value->GetStateInt("isvisible"),
-						uiList.get(i).value->GetStateInt("responded"));
 					if (uiList.get(i).value->GetStateInt("responded") == 1)
 					{
 						//	IT 266

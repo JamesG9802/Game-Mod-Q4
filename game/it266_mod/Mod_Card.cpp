@@ -83,7 +83,7 @@ void Mod_Card::DeleteUI()
 {
 	if (ui)
 	{
-		keyvalueClass <int, idUserInterface*> kvpair(guiZ, ui);
+		keyvalueClass <int, idUserInterface*> kvpair(currentZ, ui);
 		int index = gameLocal.GetLocalPlayer()->uiList.indexOf(kvpair);
 		if (index != -1)
 			gameLocal.GetLocalPlayer()->uiList.removeAt(index);

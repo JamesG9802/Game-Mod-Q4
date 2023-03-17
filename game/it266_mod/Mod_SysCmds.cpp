@@ -43,7 +43,7 @@ void Cmd_LoadRestNode()
 		ui->Activate(true, gameLocal.time);
 		ui->SetStateInt("isvisible", 1);
 		gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
-			(2, ui));
+			(MOD_NodeUiZ, ui));
 		gameLocal.GetLocalPlayer()->uiList.sort();
 	}
 }
@@ -59,7 +59,7 @@ void Cmd_StartBattle(const idCmdArgs& args)
 			battlegui->Activate(true, gameLocal.time);
 			battlegui->SetStateInt("isvisible", 1);
 			player->nodeui = battlegui;
-			player->uiList.push(keyvalueClass<int, idUserInterface*>(2, battlegui));
+			player->uiList.push(keyvalueClass<int, idUserInterface*>(MOD_NodeUiZ, battlegui));
 
 			player->battleSystem.Mod_StartBattle();
 		}
@@ -332,17 +332,7 @@ void Cmd_EndTurn_f(const idCmdArgs& args)
 	idPlayer* player = gameLocal.GetLocalPlayer();
 	if (player && player->battleSystem.battleStarted)
 	{
-		if (player->cardTarget)
-		{
-			player->cardTarget->ui->SetStateInt("verticalOffset", 0);
-			player->uiList.removeAt(
-				player->uiList.indexOf(keyvalueClass<int, idUserInterface*>(
-					MOD_SelectedCard, player->cardTarget->ui)));
-			player->uiList.push(keyvalueClass<int, idUserInterface*>(
-				player->cardTarget->currentZ, player->cardTarget->ui));
-			player->uiList.sort();
-			player->cardTarget = NULL;
-		}
+		Cmd_UnselectCard_f(args);
 		gameLocal.Printf("Ending turn\n");
 		player->battleSystem.SendRoundEvent("PlayerRoundEnd");
 	}
@@ -392,5 +382,41 @@ void Cmd_SelectBattleCard_f(const idCmdArgs& args)
 		player->uiList.push(keyvalueClass<int, idUserInterface*>(
 			MOD_SelectedCard, player->cardTarget->ui));
 		player->uiList.sort();
+	}
+}
+void Cmd_UnselectCard_f(const idCmdArgs& args)
+{
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	if (player && player->battleSystem.battleStarted)
+	{
+		if (player->cardTarget)
+		{
+			player->cardTarget->ui->SetStateInt("verticalOffset", 0);
+			player->uiList.removeAt(
+				player->uiList.indexOf(keyvalueClass<int, idUserInterface*>(
+					MOD_SelectedCard, player->cardTarget->ui)));
+			player->uiList.push(keyvalueClass<int, idUserInterface*>(
+				player->cardTarget->currentZ, player->cardTarget->ui));
+			player->uiList.sort();
+			player->cardTarget = NULL;
+		}
+	}
+}
+void Cmd_SelectTarget_f(const idCmdArgs& args)
+{
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	if (player && player->battleSystem.battleStarted)
+	{
+		if (player->cardTarget == NULL)
+			return;
+		for (int i = 0; i < player->battleSystem.enemies->size(); i++)
+		{
+			if (!player->battleSystem.enemies->get(i)->isDead && 
+				player->battleSystem.enemies->get(i)->ui->GetStateInt("thisTarget") == 1)
+			{
+				player->battleSystem.enemies->get(i)->ui->SetStateInt("thisTarget", 0);
+				gameLocal.Printf("\n Execute");
+			}
+		}
 	}
 }

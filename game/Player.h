@@ -819,6 +819,7 @@ public:
 	idUserInterface* temp;
 
 	Mod_Card* cardTarget;
+	Mod_EnemyBattleCreature* enemyTarget;
 
 	idUserInterface* hud;				// Common hud
 	idUserInterface* mphud;				// hud overlay containing MP elements
