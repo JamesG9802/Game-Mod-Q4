@@ -1,5 +1,6 @@
 #ifndef Mod_Card_h
 #define Mod_Card_h
+#include "Mod_Constants.h"
 #include "../../idlib/precompiled.h"
 #include "vectorClass.h"
 #include "keyvalueClass.h"
@@ -7,7 +8,7 @@
 class idPlayer;
 class Mod_Card {
 protected:
-	int guiZ = 5;
+	int guiZ = MOD_CardUiZ;
 public:
 	idUserInterface* ui = NULL;
 	int currentZ = 0;

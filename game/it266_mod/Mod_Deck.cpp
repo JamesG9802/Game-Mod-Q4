@@ -13,8 +13,14 @@ Mod_Deck::Mod_Deck(vectorClass<Mod_Card*>* deck)
 void Mod_Deck::DrawCard(int num)
 {
 	int i = 0;
-	while (!isEmpty() && hand.size() < 10 && i < num)
+	while (hand.size() < 10 && i < num)
 	{
+		if (deck.size() == 0)
+		{
+			if (discard.size() == 0)
+				break;
+			Reshuffle();
+		}
 		hand.push(deck.pop());
 		i++;
 	}
@@ -29,7 +35,11 @@ void Mod_Deck::DiscardCard(Mod_Card* card)
 }
 void Mod_Deck::DiscardHand()
 {
-
+	while (hand.size() > 0)
+	{
+		hand.get(hand.size()-1)->HideCard();
+		discard.push(hand.pop());
+	}
 }
 
 void Mod_Deck::Shuffle()
@@ -46,7 +56,11 @@ void Mod_Deck::Shuffle()
 }
 void Mod_Deck::Reshuffle()
 {
-
+	while (discard.size() > 0)
+	{
+		deck.push(discard.pop());
+	}
+	Shuffle();
 }
 bool Mod_Deck::isEmpty()
 {

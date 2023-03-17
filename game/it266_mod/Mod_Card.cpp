@@ -13,6 +13,13 @@ idUserInterface* Mod_Card::AddCard(float x, float y, const char* cardgui, int zM
 			ui = uiManager->FindGui(temp, true, true, false);
 			ui->Activate(true, gameLocal.time);
 			currentZ = guiZ + zMod;
+			gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
+				(currentZ, ui));
+			gameLocal.GetLocalPlayer()->uiList.sort();
+		}
+		else
+		{
+			ChangeZ(zMod);
 		}
 		ui->SetStateFloat("cardx", x);
 		ui->SetStateFloat("cardy", y);
@@ -40,14 +47,6 @@ idUserInterface* Mod_Card::AddCard(float x, float y, const char* cardgui, int zM
 		
 		ui->SetStateString("cardcost", temp);
 		ui->SetStateInt("isvisible", 1);
-		
-		if (gameLocal.GetLocalPlayer()->uiList.indexOf(keyvalueClass<int, idUserInterface*>
-			(currentZ , ui)) == -1)
-		{
-			gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
-				(currentZ, ui));
-			gameLocal.GetLocalPlayer()->uiList.sort();
-		}
 		return ui;
 	}
 	return NULL;

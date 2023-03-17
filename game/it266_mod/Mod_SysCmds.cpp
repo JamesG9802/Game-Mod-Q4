@@ -329,16 +329,47 @@ void Cmd_UpgradeConfirm_f(const idCmdArgs& args)
 
 void Cmd_EndTurn_f(const idCmdArgs& args)
 {
-	gameLocal.Printf("Ending turn\n");
-}
-void Cmd_SelectBattleCard_f(const idCmdArgs& args)
-{
-	int j = 0;
-	int z = 1;
-	gameLocal.Printf("%d", z/j);
 	idPlayer* player = gameLocal.GetLocalPlayer();
 	if (player && player->battleSystem.battleStarted)
 	{
+		if (player->cardTarget)
+		{
+			player->cardTarget->ui->SetStateInt("verticalOffset", 0);
+			player->uiList.removeAt(
+				player->uiList.indexOf(keyvalueClass<int, idUserInterface*>(
+					MOD_SelectedCard, player->cardTarget->ui)));
+			player->uiList.push(keyvalueClass<int, idUserInterface*>(
+				player->cardTarget->currentZ, player->cardTarget->ui));
+			player->uiList.sort();
+			player->cardTarget = NULL;
+		}
+		gameLocal.Printf("Ending turn\n");
+		player->battleSystem.SendRoundEvent("PlayerRoundEnd");
+	}
+}
+void Cmd_StartTurn_f(const idCmdArgs& args)
+{
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	if (player && player->battleSystem.battleStarted)
+	{
+		player->battleSystem.SendRoundEvent("PlayerRoundStart");
+	}
+}
+void Cmd_SelectBattleCard_f(const idCmdArgs& args)
+{
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	if (player && player->battleSystem.battleStarted)
+	{
+		if (player->cardTarget)
+		{
+			player->cardTarget->ui->SetStateInt("verticalOffset", 0);
+			player->uiList.removeAt(
+				player->uiList.indexOf(keyvalueClass<int, idUserInterface*>(
+					MOD_SelectedCard, player->cardTarget->ui)));
+			player->uiList.push(keyvalueClass<int, idUserInterface*>(
+				player->cardTarget->currentZ, player->cardTarget->ui));
+			player->uiList.sort();
+		}
 		Mod_PlayerBattleCreature* playerCreature = player->battleSystem.mod_battleplayer;
 		int cardIndex = -1;
 		for (int i = 0; i < playerCreature->mod_deck->hand.size(); i++)
@@ -350,9 +381,16 @@ void Cmd_SelectBattleCard_f(const idCmdArgs& args)
 				break;
 			}
 		}
-		gameLocal.Printf("POTATOOOOOOO%d\n", cardIndex);
 		if (cardIndex == -1)
 			return;
 		player->cardTarget = playerCreature->mod_deck->hand.get(cardIndex);
+		player->cardTarget->ui->SetStateInt("verticalOffset",
+			player->cardTarget->ui->GetStateInt("verticalOffset") - 100);
+		player->uiList.removeAt(
+			player->uiList.indexOf(keyvalueClass<int, idUserInterface*>(
+				player->cardTarget->currentZ, player->cardTarget->ui)));
+		player->uiList.push(keyvalueClass<int, idUserInterface*>(
+			MOD_SelectedCard, player->cardTarget->ui));
+		player->uiList.sort();
 	}
 }
