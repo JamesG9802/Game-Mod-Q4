@@ -11,9 +11,15 @@ public:
 
 	Mod_Pool() {};
 	~Mod_Pool() {};
+	void addItem(T item)
+	{
+		freeItems.push(item);
+	}
 	T getItem()
 	{
-		T item = freeItems.size() == 0 ? T() : freeItems.pop();
+		if (freeItems.size() == 0)
+			return NULL;
+		T item = freeItems.pop();
 		usedItems.push(item);
 		return item;
 	}

@@ -37,4 +37,5 @@ void Cmd_SelectBattleCard_f(const idCmdArgs& args);
 
 void Cmd_UnselectCard_f(const idCmdArgs& args);
 void Cmd_SelectTarget_f(const idCmdArgs& args);
+void Cmd_ExecuteCard_f(const idCmdArgs& args);
 #endif // !Mod_SysCmds_h

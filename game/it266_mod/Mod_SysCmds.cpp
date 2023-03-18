@@ -415,8 +415,24 @@ void Cmd_SelectTarget_f(const idCmdArgs& args)
 				player->battleSystem.enemies->get(i)->ui->GetStateInt("thisTarget") == 1)
 			{
 				player->battleSystem.enemies->get(i)->ui->SetStateInt("thisTarget", 0);
-				gameLocal.Printf("\n Execute");
+				player->enemyTarget = player->battleSystem.enemies->get(i);
+				break;
 			}
 		}
+		Cmd_ExecuteCard_f(args);
+	}
+}
+void Cmd_ExecuteCard_f(const idCmdArgs& args)
+{
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	if (player && player->battleSystem.battleStarted)
+	{
+		if (player->cardTarget == NULL)
+			return;
+		player->cardTarget->Execute();
+		player->battleSystem.mod_battleplayer->mod_deck->DiscardCard(player->cardTarget);
+
+		player->cardTarget = NULL;
+		player->enemyTarget = NULL;
 	}
 }

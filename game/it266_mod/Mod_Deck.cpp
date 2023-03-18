@@ -31,7 +31,14 @@ void Mod_Deck::DrawCard(int num)
 }
 void Mod_Deck::DiscardCard(Mod_Card* card)
 {
-
+	if (card)
+	{
+		if (hand.indexOf(card) != -1)
+		{
+			card->HideCard();
+			discard.push(hand.removeAt(hand.indexOf(card)));
+		}
+	}
 }
 void Mod_Deck::DiscardHand()
 {

@@ -3257,8 +3257,9 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand("selectBattleCard",		Cmd_SelectBattleCard_f, CMD_FL_GAME, "(IT 266) Select card in battle");
 	cmdSystem->AddCommand("unselectCard",			Cmd_UnselectCard_f, CMD_FL_GAME, "(IT 266) UnSelect card in battle");
 	cmdSystem->AddCommand("selectTarget",			Cmd_SelectTarget_f, CMD_FL_GAME, "(IT 266) Select an enemy in battle");
-	
-	//	cmdSystem->AddCommand("selectBattleCard",		Cmd_SelectBattleCard_f, CMD_FL_GAME, "(IT 266) Select card in battle");
+	cmdSystem->AddCommand("executeCard",			Cmd_ExecuteCard_f, CMD_FL_GAME, "(IT 266) Select card in battle");
+	//cmdSystem->AddCommand("executeCard",		Cmd_ExecuteCard_f, CMD_FL_GAME, "(IT 266) Select card in battle");
+	//cmdSystem->AddCommand("executeCard",		Cmd_ExecuteCard_f, CMD_FL_GAME, "(IT 266) Select card in battle");
 }
 
 /*

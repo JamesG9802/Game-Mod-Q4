@@ -46,7 +46,7 @@ public:
 		ui->SetStateInt("mod_playermaxhealth", maxHP);
 		ui->SetStateInt("blockamt", block);
 
-		gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>(MOD_NodeUiZ, ui));
+		gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>(MOD_BattleCharacter, ui));
 		gameLocal.GetLocalPlayer()->uiList.sort();
 	}
 	~Mod_PlayerBattleCreature()
@@ -55,7 +55,7 @@ public:
 			delete mod_deck;
 		if (ui)
 		{
-			keyvalueClass <int, idUserInterface*> kvpair(MOD_NodeUiZ, ui);
+			keyvalueClass <int, idUserInterface*> kvpair(MOD_BattleCharacter, ui);
 			int index = gameLocal.GetLocalPlayer()->uiList.indexOf(kvpair);
 			if (index != -1)
 				gameLocal.GetLocalPlayer()->uiList.removeAt(index);
@@ -123,14 +123,14 @@ public:
 		ui->SetStateInt("mod_playerhealth", currentHP);
 		ui->SetStateInt("mod_playermaxhealth", maxHP);
 		ui->SetStateInt("blockamt", block);
-		gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>(MOD_NodeUiZ, ui));
+		gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>(MOD_BattleCharacter, ui));
 		gameLocal.GetLocalPlayer()->uiList.sort();
 	}
 	~Mod_EnemyBattleCreature()
 	{
 		if (ui)
 		{
-			keyvalueClass <int, idUserInterface*> kvpair(MOD_NodeUiZ, ui);
+			keyvalueClass <int, idUserInterface*> kvpair(MOD_BattleCharacter, ui);
 			int index = gameLocal.GetLocalPlayer()->uiList.indexOf(kvpair);
 			if (index != -1)
 				gameLocal.GetLocalPlayer()->uiList.removeAt(index);

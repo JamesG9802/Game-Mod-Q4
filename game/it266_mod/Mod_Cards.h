@@ -25,6 +25,10 @@ public:
 	{
 		return new Mod_Card_Strike();
 	}
+	void Execute()
+	{
+
+	}
 };
 class Mod_Card_Block : public Mod_Card {
 public:
