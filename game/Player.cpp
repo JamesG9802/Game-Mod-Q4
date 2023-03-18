@@ -6367,12 +6367,13 @@ void idPlayer::Weapon_GUI( void ) {
 			gameLocal.Printf("\n");
 			for (int i = uiList.size() - 1; i >= 0; i--)
 			{
+				/*
 				if (uiList.get(i).value)
 				{
 					gameLocal.Printf("For %d:\tvisible:%d\n", 
 						uiList.get(i).key, 
 						uiList.get(i).value->GetStateInt("isvisible"));
-				}
+				}*/
 				if (uiList.get(i).value && uiList.get(i).value->GetStateInt("isvisible") == 1)
 				{
 					command = uiList.get(i).value->HandleEvent(&ev, gameLocal.time, &updateVisuals);

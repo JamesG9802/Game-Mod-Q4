@@ -429,10 +429,18 @@ void Cmd_ExecuteCard_f(const idCmdArgs& args)
 	{
 		if (player->cardTarget == NULL)
 			return;
-		player->cardTarget->Execute();
-		player->battleSystem.mod_battleplayer->mod_deck->DiscardCard(player->cardTarget);
+		if (player->cardTarget->CanBePlayed())
+		{
+			player->cardTarget->Execute();
+			player->battleSystem.mod_battleplayer->mod_deck->DiscardCard(player->cardTarget);
 
-		player->cardTarget = NULL;
-		player->enemyTarget = NULL;
+			player->cardTarget = NULL;
+			player->enemyTarget = NULL;
+		}
+		else
+		{
+			Cmd_UnselectCard_f(args);
+			player->enemyTarget = NULL;
+		}
 	}
 }

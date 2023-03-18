@@ -41,7 +41,7 @@ public:
 	/// <summary>
 	/// Activates the card's effect.
 	/// </summary>
-	virtual void Execute() = 0;
+	virtual void Execute();
 
 	/// <summary>
 	/// Makes the card visible to the screen.
@@ -51,6 +51,7 @@ public:
 	/// <param name="y"></param>
 	virtual idUserInterface* AddCard(float x, float y, const char* cardgui = "it266_card", int zMod = 0);
 	virtual idUserInterface* AddBattleCard(float x, float y, int zMod = 0);
+	virtual bool CanBePlayed();
 	virtual void ChangeZ(int newZ);
 	virtual void HideCard();
 	virtual void DeleteUI();

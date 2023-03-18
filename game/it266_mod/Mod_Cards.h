@@ -1,6 +1,13 @@
+#pragma once
 #include "../../idlib/precompiled.h"
 #include "Mod_Card.h"
+
+#include "Mod_BattleCreature.h"
+#include "Mod_BattleSystem.h"
 #pragma hdrstop
+
+class Mod_BattleSystem;
+class Mod_PlayerBattleCreature;
 
 class Mod_Card_Attack : public Mod_Card {
 public:
@@ -10,25 +17,13 @@ public:
 	{
 		this->damage = damage;
 	}
-	void Execute()
-	{
-
-	}
+	void Execute() override { Mod_Card::Execute(); }
 };
 class Mod_Card_Strike : public Mod_Card_Attack {
 public:
-	Mod_Card_Strike() : Mod_Card_Attack(1, "it266_card_strike_name", "it266_card_strike_art", "it266_card_strike_text", 6)
-	{
-
-	}
-	Mod_Card* Copy()
-	{
-		return new Mod_Card_Strike();
-	}
-	void Execute()
-	{
-
-	}
+	Mod_Card_Strike() : Mod_Card_Attack(1, "it266_card_strike_name", "it266_card_strike_art", "it266_card_strike_text", 6) {}
+	Mod_Card* Copy() { return new Mod_Card_Strike(); }
+	void Execute() override { Mod_Card_Attack::Execute(); }
 };
 class Mod_Card_Block : public Mod_Card {
 public:
@@ -38,47 +33,17 @@ public:
 	{
 		this->block = block;
 	}
-	void Execute()
-	{
-
-	}
+	void Execute();
 };
 class Mod_Card_Defend : public Mod_Card_Block {
 public:
-	Mod_Card_Defend() : Mod_Card_Block(1, "it266_card_defend_name", "it266_card_defend_art", "it266_card_defend_text", 6)
+	Mod_Card_Defend() : Mod_Card_Block(1, "it266_card_defend_name", "it266_card_defend_art", "it266_card_defend_text", 5)
 	{
 
 	}
-	void Execute()
-	{
-
-	}
+	void Execute();
 	Mod_Card* Copy()
 	{
 		return new Mod_Card_Defend();
 	}
 };
-/*
-void AddCard(vectorClass<keyvalueClass<int, idUserInterface*>> uiList, float x, float y)
-{
-	idStr temp;
-	gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_card", "", temp);
-	idUserInterface* card = uiManager->FindGui(temp, true, false, false);
-
-	card->Activate(true, gameLocal.time);
-	card->SetStateFloat("cardx", x);
-	card->SetStateFloat("cardy", y);
-
-	gameLocal.GetLocalPlayer()->spawnArgs.GetString(cardArt, "", temp);
-	card->SetStateString("cardart", temp);
-
-	gameLocal.GetLocalPlayer()->spawnArgs.GetString(name, "", temp);
-	card->SetStateString("cardname", "gfx/guis/cards/card");
-
-	card->SetStateInt("isvisible", 1);
-
-	gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
-		(2, card));
-	gameLocal.GetLocalPlayer()->uiList.sort();
-}
-*/

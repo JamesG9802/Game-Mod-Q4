@@ -1,6 +1,9 @@
 #include "../../idlib/precompiled.h"
 #include "Mod_Card.h"
 #include "keyvalueClass.h"
+
+#include "Mod_BattleCreature.h"
+#include "Mod_BattleSystem.h"
 #pragma hdrstop
 idUserInterface* Mod_Card::AddCard(float x, float y, const char* cardgui, int zMod)
 {
@@ -58,6 +61,11 @@ idUserInterface* Mod_Card::AddBattleCard(float x, float y, int zMod)
 	gameLocal.GetLocalPlayer()->uiList.sort();
 	return ui;
 }
+bool Mod_Card::CanBePlayed()
+{
+	return this->currentCost <=
+		gameLocal.GetLocalPlayer()->battleSystem.mod_battleplayer->currentEnergy;
+}
 void Mod_Card::ChangeZ(int newZmod)
 {
 	if (gameLocal.GetLocalPlayer()->uiList.indexOf(keyvalueClass<int, idUserInterface*>
@@ -93,6 +101,7 @@ void Mod_Card::DeleteUI()
 void Mod_Card::Execute()
 {
 
+	gameLocal.GetLocalPlayer()->battleSystem.mod_battleplayer->ChangeEnergyByCost(this->currentCost);
 }
 Mod_Card* Mod_Card::Copy()
 {

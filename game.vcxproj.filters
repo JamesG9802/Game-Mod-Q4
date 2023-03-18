@@ -546,6 +546,9 @@
     <ClCompile Include="game\it266_mod\Mod_BattleSystem.cpp">
       <Filter>Game\IT266Mod</Filter>
     </ClCompile>
+    <ClCompile Include="game\it266_mod\Mod_Cards.cpp">
+      <Filter>Game\IT266Mod</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game\Actor.h">
