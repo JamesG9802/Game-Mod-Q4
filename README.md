@@ -9,4 +9,4 @@ The game follows the same rules as Slay the Spire:
 - The player has 3 energy to spend on cards each turn.
 - Each battle ends when the enemies all run out of health.
 
-To play the mod, just select play the game and you the custom map will load for the mod.
+To play the mod, just select play the game and the custom map will load for the mod.
