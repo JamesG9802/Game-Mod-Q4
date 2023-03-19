@@ -45,6 +45,7 @@ void Mod_BattleSystem::Mod_EndBattle()
 	player->nodeui = NULL;
 
 	battleStarted = false;
+	player->health = mod_battleplayer->currentHP;
 	delete mod_battleplayer;
 	mod_battleplayer = NULL;
 	while (enemies->size() != 0)
