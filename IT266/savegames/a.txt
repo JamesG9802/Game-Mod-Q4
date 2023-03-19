@@ -1,3 +1,0 @@
-"a"
-"^:a	^0game/mod_level_1"
-""

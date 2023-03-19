@@ -3,7 +3,7 @@ windowDef Desktop
 	rect	0,0,640,480
 	visible	"gui::isvisible"
 	menugui	1
-	nocursor	1
+	nocursor	0
 	windowDef Container
 	{
 		rect	0,21,640,459

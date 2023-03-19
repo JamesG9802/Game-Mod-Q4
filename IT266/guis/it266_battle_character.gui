@@ -1,0 +1,128 @@
+windowDef Desktop
+{
+	rect	0,0,640,480
+	visible	"gui::isvisible"
+	menugui	1
+	nocursor	0
+	onNamedEvent NoImage {
+		set "Intent::background" "";
+	}
+	onNamedEvent Attack {
+		set "Intent::background" "gfx/guis/intentattack";
+	}
+	onNamedEvent Defend {
+		set "Intent::background" "gfx/guis/intentdefend";
+	}
+	onNamedEvent AttackDefend {
+		set "Intent::background" "gfx/guis/intentattackdefend";
+	}
+	windowDef Container
+	{
+		rect	("gui::xpos"), ("gui::ypos"),100,132
+		visible	1
+
+		onAction {
+			if ("gui::isplayer" == 0)
+			{
+				set "gui::thisTarget" "1";
+				consoleCMD "selectTarget" ;
+				set "gui::responded" "1";
+			}
+		}
+
+		windowDef Picture
+		{
+			rect	0,24,100,104
+			visible	1
+			backcolor	1,1,1,1
+			bordersize	2
+			bordercolor	0,0,0,1
+		}
+		windowDef Healthbar
+		{
+			rect	0,74,100,25
+			visible	1
+			forecolor	1,1,1,1
+			text	""
+			textscale	1
+			backcolor	1,0,0,.65
+		}
+		windowDef CurrentHP
+		{
+			rect	0,74,100,25
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::mod_playerhealth"
+			textscale	.3
+			textstyle	2
+			font	"fonts/lowpixel"
+		}
+		windowDef MaxHP
+		{
+			rect	0,74,95,25
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::mod_playermaxhealth"
+			textscale	0.3
+			font	"fonts/lowpixel"
+			textalign	2
+			textstyle	2
+		}
+		windowDef HPSlash
+		{
+			rect	0,74,100,25
+			visible	1
+			forecolor	1,1,1,1
+			text	"/"
+			textscale	0.3
+			textstyle	2
+			font	"fonts/lowpixel"
+			textalign	1
+		}
+		windowDef Desc
+		{
+			rect	0,25,100,50
+			visible	1
+			forecolor	0,0,0,1
+			text	"gui::mod_name"
+			textscale	0.3
+			textalign	1
+			textstyle	1
+			font	"fonts/lowpixel"
+		}
+		windowDef Block
+		{
+			rect	0,96,32,32
+			visible	1
+			background	"gfx/guis/block"
+			matcolor	1,1,1,1
+		}
+		windowDef BlockAmt
+		{
+			rect	0,103,32,27
+			visible	1
+			forecolor	0,0,0,1
+			text	"gui::blockamt"
+			textscale	0.2
+			font	"fonts/lowpixel"
+			textalign	1
+		}
+		windowDef Intent
+		{
+			rect	36,0,24,24
+			visible	1
+			background	""
+			matcolor	1,1,1,1
+		}
+		windowDef IntentAmt
+		{
+			rect	0,0,100,24
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::intentamt"
+			textscale	0.4
+			font	"fonts/lowpixel"
+			textstyle	2
+		}
+	}
+}

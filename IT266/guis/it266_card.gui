@@ -3,18 +3,33 @@ windowDef Desktop
 	rect	0,0,640,480
 	visible	"gui::isvisible"
 	menugui	1
-	nocursor	1
+	nocursor	0
+
 	windowDef CardArt
 	{
-		rect	( "gui::cardx" ) , ( "gui::cardy" + "gui::verticalOffset" ),138,188
+		rect	( "gui::cardx" ) , ( "gui::cardy" + "gui::verticalOffset" ),188,188
 		visible	1
 		background	"gfx/guis/cards/card"
 		matcolor	1,1,1,1
-
+		rotate	"gui::rotate"
+		
 		onAction {
 			if("gui::isUpgradeable" == 1)
 			{
-				consoleCMD "showUpgradeCard" ( "gui::cardIndex" );
+				set "gui::thisCard" "1";
+				consoleCMD "showUpgradeCard";
+				set "gui::responded" "1";
+			}
+			if("gui::isBuyable" == 1)
+			{
+				set "gui::thisCard" "1";
+				consoleCMD "buycard";
+				set "gui::responded" "1";
+			}
+			if("gui::isReward" == 1)
+			{
+				set "gui::thisCard" "1";
+				consoleCMD "addrewardcard";
 				set "gui::responded" "1";
 			}
 		}
@@ -38,7 +53,7 @@ windowDef Desktop
 			forecolor	1,1,1,1
 			text	"gui::cardname"
 			font	"fonts/lowpixel"
-			textscale	.3
+			textscale	.25
 		}
 		windowDef CardType
 		{

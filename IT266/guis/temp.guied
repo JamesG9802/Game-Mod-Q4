@@ -1,0 +1,79 @@
+windowDef Desktop
+{
+	rect	0,0,640,480
+	visible	"gui::isvisible"
+	menugui	1
+	nocursor	0
+
+	windowDef CardArt
+	{
+		rect	( "gui::cardx" ) , ( "gui::cardy" + "gui::verticalOffset" ),138,188
+		visible	1
+		background	"gfx/guis/card"
+		matcolor	1,1,1,1
+		rotate	"gui::rotate"
+		
+		onAction {
+			if("gui::isUpgradeable" == 1)
+			{
+				set "gui::thisCard" "1";
+				consoleCMD "showUpgradeCard";
+				set "gui::responded" "1";
+			}
+			if("gui::isBuyable" == 1)
+			{
+				set "gui::thisCard" "1";
+				consoleCMD "buycard";
+				set "gui::responded" "1";
+			}
+			if("gui::isReward" == 1)
+			{
+				set "gui::thisCard" "1";
+				consoleCMD "addrewardcard";
+				set "gui::responded" "1";
+			}
+		}
+
+		windowDef Cost
+		{
+			rect	2,0,21,26
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::cardcost"
+			textscale	0.4
+			font	"fonts/lowpixel"
+			textalign	1
+			textstyle	1
+		}
+		windowDef CardName
+		{
+			rect	22,7,99,21
+			visible	1
+			textalign	1
+			forecolor	1,1,1,1
+			text	"gui::cardname"
+			font	"fonts/lowpixel"
+			textscale	.25
+		}
+		windowDef CardType
+		{
+			rect	56,87,23,24
+			visible	0
+			forecolor	1,1,1,1
+			text	"gui::cardtype"
+			textscale	0.4
+			textalign	1
+			font	"fonts/lowpixel"
+		}
+		windowDef CardText
+		{
+			rect	20,107,100,59
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::cardtext"
+			textscale	0.15
+			font	"fonts/lowpixel"
+			textalign	1
+		}
+	}
+}

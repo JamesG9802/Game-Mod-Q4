@@ -607,20 +607,64 @@ entityDef player_marine
 	"it266_map"						"guis/it266_map.gui"
 	"it266_deck"					"guis/it266_deck.gui"
 	"it266_card"					"guis/it266_card.gui"
+	"it266_battlecard"				"guis/it266_card_battle.gui"
 	"it266_battle"					"guis/it266_battle.gui"
+	"it266_lose"					"guis/it266_lose.gui"
 
+	"it266_battlecreature"			"guis/it266_battle_character.gui"
+	"it266_shopui"					"guis/it266_shop.gui"
 	"it266_restui"					"guis/it266_rest.gui"
 	"it266_confirmui"				"guis/it266_upgradeconfirm.gui"
+	"it266_reward"					"guis/it266_reward.gui"
+	"it266_skipcard"				"guis/it266_skipcard.gui"
 
 	"it266_monster"					"gfx/guis/map/map_monster"
 	"it266_shop"					"gfx/guis/map/map_shop"
 	"it266_elite"					"gfx/guis/map/map_elite"
 	"it266_rest"					"gfx/guis/map/map_rest"
 	
+	"it266_playerSprite"			""
+
 	"it266_card_strike_name"		"Strike"
-	"it266_card_strike_art"			"gfx/guis/cards/card"
+	"it266_card_strike_art"			"gfx/guis/cards/strike"
 	"it266_card_strike_text"		"Deal 6 damage."
 	"it266_card_strike_text+"		"Deal 9 damage."
+
+	"it266_card_setupstrike_name"		"Setup Strike"
+	"it266_card_setupstrike_art"		""
+	"it266_card_setupstrike_text"		"Deal 7 damage. Gain 1 energy next turn."
+	"it266_card_setupstrike_text+"		"Deal 7 damage. Gain 2 energy next turn."
+
+	"it266_card_parry_name"			"Parry"
+	"it266_card_parry_art"			""
+	"it266_card_parry_text"			"Deal 6 damage. Gain 5 block."
+	"it266_card_parry_text+"		"Deal 9 damage. Gain 8 block."
+
+	"it266_card_heavyblow_name"			"Heavy Blow"
+	"it266_card_heavyblow_art"			""
+	"it266_card_heavyblow_text"			"Deal 16 damage."
+	"it266_card_heavyblow_text+"		"Deal 25 damage."
+
+	
+	"it266_card_slam_name"			"Slam"
+	"it266_card_slam_art"			""
+	"it266_card_slam_text"			"Deal damage equal to your block."
+	"it266_card_slam_text+"			"Gain 3 block. Deal damage equal to your block."
+
+	"it266_card_defend_name"		"Defend"
+	"it266_card_defend_art"			"gfx/guis/cards/defend"
+	"it266_card_defend_text"		"Gain 5 block."
+	"it266_card_defend_text+"		"Gain 8 block."
+
+	"it266_card_prepare_name"		"Prepare"
+	"it266_card_prepare_art"		""
+	"it266_card_prepare_text"		"Gain 5 block. Draw 1 card."
+	"it266_card_prepare_text+"		"Gain 5 block. Draw 1 card."
+
+	"it266_card_fortify_name"		"Fortify"
+	"it266_card_fortify_art"			""
+	"it266_card_fortify_text"			"Double your block."
+	"it266_card_fortify_text+"			"Triple your block."
 
 	"hud"							"guis/hud.gui"
 	"mphud"							"guis/mphud.gui" // mphud is overlayed on hud in multiplayer

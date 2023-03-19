@@ -1,0 +1,88 @@
+windowDef Desktop
+{
+	rect	0,0,640,480
+	nocursor 1
+	windowDef back
+	{
+		rect	0,33,640,448
+		visible	1
+		backcolor	0,0,0.627,1
+
+		onAction {
+			set "gui::responded" "1";
+		}
+
+	}
+	windowDef Price1
+	{
+		rect	50,40,100,32
+		visible	1
+		forecolor	1,1,1,1
+		text	"gui::price1"
+		textscale	0.4
+		textstyle	2
+		font	"fonts/lowpixel"
+	}
+	windowDef Gold1
+	{
+		rect	100,40,32,32
+		visible	1
+		background	"gfx/guis/rewardgold"
+		matcolor	1,1,1,1
+	}
+	windowDef Price2
+	{
+		rect	250,40,100,32
+		visible	1
+		forecolor	1,1,1,1
+		text	"gui::price2"
+		textscale	0.4
+		textstyle	2
+		font	"fonts/lowpixel"
+	}
+	windowDef Gold2
+	{
+		rect	300,40,32,32
+		visible	1
+		background	"gfx/guis/rewardgold"
+		matcolor	1,1,1,1
+	}
+	windowDef Price3
+	{
+		rect	450,40,100,32
+		visible	1
+		forecolor	1,1,1,1
+		text	"gui::price3"
+		textscale	0.4
+		textstyle	2
+		font	"fonts/lowpixel"
+	}
+	windowDef Gold3
+	{
+		rect	500,40,32,32
+		visible	1
+		background	"gfx/guis/rewardgold"
+		matcolor	1,1,1,1
+	}
+	windowDef Proceed
+	{
+		rect	395,238,320,320
+		visible	1
+		background	"gfx/guis/proceed"
+		matcolor	1,1,1,1
+		onAction {
+			set "gui::responded" "1";
+			consoleCMD "closeshop";
+		}
+	}
+	windowDef Text
+	{
+		rect	511,380,100,100
+		visible	1
+		forecolor	1,1,1,1
+		text	"Proceed"
+		textscale	0.5
+		font	"fonts/lowpixel"
+		textstyle	2
+	}
+}
