@@ -8,7 +8,15 @@ Mod_Deck::Mod_Deck(vectorClass<Mod_Card*>* deck)
 	{
 		 this->deck.push(deck->get(i)->Copy());
 	}
-	
+}
+Mod_Deck::~Mod_Deck()
+{
+	while (deck.size() > 0)
+		delete deck.pop();
+	while (hand.size() > 0)
+		delete hand.pop();
+	while (discard.size() > 0)
+		delete discard.pop();
 }
 void Mod_Deck::DrawCard(int num)
 {
@@ -54,7 +62,7 @@ void Mod_Deck::Shuffle()
 	vectorClass<Mod_Card*> deckClone;
 	while (deck.size() != 0)
 	{
-		deckClone.push(deck.removeAt(gameLocal.random.RandomInt(deck.size() - 1)));
+		deckClone.push(deck.removeAt(gameLocal.random.RandomInt(deck.size())));
 	}
 	while (deckClone.size() != 0)
 	{

@@ -6363,17 +6363,17 @@ void idPlayer::Weapon_GUI( void ) {
  			ev = sys->GenerateMouseButtonEvent( 1, ( usercmd.buttons & BUTTON_ATTACK ) != 0 );
 			
 			//	Due to weird mouse shenanigans we will do some shenanigans of our own
-
-			gameLocal.Printf("\n");
 			for (int i = uiList.size() - 1; i >= 0; i--)
 			{
-				/*
+				
 				if (uiList.get(i).value)
 				{
-					gameLocal.Printf("For %d:\tvisible:%d\n", 
+					/*
+					gameLocal.Printf("For %d:\tvisible:%d %s\n", 
 						uiList.get(i).key, 
-						uiList.get(i).value->GetStateInt("isvisible"));
-				}*/
+						uiList.get(i).value->GetStateInt("isvisible"), uiList.get(i).value->Name());
+					*/
+				}
 				if (uiList.get(i).value && uiList.get(i).value->GetStateInt("isvisible") == 1)
 				{
 					command = uiList.get(i).value->HandleEvent(&ev, gameLocal.time, &updateVisuals);
@@ -6383,7 +6383,7 @@ void idPlayer::Weapon_GUI( void ) {
 						//	Player is always the GUI focus entity
 						HandleGuiCommands(this, command);
 						uiList.get(i).value->SetStateInt("responded", 0);
-						return;
+						break;
 					}
 				}
 			}
@@ -14415,12 +14415,12 @@ void idPlayer::SetupDeck()
 {
 	for (int i = 0; i < 5; i++)
 	{
-		Mod_Card* card = new Mod_Card_Strike();
+		Mod_Card* card = new Mod_Card_Strike(false);
 		mod_deck.push(card);
 	}
 	for (int i = 0; i < 5; i++)
 	{
-		Mod_Card* card = new Mod_Card_Defend();
+		Mod_Card* card = new Mod_Card_Defend(false);
 		mod_deck.push(card);
 	}
 }

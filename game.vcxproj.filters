@@ -537,9 +537,6 @@
     <ClCompile Include="game\it266_mod\Mod_Map.cpp">
       <Filter>Game\IT266Mod</Filter>
     </ClCompile>
-    <ClCompile Include="game\it266_mod\Mod_Cards.h">
-      <Filter>Game\IT266Mod</Filter>
-    </ClCompile>
     <ClCompile Include="game\it266_mod\Mod_SysCmds.cpp">
       <Filter>Game\IT266Mod</Filter>
     </ClCompile>
@@ -906,6 +903,9 @@
       <Filter>Game\IT266Mod</Filter>
     </ClInclude>
     <ClInclude Include="game\it266_mod\Mod_BattleSystem.h">
+      <Filter>Game\IT266Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="game\it266_mod\Mod_Cards.h">
       <Filter>Game\IT266Mod</Filter>
     </ClInclude>
   </ItemGroup>

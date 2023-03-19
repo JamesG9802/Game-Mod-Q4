@@ -10,6 +10,7 @@ public:
 	vectorClass<Mod_Card*> hand;
 	vectorClass<Mod_Card*> discard;
 	Mod_Deck(vectorClass<Mod_Card*>* deck);
+	~Mod_Deck();
 	/// <summary>
 	/// Draw num cards from the deck. 
 	/// If the deck is empty while drawing, 

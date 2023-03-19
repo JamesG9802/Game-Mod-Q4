@@ -38,4 +38,12 @@ void Cmd_SelectBattleCard_f(const idCmdArgs& args);
 void Cmd_UnselectCard_f(const idCmdArgs& args);
 void Cmd_SelectTarget_f(const idCmdArgs& args);
 void Cmd_ExecuteCard_f(const idCmdArgs& args);
+void Cmd_WinBattle_f(const idCmdArgs& args);
+void Cmd_WinBattle();
+void ShowRewardScreen();
+void CloseRewardScreen(const idCmdArgs& args);
+void CollectGoldReward(const idCmdArgs& args);
+void ShowCardReward(const idCmdArgs& args);
+void CancelCard(const idCmdArgs& args);
+void AddRewardCard(const idCmdArgs& args);
 #endif // !Mod_SysCmds_h

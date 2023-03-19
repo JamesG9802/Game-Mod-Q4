@@ -17,9 +17,9 @@ public:
 		block = 0;
 	}
 	virtual void HandleRoundEvent(idStr str) = 0;
-	virtual void ChooseAction(Mod_BattleSystem battleSystem) = 0;
+	virtual void ChooseAction(Mod_BattleSystem* battleSystem) = 0;
 	virtual void Die() = 0;
-	virtual void ExecuteAction(Mod_BattleSystem battleSystem) = 0;
+	virtual void ExecuteAction(Mod_BattleSystem* battleSystem) = 0;
 	void SetupUI(bool isPlayer, int x = 15, int y = 90)
 	{
 		if (ui == NULL)
@@ -41,7 +41,7 @@ public:
 		gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>(MOD_BattleCharacter, ui));
 		gameLocal.GetLocalPlayer()->uiList.sort();
 	}
-	void TakeDamage(int damage)
+	virtual void TakeDamage(int damage)
 	{
 		if (isDead)
 			return;
@@ -55,6 +55,8 @@ public:
 					damage = -block;
 					block = 0;
 				}
+				else
+					damage = 0;
 			}
 			currentHP = currentHP - damage > 0 ? currentHP - damage : 0;
 		}
@@ -65,12 +67,22 @@ public:
 		if (currentHP == 0)
 			Die();
 	}
+	void AddBlock(int blockAmt)
+	{
+		SetBlock(block + blockAmt);
+	}
+	void SetBlock(int newBlock)
+	{
+		block = newBlock;
+		ui->SetStateInt("blockamt", newBlock);
+	}
 };
 
 class Mod_PlayerBattleCreature : public Mod_BattleCreature
 {
 
 public:
+	int nextTurnEnergyMod = 0;
 	int currentEnergy;
 	Mod_Deck* mod_deck = NULL;
 	Mod_PlayerBattleCreature(int currentHP, int maxHP, vectorClass<Mod_Card*>* mod_deck) 
@@ -78,7 +90,6 @@ public:
 	{
 		this->mod_deck = new Mod_Deck(mod_deck);
 		SetupUI(true);
-		SetEnergy(3);
 		ui->SetStateString("mod_name", "Player");
 	}
 	~Mod_PlayerBattleCreature()
@@ -99,6 +110,8 @@ public:
 		if (str == "PlayerRoundStart")
 		{
 			SetEnergy(3);
+			ChangeEnergyByCost(nextTurnEnergyMod);
+			nextTurnEnergyMod = 0;
 			mod_deck->DrawCard(5);
 			SetBlock(0);
 		}
@@ -107,7 +120,7 @@ public:
 			mod_deck->DiscardHand();
 		}
 	}
-	void ChooseAction(Mod_BattleSystem battleSystem) override
+	void ChooseAction(Mod_BattleSystem* battleSystem) override
 	{
 
 	}
@@ -119,9 +132,12 @@ public:
 		newui->SetStateInt("isvisible", 1);
 		gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>(999, newui));
 	}
-	void ExecuteAction(Mod_BattleSystem battleSystem) override
+	void ExecuteAction(Mod_BattleSystem* battleSystem) override{}
+	void TakeDamage(int damage) override
 	{
-
+		Mod_BattleCreature::TakeDamage(damage);
+		gameLocal.GetLocalPlayer()->mapui->SetStateInt("player_health", currentHP);
+		gameLocal.GetLocalPlayer()->mapui->SetStateInt("player_maxhealth", maxHP);
 	}
 	void ChangeEnergyByCost(int cost)
 	{
@@ -132,22 +148,17 @@ public:
 		currentEnergy = newEnergy;
 		gameLocal.GetLocalPlayer()->nodeui->SetStateInt("energyamt", currentEnergy);
 	}
-	void AddBlock(int blockAmt)
-	{
-		SetBlock(block + blockAmt);
-	}
-	void SetBlock(int newBlock)
-	{
-		block = newBlock;
-		ui->SetStateInt("blockamt", newBlock);
-	}
 };
 class Mod_EnemyBattleCreature : public Mod_BattleCreature
 {
 public:
-	Mod_EnemyBattleCreature(int currentHP, int maxHP, const char* name, int x, int y)
+	float difficulty = 0;
+	int intent = -1;
+	int intentAmt = 0;
+	Mod_EnemyBattleCreature(int currentHP, int maxHP, const char* name, int x, int y, int difficulty)
 		: Mod_BattleCreature(currentHP, maxHP)
 	{
+		this->difficulty = difficulty;
 		SetupUI(false, x, y);
 		ui->SetStateString("mod_name", name);
 	}
@@ -162,13 +173,38 @@ public:
 			delete ui;
 		}
 	}
-	void ChooseAction(Mod_BattleSystem battleSystem) override
+	void ChooseAction(Mod_BattleSystem* battleSystem) override
 	{
-
+		idStr temp = "";
+		intent = gameLocal.random.RandomInt(3);
+		if (intent == 1 && gameLocal.random.RandomInt(100) < 33)
+			intent = 0;
+		else if (intent == 1 && gameLocal.random.RandomInt(100) < 66)
+			intent = 2;
+		switch (intent)
+		{
+		case 0:
+		case 1:
+			intentAmt = (gameLocal.random.RandomInt(5 +(int)(difficulty/2)) + 3 + difficulty);
+			temp += intentAmt;
+			ui->SetStateString("intentamt", temp);
+			if (intent == 0)
+				ui->HandleNamedEvent("Attack");
+			else
+				ui->HandleNamedEvent("AttackDefend");
+			break;
+		case 2:
+		default:
+			ui->SetStateString("intentamt", temp);
+			ui->HandleNamedEvent("Defend");
+			break;
+		}
+		gameLocal.Printf("Intent: %d\n", intent);
 	}
 	void Die() override
 	{
 		ui->SetStateInt("isvisible", 0);
+		isDead = true;
 	}
 	void HandleRoundEvent(idStr str) override
 	{
@@ -176,14 +212,26 @@ public:
 			return;
 		if (str == "EnemyRoundStart")
 		{
-			block = 0;
+			SetBlock(0);
+			ExecuteAction(&(gameLocal.GetLocalPlayer()->battleSystem));
 		}
 		else if (str == "PlayerRoundStart")
 		{
+			ChooseAction(&(gameLocal.GetLocalPlayer()->battleSystem));
 		}
 	}
-	void ExecuteAction(Mod_BattleSystem battleSystem) override
+	void ExecuteAction(Mod_BattleSystem* battleSystem) override
 	{
-
+		switch (intent)
+		{
+		case 0:
+		case 1:
+			battleSystem->mod_battleplayer->TakeDamage(intentAmt);
+			if(intent == 0)
+				break;
+		case 2:
+			AddBlock(5 +(int)(difficulty/2));
+			break;
+		}
 	}
 };

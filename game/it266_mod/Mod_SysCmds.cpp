@@ -68,6 +68,8 @@ void Cmd_StartBattle(const idCmdArgs& args)
 //	Given a node, hides all relevant gui and loads the correct gui
 void Cmd_LoadNode(const idCmdArgs& args, Mod_Node node)
 {
+	if (gameLocal.GetLocalPlayer())
+		gameLocal.GetLocalPlayer()->battleSystem.currentFloor++;
 	switch (node.type)
 	{
 
@@ -419,6 +421,11 @@ void Cmd_SelectTarget_f(const idCmdArgs& args)
 				break;
 			}
 		}
+		if (player->enemyTarget == NULL)
+		{
+			gameLocal.Printf("Enemy null\n");
+			return;
+		}
 		Cmd_ExecuteCard_f(args);
 	}
 }
@@ -431,9 +438,13 @@ void Cmd_ExecuteCard_f(const idCmdArgs& args)
 			return;
 		if (player->cardTarget->CanBePlayed())
 		{
+			//... oops :(
+			Mod_Card* cardtarget = player->cardTarget;
+			Cmd_UnselectCard_f(args);
+			player->cardTarget = cardtarget;
 			player->cardTarget->Execute();
 			player->battleSystem.mod_battleplayer->mod_deck->DiscardCard(player->cardTarget);
-
+			player->battleSystem.CheckStatus();
 			player->cardTarget = NULL;
 			player->enemyTarget = NULL;
 		}
@@ -442,5 +453,117 @@ void Cmd_ExecuteCard_f(const idCmdArgs& args)
 			Cmd_UnselectCard_f(args);
 			player->enemyTarget = NULL;
 		}
+	}
+}
+void Cmd_WinBattle()
+{
+	ShowRewardScreen();
+}
+void Cmd_WinBattle_f(const idCmdArgs& args)
+{
+	Cmd_WinBattle();
+}
+void ShowRewardScreen()
+{
+	if (gameLocal.GetLocalPlayer())
+	{
+		idPlayer* player = gameLocal.GetLocalPlayer();
+		idStr temp;
+		player->spawnArgs.GetString("it266_reward", "", temp);
+		player->nodeui = uiManager->FindGui(temp, true, true, false);
+		gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
+			(MOD_NodeUiZ, player->nodeui));
+		gameLocal.GetLocalPlayer()->uiList.sort();
+
+		player->nodeui->Activate(true, gameLocal.time);
+		player->nodeui->SetStateInt("isvisible", 1);
+		player->nodeui->SetStateInt("goldvisible", 1);
+		player->nodeui->SetStateInt("cardvisible", 1);
+		
+		temp = "";
+		temp += player->battleSystem.CalculateGoldReward();
+		temp += " gold";
+		player->nodeui->SetStateString("goldreward", temp);
+	}
+}
+void CloseRewardScreen(const idCmdArgs& args)
+{
+	if (gameLocal.GetLocalPlayer())
+	{
+		idPlayer* player = gameLocal.GetLocalPlayer();
+		gameLocal.GetLocalPlayer()->uiList.removeAt(
+			gameLocal.GetLocalPlayer()->uiList.indexOf(
+			keyvalueClass<int, idUserInterface*>
+			(MOD_NodeUiZ, player->nodeui)));
+		gameLocal.GetLocalPlayer()->uiList.sort();
+		delete player->nodeui;
+	}
+}
+void CollectGoldReward(const idCmdArgs& args)
+{
+	if (gameLocal.GetLocalPlayer())
+	{
+		idPlayer* player = gameLocal.GetLocalPlayer();
+		player->playerGoldAmt += player->battleSystem.goldReward;
+		player->mapui->SetStateInt("player_gold", player->playerGoldAmt);
+		player->nodeui->SetStateInt("goldvisible", 0);
+	}
+}
+void ShowCardReward(const idCmdArgs& args)
+{
+	if (gameLocal.GetLocalPlayer())
+	{
+		idPlayer* player = gameLocal.GetLocalPlayer();
+		player->battleSystem.GenerateCardOptions();
+
+		player->battleSystem.cardOption1->AddCard(50,80);
+		player->battleSystem.cardOption1->ui->SetStateInt("isReward", 1);
+
+		player->battleSystem.cardOption2->AddCard(250, 80);
+		player->battleSystem.cardOption2->ui->SetStateInt("isReward", 1);
+
+		player->battleSystem.cardOption3->AddCard(450, 80);
+		player->battleSystem.cardOption3->ui->SetStateInt("isReward", 1);
+
+		idStr temp;
+		player->spawnArgs.GetString("it266_skipcard", "", temp);
+		player->confirmui = uiManager->FindGui(temp, true, true, false);
+		gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
+			(MOD_BattleCharacter, player->confirmui));
+		gameLocal.GetLocalPlayer()->uiList.sort();
+		player->confirmui->SetStateInt("isvisible", 1);
+	}
+}
+void CancelCard(const idCmdArgs& args)
+{
+	if (gameLocal.GetLocalPlayer())
+	{
+		idPlayer* player = gameLocal.GetLocalPlayer();
+
+		delete player->battleSystem.cardOption1;
+		delete player->battleSystem.cardOption2;
+		delete player->battleSystem.cardOption3;
+
+		gameLocal.GetLocalPlayer()->uiList.removeAt(
+			gameLocal.GetLocalPlayer()->uiList.indexOf(
+				keyvalueClass<int, idUserInterface*>
+				(MOD_BattleCharacter, player->confirmui)));
+		gameLocal.GetLocalPlayer()->uiList.sort();
+		delete player->confirmui;
+	}
+
+}
+void AddRewardCard(const idCmdArgs& args)
+{
+	if (gameLocal.GetLocalPlayer())
+	{
+		idPlayer* player = gameLocal.GetLocalPlayer();
+		if (player->battleSystem.cardOption1->ui->GetStateInt("thiscard") == 1)
+			player->mod_deck.push(player->battleSystem.cardOption1->Copy());
+		else if (player->battleSystem.cardOption2->ui->GetStateInt("thiscard") == 1)
+			player->mod_deck.push(player->battleSystem.cardOption2->Copy());
+		else
+			player->mod_deck.push(player->battleSystem.cardOption3->Copy());
+		CancelCard(args);
 	}
 }

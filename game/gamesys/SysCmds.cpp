@@ -3258,6 +3258,13 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand("unselectCard",			Cmd_UnselectCard_f, CMD_FL_GAME, "(IT 266) UnSelect card in battle");
 	cmdSystem->AddCommand("selectTarget",			Cmd_SelectTarget_f, CMD_FL_GAME, "(IT 266) Select an enemy in battle");
 	cmdSystem->AddCommand("executeCard",			Cmd_ExecuteCard_f, CMD_FL_GAME, "(IT 266) Select card in battle");
+	cmdSystem->AddCommand("closerewardscreen",		CloseRewardScreen, CMD_FL_GAME, "(IT 266) close rewward ui");
+	cmdSystem->AddCommand("collectgoldreward",		CollectGoldReward, CMD_FL_GAME, "(IT 266) collect gold reward");
+	cmdSystem->AddCommand("showcardreward",			ShowCardReward, CMD_FL_GAME, "(IT 266) ");
+	cmdSystem->AddCommand("cancelcard",				CancelCard, CMD_FL_GAME, "(IT 266) cancel card");
+	cmdSystem->AddCommand("addrewardcard",			AddRewardCard, CMD_FL_GAME, "(IT 266) add card ");
+	
+	//cmdSystem->AddCommand("executeCard",		Cmd_ExecuteCard_f, CMD_FL_GAME, "(IT 266) Select card in battle");
 	//cmdSystem->AddCommand("executeCard",		Cmd_ExecuteCard_f, CMD_FL_GAME, "(IT 266) Select card in battle");
 	//cmdSystem->AddCommand("executeCard",		Cmd_ExecuteCard_f, CMD_FL_GAME, "(IT 266) Select card in battle");
 }

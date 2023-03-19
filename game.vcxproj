@@ -435,9 +435,9 @@ cd "%quake%"
     <ClCompile Include="game\weapon\WeaponRocketLauncher.cpp" />
     <ClCompile Include="game\weapon\WeaponShotgun.cpp" />
     <ClCompile Include="game\WorldSpawn.cpp" />
-    <ClCompile Include="game\it266_mod\Mod_Cards.h">
+    <ClInclude Include="game\it266_mod\Mod_Cards.h">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
+    </ClInclude>
     <ClCompile Include="game\it266_mod\Mod_Cards.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>

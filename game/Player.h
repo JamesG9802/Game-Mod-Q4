@@ -816,7 +816,7 @@ public:
 	idUserInterface* deckui;
 	idUserInterface* nodeui;
 	idUserInterface* confirmui;
-	idUserInterface* temp;
+//	idUserInterface* temp;
 
 	Mod_Card* cardTarget;
 	Mod_EnemyBattleCreature* enemyTarget;
