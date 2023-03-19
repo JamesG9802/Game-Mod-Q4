@@ -7,7 +7,7 @@ windowDef Desktop
 
 	windowDef CardArt
 	{
-		rect	( "gui::cardx" ) , ( "gui::cardy" + "gui::verticalOffset" ),188,188
+		rect	( "gui::cardx" ) , ( "gui::cardy" + "gui::verticalOffset" ),210,210
 		visible	1
 		background	"gfx/guis/cards/card"
 		matcolor	1,1,1,1

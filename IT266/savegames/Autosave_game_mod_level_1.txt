@@ -1,4 +1,0 @@
-"Autosave game/mod_level_1"
-"^:Map Start	^0game/mod_level_1"
-""
-nooverwrite
