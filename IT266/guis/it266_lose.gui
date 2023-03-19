@@ -1,0 +1,18 @@
+windowDef Desktop
+{
+	rect	0,0,640,480
+	visible	1
+	menugui	1
+	windowDef Container
+	{
+		rect	0,0,640,480
+		visible	1
+		backcolor	1,0.498,0.498,1
+		forecolor	0.933,0.815,0.415,1
+		text	"Lose"
+		textscale	0.5
+		font	"fonts/lowpixel"
+		textalign	1
+		textstyle	2
+	}
+}

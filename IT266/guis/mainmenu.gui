@@ -4,6 +4,8 @@ windowDef Desktop
 	menugui	1
 	rect	0,0,640,480
 	backcolor	0,0,0,1
+	::	mousey
+	-	186
 	definevec4	"corner"	0.564,0.603,0.286,0.4
 	definevec4	"corner_0"	0.564,0.603,0.286,0
 	definevec4	"white"	1,1,1,1
@@ -20,8 +22,8 @@ windowDef Desktop
 	definevec4	"orange"	0.890,0.537,0,1
 	definevec4	"yellow_8"	1,0.745,0.137,0.8
 	definevec4	"grey1_4"	0.435,0.435,0.435,0.4
-	definefloat	"tooltip_x_offset"	gui::mousex-255
-	definefloat	"tooltip_y_offset"	gui::mousey-186
+	definefloat	"tooltip_x_offset"	gui
+	definefloat	"tooltip_y_offset"	gui
 	defineicon	"fve"	"gfx/guis/mainmenu/icon_favorite.tga"
 	defineicon	"pse"	"gfx/guis/mainmenu/icon_locked.tga"
 	defineicon	"dse"	"gfx/guis/mainmenu/icon_dedserver.tga"
@@ -1652,7 +1654,7 @@ windowDef Desktop
 			}
 			windowDef load_mapshot
 			{
-				rect	25,78,183,137
+				rect	25,77,183,137
 				visible	1
 				background	"gui::loadgame_shot"
 				matcolor	1,1,1,1
@@ -26156,6 +26158,102 @@ windowDef Desktop
 				
 			}
 
+		}
+	}
+	windowDef HelpScreen
+	{
+		rect	0,0,642,480
+		visible	"gui::helpvisible"
+		backcolor	0,0,0,.8
+		windowDef HelpMessage1
+		{
+			rect	0,0,350,30
+			visible	1
+			forecolor	1,1,1,1
+			text	"When your Health reaches 0, you lose."
+			textscale	0.3
+			font	"fonts/lowpixel"
+		}
+		windowDef HelpMessage2
+		{
+			rect	0,30,578,30
+			visible	1
+			forecolor	1,1,1,1
+			text	"You discard all cards you don't play at the end of your turn."
+			textscale	0.3
+			font	"fonts/lowpixel"
+		}
+		windowDef HelpMessage3
+		{
+			rect	0,60,578,30
+			visible	1
+			forecolor	1,1,1,1
+			text	"You draw 5 cards at the start of your turn."
+			textscale	0.3
+			font	"fonts/lowpixel"
+		}
+		windowDef HelpMessage3
+		{
+			rect	0,90,578,30
+			visible	1
+			forecolor	1,1,1,1
+			text	"You gain up to 3 energy every turn. Spend it all!"
+			textscale	0.3
+			font	"fonts/lowpixel"
+		}
+		windowDef HelpMessage4
+		{
+			rect	0,120,578,30
+			visible	1
+			forecolor	1,1,1,1
+			text	"Block only lasts for one turn, but blocks damage before your health."
+			textscale	0.3
+			font	"fonts/lowpixel"
+		}
+		windowDef HelpMessage5
+		{
+			rect	0,150,578,30
+			visible	1
+			forecolor	1,1,1,1
+			text	"Enemies will show their intent above their head."
+			textscale	0.3
+			font	"fonts/lowpixel"
+		}
+		windowDef HelpMessage6
+		{
+			rect	0,180,578,30
+			visible	1
+			forecolor	1,1,1,1
+			text	"Cards have an energy cost to play."
+			textscale	0.3
+			font	"fonts/lowpixel"
+		}
+	}
+	windowDef HelpBack
+	{
+		rect	576,0,64,34
+		visible	1
+		backcolor	1,1,1,.3
+	}
+	windowDef HelpButton
+	{
+		rect	584,2,62,60
+		visible	1
+		forecolor	1,1,1,1
+		text	"Help"
+		textscale	0.4
+		font	"fonts/lowpixel"
+		textstyle	2
+
+		onAction {
+			if ("gui::helpvisible" == 0)
+			{
+				set "gui::helpvisible" "1";
+			}
+			else 
+			{
+				set "gui::helpvisible" "0";
+			}
 		}
 	}
 }

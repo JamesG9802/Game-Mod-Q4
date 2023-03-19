@@ -1,0 +1,67 @@
+windowDef Desktop
+{
+	rect	0,0,640,480
+	visible	1
+	menugui	1
+	windowDef Container
+	{
+		rect	0,21,640,459
+		visible	1
+		windowDef Background
+		{
+			rect	0,-49,640,640
+			visible	1
+			backcolor	0.172,0.176,0.211,1
+
+			onAction {
+				consoleCMD "unselectCard";
+				set "gui::responded" "1";
+			}
+
+		}
+		windowDef EndTurn
+		{
+			rect	490,345,150,30
+			visible	1
+			backcolor	1,0.498,0.498,0.6
+			forecolor	0.933,0.815,0.415,1
+			text	"End Turn"
+			textscale	0.5
+			font	"fonts/lowpixel"
+			textalign	1
+			textstyle	2
+
+			onAction {
+				consoleCMD "endTurn";
+				set "gui::responded" "1";
+			}
+
+			onMouseEnter {
+				set "EndTurn::backcolor" "1,0.598,0.598,0.6";
+			}
+
+			onMouseExit {
+				set "EndTurn::backcolor" "1,0.498,0.498,0.6";
+			}
+
+		}
+		windowDef Energy
+		{
+			rect	0,200,64,64
+			visible	1
+			background	"gfx/guis/energy"
+			matcolor	1,1,1,1
+			windowDef EnergyAmt
+			{
+				rect	4,12,54,53
+				visible	1
+				forecolor	0.929,0.811,0.411,1
+				text	"gui::energyamt"
+				textscale	0.5
+				textalign	1
+				font	"fonts/lowpixel"
+				textstyle	2
+			}
+		}
+	}
+}

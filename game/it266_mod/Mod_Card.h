@@ -31,7 +31,8 @@ public:
 		this->cardText = cardText;
 
 		this->isUpgraded = isUpgraded;
-
+		if (isUpgraded)
+			OnUpgrade();
 		currentCost = cost;
 	}
 	~Mod_Card()
@@ -56,5 +57,6 @@ public:
 	virtual void HideCard();
 	virtual void DeleteUI();
 	virtual Mod_Card* Copy();
+	virtual void OnUpgrade();
 };
 #endif

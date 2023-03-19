@@ -86,15 +86,17 @@ void Mod_BattleSystem::CreateEnemyList()
 		return;
 	}
 	int difficulty = currentFloor;
+	if (fightingElite)
+		difficulty = (int)(difficulty * 1.5);
 	int random = gameLocal.random.RandomInt(100);
-	if (random < 25)
+	if (random < 33)
 	{
 		int temprandom = gameLocal.random.RandomInt(5);
 		AddEnemy(new Mod_EnemyBattleCreature(
 			(int)(10 + difficulty) * 2.5 + temprandom,
 			(int)(10 + difficulty) * 2.5 + temprandom, GetRandomEnemyName(), 330, 55, difficulty));
 	}
-	else if (random < 50)
+	else if (random < 66)
 	{
 		int temprandom = gameLocal.random.RandomInt(5);
 		AddEnemy(new Mod_EnemyBattleCreature(
@@ -105,7 +107,7 @@ void Mod_BattleSystem::CreateEnemyList()
 			(int)(10 + difficulty) * 1.25 + temprandom,
 			(int)(10 + difficulty) * 1.25 + temprandom, GetRandomEnemyName(), 500, 55, difficulty));
 	}
-	else if (random < 75)
+	else if (random < 90)
 	{
 		int temprandom = gameLocal.random.RandomInt(5);
 		AddEnemy(new Mod_EnemyBattleCreature(
@@ -159,8 +161,10 @@ void Mod_BattleSystem::CheckStatus()
 }
 int Mod_BattleSystem::CalculateGoldReward()
 {
-	goldReward = 10;
-	return 10;
+	goldReward = 10 + currentFloor * gameLocal.random.RandomInt(5);
+	if (fightingElite)
+		goldReward *= 3;
+	return goldReward;
 }
 void Mod_BattleSystem::GenerateCardOptions()
 {
@@ -170,9 +174,20 @@ void Mod_BattleSystem::GenerateCardOptions()
 		delete cardOption2;
 		delete cardOption3;
 	}
-	cardOption1 = GetRandomCard();
-	cardOption2 = GetRandomCard();
-	cardOption3 = GetRandomCard();
+	const int cardamt = 6;
+	int arr[cardamt];
+	for (int i = 0; i < cardamt; i++)
+		arr[i] = i;
+	for (int i = 0; i < cardamt; i++)
+	{
+		int j = gameLocal.random.RandomInt(cardamt);
+		int temp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = temp;
+	}
+	cardOption1 = GetCard(arr[0]);
+	cardOption2 = GetCard(arr[1]);
+	cardOption3 = GetCard(arr[2]);
 
 }
 const char* Mod_BattleSystem::GetRandomEnemyName()
@@ -195,10 +210,19 @@ const char* Mod_BattleSystem::GetRandomEnemyName()
 }
 Mod_Card* Mod_BattleSystem::GetRandomCard()
 {
-	int num = gameLocal.random.RandomInt(10);
-	switch (num)
+	int num = gameLocal.random.RandomInt(6);
+	return GetCard(num);
+}
+Mod_Card* Mod_BattleSystem::GetCard(int i)
+{
+	switch (i)
 	{
-	case 0:
-	default: return new Mod_Card_SetupStrike(false);
+	case 0: return new Mod_Card_Parry(false);
+	case 1: return new Mod_Card_Prepare(false);
+	case 2: return new Mod_Card_SetupStrike(false);
+	case 3: return new Mod_Card_HeavyBlow(false);
+	case 4: return new Mod_Card_Fortify(false);
+	default:
+	case 5: return new Mod_Card_Slam(false);
 	}
 }

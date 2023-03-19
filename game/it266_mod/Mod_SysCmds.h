@@ -46,4 +46,8 @@ void CollectGoldReward(const idCmdArgs& args);
 void ShowCardReward(const idCmdArgs& args);
 void CancelCard(const idCmdArgs& args);
 void AddRewardCard(const idCmdArgs& args);
+
+
+void BuyCard(const idCmdArgs& args);
+void CloseShop(const idCmdArgs& args);
 #endif // !Mod_SysCmds_h

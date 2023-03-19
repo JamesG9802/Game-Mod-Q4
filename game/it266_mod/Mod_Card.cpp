@@ -110,3 +110,7 @@ Mod_Card* Mod_Card::Copy()
 {
 	return NULL;
 }
+void Mod_Card::OnUpgrade()
+{
+
+}

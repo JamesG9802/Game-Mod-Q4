@@ -1017,27 +1017,21 @@
 	"#str_201027"	"Mic Level"
 	"#str_201028"	"Warning: OpenAL sound system required for voice chat."
 	"#str_201029"	"Volume"
-	"#str_201030"	"Mic Input Volume"	
-	
+	"#str_201030"	"Mic Input Volume"
 	"#str_201031"	"AN ID SOFTWARE GAME"
 	"#str_201032"	"DEVELOPED BY"
 	"#str_201033"	"RAVEN SOFTWARE"
 	"#str_201034"	"PUBLISHED BY"
 	"#str_201035"	"BETHESDA SOFTWORKS"
 	"#str_201036"	"PRESENTS"
-	
 	"#str_201037"	"Warning: Your sound card does not support OpenAL."
 	"#str_201038"	"VOICE CONFIG"
-	
 	"#str_201039"	""
 	"#str_201040"	"'640x480';'800x600';'1024x768';'1152x864';'1280x1024';'1600x1200';'2048x1536'"
 	"#str_201041"	"'640x360';'800x450';'852x480';'1024x576';'1280x720';'1280x768';'1600x900';'1920x1080'"
-	"#str_201042"	"'640x400';'800x500';'1024x640';'1280x800';'1440x900';'1600x1000';'1680x1050';'1920x1200'"	
+	"#str_201042"	"'640x400';'800x500';'1024x640';'1280x800';'1440x900';'1600x1000';'1680x1050';'1920x1200'"
 	"#str_201043"	""
-	
 	"#str_201044"	"Shuffle Teams"
-	
-	// Reserved for Russian
 	"#str_202000"	""
 	"#str_202001"	""
 	"#str_202002"	""
@@ -1076,17 +1070,12 @@
 	"#str_202035"	""
 	"#str_202036"	""
 	"#str_202037"	""
-	
-	//
-	
 	"#str_202038"	"Changes must be applied for settings to take effect. This may take up to several minutes."
 	"#str_202039"	"The Marine team has too many players!"
 	"#str_202040"	"You are already on the Marine team!"
 	"#str_202041"	"The Strogg team has too many players!"
 	"#str_202042"	"You are already on the Strogg team!"
 	"#str_202043"	"Multiple CPU/Core Optimization"
-	
-	// Ritual 1.3 patch GUI strings : #str_222000 - #str_222999
 	"#str_222000"	"Allow Buying"
 	"#str_222001"	"Napalm Gun"
 	"#str_222002"	"Credits:"
@@ -1102,8 +1091,6 @@
 	"#str_222012"	"Doubler"
 	"#str_222013"	"Control Time"
 	"#str_222014"	"Buy Menu"
-
-	// 1.4 patch GUI strings : #str_223000 - #str_223099
 	"#str_223000"	"Simple Items"
 	"#str_223001"	"Handicap"
 	"#str_223002"	"Force ambient light"
@@ -1114,4 +1101,5 @@
 	"#str_223007"	"Gun Position"
 	"#str_223008"	"Right;Centered;Lower Right"
 	"#str_223009"	"Enable detailed sky"
+
 }

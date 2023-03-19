@@ -83,7 +83,7 @@ class Mod_PlayerBattleCreature : public Mod_BattleCreature
 
 public:
 	int nextTurnEnergyMod = 0;
-	int currentEnergy;
+	int currentEnergy = 0;
 	Mod_Deck* mod_deck = NULL;
 	Mod_PlayerBattleCreature(int currentHP, int maxHP, vectorClass<Mod_Card*>* mod_deck) 
 		: Mod_BattleCreature(currentHP, maxHP)

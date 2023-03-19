@@ -2115,8 +2115,6 @@ void idPlayer::Spawn( void ) {
 
 	itemCosts = static_cast< const idDeclEntityDef * >( declManager->FindType( DECL_ENTITYDEF, "ItemCostConstants", false ) );
 
-
-	this->health = 30;
 }
 
 /*

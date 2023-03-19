@@ -13,6 +13,7 @@
 void Cmd_UpgradeCard(Mod_Card* card)
 {
 	card->isUpgraded = true;
+	card->OnUpgrade();
 }
 
 void Cmd_ToggleMap_f(const idCmdArgs& args) {
@@ -32,6 +33,7 @@ void Cmd_DeleteNodeUI_f(const idCmdArgs& args)
 		if (index != -1)
 			gameLocal.GetLocalPlayer()->uiList.removeAt(index);
 		delete gameLocal.GetLocalPlayer()->nodeui;
+		gameLocal.GetLocalPlayer()->nodeui = NULL;
 	}
 }
 void Cmd_LoadRestNode()
@@ -65,6 +67,87 @@ void Cmd_StartBattle(const idCmdArgs& args)
 		}
 	}
 }
+void Cmd_LoadShop(const idCmdArgs& args)
+{
+	idStr		temp;
+	if (gameLocal.GetLocalPlayer()->spawnArgs.GetString("it266_shopui", "", temp)) {
+		idPlayer* player = gameLocal.GetLocalPlayer();
+		idUserInterface* ui = uiManager->FindGui(temp, true, true, false);
+		gameLocal.GetLocalPlayer()->nodeui = ui;
+		ui->Activate(true, gameLocal.time);
+		ui->SetStateInt("isvisible", 1);
+		gameLocal.GetLocalPlayer()->uiList.push(keyvalueClass<int, idUserInterface*>
+			(MOD_NodeUiZ, ui));
+		gameLocal.GetLocalPlayer()->uiList.sort();
+		gameLocal.GetLocalPlayer()->nodeui = ui;
+
+		player->battleSystem.GenerateCardOptions();
+
+		player->battleSystem.cardOption1->AddCard(50, 80);
+		player->battleSystem.cardOption1->ui->SetStateInt("isBuyable", 1);
+
+		player->battleSystem.cardOption2->AddCard(250, 80);
+		player->battleSystem.cardOption2->ui->SetStateInt("isBuyable", 1);
+
+		player->battleSystem.cardOption3->AddCard(450, 80);
+		player->battleSystem.cardOption3->ui->SetStateInt("isBuyable", 1);
+
+		player->nodeui->SetStateInt("price1", 30);
+		player->nodeui->SetStateInt("price2", 30);
+		player->nodeui->SetStateInt("price3", 30);
+	}
+}
+void BuyCard(const idCmdArgs& args)
+{
+	if (gameLocal.GetLocalPlayer())
+	{
+		idPlayer* player = gameLocal.GetLocalPlayer();
+		if (player->playerGoldAmt >= 30)
+		{
+			if (player->battleSystem.cardOption1->ui->GetStateInt("thiscard") == 1)
+			{
+				player->battleSystem.cardOption1->ui->SetStateInt("thiscard", 0);
+				player->mod_deck.push(player->battleSystem.cardOption1->Copy());
+				player->battleSystem.cardOption1->HideCard();
+
+			}
+			else if (player->battleSystem.cardOption2->ui->GetStateInt("thiscard") == 1)
+			{
+				player->battleSystem.cardOption2->ui->SetStateInt("thiscard", 0);
+				player->mod_deck.push(player->battleSystem.cardOption2->Copy());
+				player->battleSystem.cardOption2->HideCard();
+			}
+			else
+			{
+				player->battleSystem.cardOption3->ui->SetStateInt("thiscard", 0);
+				player->mod_deck.push(player->battleSystem.cardOption3->Copy());
+				player->battleSystem.cardOption3->HideCard();
+			}
+			player->playerGoldAmt -= 30;
+			player->mapui->SetStateInt("player_gold", player->playerGoldAmt);
+		}
+	}
+}
+void CloseShop(const idCmdArgs& args)
+{
+	if (gameLocal.GetLocalPlayer()) {
+		idPlayer* player = gameLocal.GetLocalPlayer();
+
+		gameLocal.GetLocalPlayer()->uiList.removeAt(gameLocal.GetLocalPlayer()->uiList.indexOf(keyvalueClass<int, idUserInterface*>
+			(MOD_NodeUiZ, gameLocal.GetLocalPlayer()->nodeui)));
+		delete gameLocal.GetLocalPlayer()->nodeui;
+		gameLocal.GetLocalPlayer()->nodeui = NULL;
+
+		delete player->battleSystem.cardOption1;
+		delete player->battleSystem.cardOption2;
+		delete player->battleSystem.cardOption3;
+
+		player->battleSystem.cardOption1 = NULL;
+		player->battleSystem.cardOption2 = NULL;
+		player->battleSystem.cardOption3 = NULL;
+	}
+
+}
 //	Given a node, hides all relevant gui and loads the correct gui
 void Cmd_LoadNode(const idCmdArgs& args, Mod_Node node)
 {
@@ -75,9 +158,14 @@ void Cmd_LoadNode(const idCmdArgs& args, Mod_Node node)
 
 	case node.MonsterNode:
 		gameLocal.Printf("Loading Battle Ui\n");
+		gameLocal.GetLocalPlayer()->battleSystem.fightingElite = false;
 		Cmd_StartBattle(args);
 		break;
 	case node.EliteNode:
+		gameLocal.Printf("Loading Elite Battle Ui\n");
+		gameLocal.GetLocalPlayer()->battleSystem.fightingElite = true;
+		Cmd_StartBattle(args);
+		break;
 	case node.RestNode:
 	{
 		gameLocal.Printf("Loading RestNode Ui\n");
@@ -85,6 +173,10 @@ void Cmd_LoadNode(const idCmdArgs& args, Mod_Node node)
 		break;
 	}
 	case node.ShopNode:
+	{
+		gameLocal.Printf("Loading Shop\n");
+		Cmd_LoadShop(args);
+	}
 	case node.NotNode:
 	default:
 		break;
@@ -228,6 +320,7 @@ void Cmd_Sleep_f(const idCmdArgs& args)
 		int maxHealth = player->inventory.maxHealth;
 		player->health = player->health + (int)(.30 * maxHealth) > maxHealth ?
 			maxHealth : player->health + (int)(.30 * maxHealth);
+		player->mapui->SetStateInt("player_health", player->health);
 	}
 }
 void Cmd_ShowUpgradeMenu_f(const idCmdArgs& args)
@@ -235,6 +328,13 @@ void Cmd_ShowUpgradeMenu_f(const idCmdArgs& args)
 	if (gameLocal.GetLocalPlayer())
 	{
 		idPlayer* player = gameLocal.GetLocalPlayer();
+		for (int i = 0; i < player->mod_deck.size(); i++)
+		{
+			if (!(player->mod_deck.get(i)->isUpgraded))
+				break;
+			if (i == player->mod_deck.size() - 1)
+				return;
+		}
 		player->deckui->SetStateInt("isvisible", 1);
 		for (int i = 0; i < player->mod_deck.size(); i++)
 		{
@@ -256,6 +356,8 @@ void Cmd_HideUpgradeMenu_f()
 		player->deckui->SetStateInt("isvisible", 0);
 		for (int i = 0; i < player->mod_deck.size(); i++)
 		{
+			if (player->mod_deck.get(i)->ui == NULL)
+				continue;
 			player->mod_deck.get(i)->HideCard();
 			player->mod_deck.get(i)->ui->SetStateInt("isUpgradeable", 0);
 		}
@@ -280,6 +382,8 @@ void Cmd_ShowUpgradeCard_f(const idCmdArgs& args)
 		int cardIndex = -1;
 		for (int i = 0; i < player->mod_deck.size(); i++)
 		{
+			if (player->mod_deck.get(i)->ui == NULL)
+				continue;
 			if (player->mod_deck.get(i)->ui->GetStateInt("thisCard") == 1)
 			{
 				cardIndex = i;
@@ -307,6 +411,7 @@ void Cmd_UpgradeBack_f(const idCmdArgs& args)
 			if (index != -1)
 				gameLocal.GetLocalPlayer()->uiList.removeAt(index);
 			delete player->confirmui;
+			player->confirmui = NULL;
 			Cmd_ShowUpgradeMenu_f(args);
 		}
 	}
@@ -323,6 +428,7 @@ void Cmd_UpgradeConfirm_f(const idCmdArgs& args)
 			if (index != -1)
 				gameLocal.GetLocalPlayer()->uiList.removeAt(index);
 			delete player->confirmui;
+			player->confirmui = NULL;
 			Cmd_UpgradeCard(player->cardTarget);
 			Cmd_HideUpgradeMenu_f();
 		}
@@ -497,6 +603,7 @@ void CloseRewardScreen(const idCmdArgs& args)
 			(MOD_NodeUiZ, player->nodeui)));
 		gameLocal.GetLocalPlayer()->uiList.sort();
 		delete player->nodeui;
+		player->nodeui = NULL;
 	}
 }
 void CollectGoldReward(const idCmdArgs& args)
@@ -543,13 +650,18 @@ void CancelCard(const idCmdArgs& args)
 		delete player->battleSystem.cardOption1;
 		delete player->battleSystem.cardOption2;
 		delete player->battleSystem.cardOption3;
-
+		
+		player->battleSystem.cardOption1 = NULL;
+		player->battleSystem.cardOption2 = NULL;
+		player->battleSystem.cardOption3 = NULL;
+		
 		gameLocal.GetLocalPlayer()->uiList.removeAt(
 			gameLocal.GetLocalPlayer()->uiList.indexOf(
 				keyvalueClass<int, idUserInterface*>
 				(MOD_BattleCharacter, player->confirmui)));
 		gameLocal.GetLocalPlayer()->uiList.sort();
 		delete player->confirmui;
+		player->confirmui = NULL;
 	}
 
 }
@@ -565,5 +677,6 @@ void AddRewardCard(const idCmdArgs& args)
 		else
 			player->mod_deck.push(player->battleSystem.cardOption3->Copy());
 		CancelCard(args);
+		player->nodeui->SetStateInt("cardvisible", 0);
 	}
 }

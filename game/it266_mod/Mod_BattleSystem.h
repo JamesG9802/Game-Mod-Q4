@@ -12,6 +12,7 @@ public:
 	/**/
 	int currentFloor = 0;
 	bool battleStarted = false;
+	bool fightingElite = false;
 
 	Mod_PlayerBattleCreature* mod_battleplayer;
 	vectorClass<Mod_EnemyBattleCreature*>* enemies;
@@ -27,4 +28,5 @@ public:
 	void GenerateCardOptions();
 	const char* GetRandomEnemyName();
 	Mod_Card* GetRandomCard();
+	Mod_Card* GetCard(int i);
 };

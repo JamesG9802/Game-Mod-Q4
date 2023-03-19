@@ -3263,10 +3263,9 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand("showcardreward",			ShowCardReward, CMD_FL_GAME, "(IT 266) ");
 	cmdSystem->AddCommand("cancelcard",				CancelCard, CMD_FL_GAME, "(IT 266) cancel card");
 	cmdSystem->AddCommand("addrewardcard",			AddRewardCard, CMD_FL_GAME, "(IT 266) add card ");
-	
-	//cmdSystem->AddCommand("executeCard",		Cmd_ExecuteCard_f, CMD_FL_GAME, "(IT 266) Select card in battle");
-	//cmdSystem->AddCommand("executeCard",		Cmd_ExecuteCard_f, CMD_FL_GAME, "(IT 266) Select card in battle");
-	//cmdSystem->AddCommand("executeCard",		Cmd_ExecuteCard_f, CMD_FL_GAME, "(IT 266) Select card in battle");
+	cmdSystem->AddCommand("winbattle",		Cmd_WinBattle_f, CMD_FL_GAME, "(IT 266) win battle");
+	cmdSystem->AddCommand("buycard",		BuyCard, CMD_FL_GAME, "(IT 266) Select card in battle");
+	cmdSystem->AddCommand("closeshop",		CloseShop, CMD_FL_GAME, "(IT 266) Select card in battle");
 }
 
 /*
